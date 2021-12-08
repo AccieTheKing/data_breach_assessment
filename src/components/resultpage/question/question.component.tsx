@@ -1,8 +1,9 @@
 import React from 'react';
+import './style.css';
 
 export const QuestionsComponentTest: React.FC = () => {
 	return (
-		<div className='accordion' id='accordionExample'>
+		<div className='accordion' id='breachassessmetcontainer'>
 			<div className='accordion-item'>
 				<h2 className='accordion-header' id='headingOne'>
 					<button
@@ -20,7 +21,7 @@ export const QuestionsComponentTest: React.FC = () => {
 					id='collapseOne'
 					className='accordion-collapse collapse show'
 					aria-labelledby='headingOne'
-					data-bs-parent='#accordionExample'
+					data-bs-parent='#breachassessmetcontainer'
 				>
 					<div className='accordion-body'>
 						<strong>
@@ -55,7 +56,7 @@ export const QuestionsComponentTest: React.FC = () => {
 					id='collapseTwo'
 					className='accordion-collapse collapse'
 					aria-labelledby='headingTwo'
-					data-bs-parent='#accordionExample'
+					data-bs-parent='#breachassessmetcontainer'
 				>
 					<div className='accordion-body'>
 						<strong>
@@ -90,7 +91,7 @@ export const QuestionsComponentTest: React.FC = () => {
 					id='collapseThree'
 					className='accordion-collapse collapse'
 					aria-labelledby='headingThree'
-					data-bs-parent='#accordionExample'
+					data-bs-parent='#breachassessmetcontainer'
 				>
 					<div className='accordion-body'>
 						<strong>
@@ -114,18 +115,18 @@ export const QuestionsComponentTest: React.FC = () => {
 						className='accordion-button collapsed'
 						type='button'
 						data-bs-toggle='collapse'
-						data-bs-target='#collapseThree'
+						data-bs-target='#collapseFour'
 						aria-expanded='false'
-						aria-controls='collapseThree'
+						aria-controls='collapseFour'
 					>
 						Sensitive data
 					</button>
 				</h2>
 				<div
-					id='collapseThree'
+					id='collapseFour'
 					className='accordion-collapse collapse'
 					aria-labelledby='headingFour'
-					data-bs-parent='#accordionExample'
+					data-bs-parent='#breachassessmetcontainer'
 				>
 					<div className='accordion-body'>
 						<strong>
