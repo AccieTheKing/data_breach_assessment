@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuestionsComponentTest } from './question/question.component';
+import { QuestionsComponentTest } from '../question/question.component';
 import './styles.css';
 
 enum ASSESSMENT_IMPACT_TITLE {
