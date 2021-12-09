@@ -50,5 +50,18 @@ header {
 	font-size: 1.2em;
 }
 
+.action_list_container h2 {
+	text-align: center;
+	font-size: var(--h1fontSize);
+	background: var(--titleBackground);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.action_list_container .action_list {
+	font-size: 1.5em;
+}
+
 /* Main */
 /* Footer */
