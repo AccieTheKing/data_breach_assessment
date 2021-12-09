@@ -1,28 +1,42 @@
-
 .h1Style {
-    color:#ea650d
+  color: #ea650d;
 }
 
-
-
 .classPosition {
-    margin-top:  50px;
+  margin-top: 50px;
+}
+
+.classPosition b,
+.classPosition button.btn {
+  text-align: center;
+}
+
+.classPosition button.btn {
+  display: block;
+  margin: auto;
 }
 
 .btn-colour-1 {
-    color: white;
-    background-color: #ea650d;
-    font-weight: bold;
-    padding: 40px 60px;
-    filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(48, 47, 47));
-
+  color: white;
+  background-color: #ea650d;
+  font-weight: bold;
+  padding: 40px 60px;
+  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(48, 47, 47));
 }
 
 .btn-colour-2 {
-    color: black;
-    background-color: #F1EDEB;
-    font-weight: bold;
-    padding: 20px 25px;
-    filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(48, 47, 47));
-
+  color: black;
+  background-color: #f1edeb;
+  font-weight: bold;
+  padding: 20px 25px;
+  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(48, 47, 47));
 }
+.linkStyle {
+  color: black;
+  text-align: center;
+}
+
+.centerLink {
+  text-align: center;
+}
+

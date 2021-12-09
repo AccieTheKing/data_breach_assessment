@@ -7,8 +7,8 @@ const Aboutpage = () => {
   <div>
     <Navbar></Navbar>
     <div className="offset-lg 2 col-lg-8 offset-lg-2">
-    <h1 className="h1Style">What is this tool about?</h1>
-    <p>
+    <h1 className="h1Style text-center">What is this tool about?</h1>
+    <p className="text-center">
       Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
       eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
       voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet

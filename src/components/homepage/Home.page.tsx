@@ -2,8 +2,8 @@ import React from "react";
 import "./style.css";
 import { GearIcon } from "@primer/octicons-react";
 import Navbar from "../Navbar/Nav";
-import "./About.page"
-
+import "./About.page";
+import { Link } from "react-router-dom";
 
 const Homepage = () => {
   return (
@@ -66,7 +66,11 @@ const Homepage = () => {
           Historic assessments
         </button>
         <p></p>
-        {/*<Link to="/Home.page">What is the tool about?</Link>*/}
+        <div className="centerLink">
+          <Link className="linkStyle" to="/about">
+            What is the tool about?
+          </Link>
+        </div>
       </div>
     </div>
   );

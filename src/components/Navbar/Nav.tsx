@@ -1,17 +1,17 @@
 import React from "react";
 import "./style.css";
 import { GearIcon } from "@primer/octicons-react";
-
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div>
       <nav className="navbar">
         <button className="btn">
-            <label>Home</label>
+          <Link to="/">Home</Link>
         </button>
         <button className="btn">
-            <label>Assessments</label>
+          <label>Assessments</label>
         </button>
         <button className="btn ms-auto">
           <b>NL</b>
@@ -21,12 +21,7 @@ const Navbar = () => {
         </button>
       </nav>
     </div>
-    );
+  );
 };
 
-export default Navbar
-    
-
-
-
-
+export default Navbar;
