@@ -15,7 +15,6 @@ interface AssessmentData {
 	performedBy: string;
 	result: number;
 	impact_score: number;
-	impact_title: ASSESSMENT_IMPACT_TITLE;
 }
 
 const mockData: AssessmentData = {
@@ -24,7 +23,21 @@ const mockData: AssessmentData = {
 	performedBy: 'Stijn',
 	result: 15,
 	impact_score: 3,
-	impact_title: ASSESSMENT_IMPACT_TITLE.HIGH,
+};
+
+const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
+	// based on the score decide what value to show
+	const title = Object.values(ASSESSMENT_IMPACT_TITLE)[props.score - 1];
+	return (
+		<div className='impact_card card'>
+			<div className='impact_score_container'>
+				<div className={`impact_score score_${title}`}>
+					{mockData.impact_score}
+				</div>
+			</div>
+			<h2 className='impact_title'>{title}</h2>
+		</div>
+	);
 };
 
 const Resultpage: React.FC = () => {
@@ -38,16 +51,7 @@ const Resultpage: React.FC = () => {
 				</div>
 				<div className='row'>
 					<div className='col-12 col-lg-8 offset-lg-2'>
-						<div className='impact_card card'>
-							<div className='impact_score_container'>
-								<div className='impact_score'>
-									{mockData.impact_score}
-								</div>
-							</div>
-							<h2 className='impact_title'>
-								{mockData.impact_title}
-							</h2>
-						</div>
+						<ImpactScoreVisual score={mockData.impact_score} />
 					</div>
 				</div>
 				<div className='row'>
