@@ -69,6 +69,31 @@ const Resultpage: React.FC = () => {
 						<QuestionsComponentTest />
 					</div>
 				</div>
+
+				<div className='row'>
+					<div className='col-12 col-lg-8 offset-lg-2'>
+						<div className='action_list_container'>
+							<h2>Action list</h2>
+							<ol className='action_list'>
+								<li>
+									Lorem, ipsum dolor sit amet consectetur
+									adipisicing elit. Beatae optio ducimus
+									consequatur ullam aspernatur illum quia
+								</li>
+								<li>
+									Lorem, ipsum dolor sit amet consectetur
+									adipisicing elit. Beatae optio ducimus
+									consequatur ullam aspernatur illum quia
+								</li>
+								<li>
+									Lorem, ipsum dolor sit amet consectetur
+									adipisicing elit. Beatae optio ducimus
+									consequatur ullam aspernatur illum quia
+								</li>
+							</ol>
+						</div>
+					</div>
+				</div>
 			</main>
 			<footer className='container'>
 				<div className='row'></div>
