@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from '../Navbar/Nav';
 import { QuestionsComponentTest } from '../question/question.component';
 import './styles.css';
 
@@ -43,6 +44,7 @@ const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
 const Resultpage: React.FC = () => {
 	return (
 		<>
+			<Navbar />
 			<header className='container'>
 				<div className='row'>
 					<div className='col-12 col-lg-12'>
