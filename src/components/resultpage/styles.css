@@ -1,0 +1,77 @@
+/*  Global for page */
+
+/* Header */
+header {
+	text-align: center;
+}
+
+header h1 {
+	font-size: var(--h1fontSize);
+	background: var(--titleBackground);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-top: 20px;
+	margin-bottom: 25px;
+}
+
+.impact_card.card {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	background: #f1edeb;
+	border-radius: 25px;
+	flex-basis: 0.33;
+	padding: 10px;
+}
+
+.impact_score_container {
+	flex: 0.33;
+}
+
+.impact_score {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+	border: solid #fd9800;
+	border-width: 0.5em;
+	background: #fff;
+	font-size: 1.5em;
+	border-radius: 100%;
+	max-width: 60px;
+	height: 60px;
+}
+
+.impact_title {
+	flex: 0.33;
+	font-weight: bold;
+	margin: 0;
+}
+
+.assessor_info_container {
+	margin: 15px 0;
+}
+
+.assessor_info_container p {
+	margin-bottom: 2px;
+	font-size: 1.2em;
+}
+
+.action_list_container h2 {
+	text-align: center;
+	font-size: var(--h1fontSize);
+	background: var(--titleBackground);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.action_list_container .action_list {
+	font-size: 1.5em;
+}
+
+/* Main */
+/* Footer */
