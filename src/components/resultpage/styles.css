@@ -27,6 +27,7 @@ header h1 {
 	padding: 10px;
 }
 
+/* Impact score */
 .impact_score_container {
 	flex: 0.33;
 }
@@ -36,13 +37,25 @@ header h1 {
 	justify-content: center;
 	align-items: center;
 	font-weight: bold;
-	border: solid #fd9800;
 	border-width: 0.5em;
 	background: #fff;
 	font-size: 1.5em;
 	border-radius: 100%;
 	max-width: 60px;
 	height: 60px;
+}
+
+.impact_score.score_LOW {
+	border: solid 10px var(--impactScoreColorLow);
+}
+.impact_score.score_MEDIUM {
+	border: solid 10px var(--impactScoreColorMedium);
+}
+.impact_score.score_HIGH {
+	border: solid 10px var(--impactScoreColorHigh);
+}
+.impact_score.score_CRITICAL {
+	border: solid 10px var(--impactScoreColorCritical);
 }
 
 .impact_title {
