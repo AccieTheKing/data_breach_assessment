@@ -1,0 +1,20 @@
+footer#app-footer {
+   background: #f1edeb;
+}
+
+footer .button-container button {
+   width: 100%;
+   max-width: 200px;
+   height: 58px;
+   color: var(--nnOrange);
+   border: solid 1px var(--nnOrange);
+   background: #fff;
+   margin: 0.5em;
+}
+
+footer .button-container button:hover {
+   color: var(--nnOrange);
+   border: solid 1px var(--nnOrange);
+   background: var(--nnOrange);
+   color: #fff;
+}
