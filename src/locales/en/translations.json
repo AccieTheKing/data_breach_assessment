@@ -1,0 +1,125 @@
+{
+    "test": "jaaahh",
+    "dataBreachAssessmentQuestions": [
+        {
+            "type": "Simple data",
+            "questions": [
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        },
+        {
+            "type": "Behavioral data",
+            "questions": [
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        },
+        {
+            "type": "Financial data",
+            "questions": [
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        },
+        {
+            "type": "Sensitive data",
+            "questions": [
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        }
+    ]
+}
