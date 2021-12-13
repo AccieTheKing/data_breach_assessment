@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import { GearIcon } from "@primer/octicons-react";
+import Navbar from '../Navbar/Nav';
 import Navbar from "../Navbar/Nav";
 import "./About.page";
 import { Link } from "react-router-dom";
