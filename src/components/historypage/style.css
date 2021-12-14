@@ -1,0 +1,48 @@
+
+.h1Hist {
+    text-align: center;
+	color: #E64415;
+	margin-top: 20px;
+	margin-bottom: 25px;
+}
+
+
+.card {
+	background: #f1edeb;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+ 	grid-gap: 3rem;
+	justify-content: flex-end;
+	border-radius: 10px;
+	padding: 25px;
+    filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
+}
+
+.card-text {
+	font-weight: bold;
+}
+
+.square {
+	text-align: center;
+	font-weight: bold;
+	color: white;
+	font-size: 28px;
+	background-color: #FD9800;
+	width: 6.5em;
+	padding-top: 0.5em;
+	border-radius: 5px;
+}
+
+.assessmentCard button.btn {
+	display: flex;
+    justify-content: center; 
+    align-items: center; 
+	width: 6.5em;
+	padding: 10px 12px;
+	background-color: gray;
+	height: 100%;
+
+  }
+
+
+  
