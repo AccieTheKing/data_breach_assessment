@@ -3,9 +3,13 @@ import "./style.css";
 import { GearIcon } from "@primer/octicons-react";
 import Navbar from "../Navbar/Nav";
 import "./About.page";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
+
 
 const Homepage = () => {
+
+  const navigate = useNavigate();
+
   return (
     <div>
       <Navbar></Navbar>
@@ -61,10 +65,21 @@ const Homepage = () => {
           START <br></br>
           ASSESSMENT
         </button>
-        <div className="row mb-3"></div>
-        <button type="submit" className="btn btn-colour-2 btn-lg btn-block">
-          Historic assessments
-        </button>
+        <div className="row justify-content-center">
+          <p></p>
+        <div className="grid gridPos">
+
+          <button type="submit" className="btn btn-colour-2 btn-lg btn-block" onClick={ () => navigate("/history")}>
+            Historic  <br></br>
+            assessments
+          </button>
+       
+          <button type="submit" className="btn btn-colour-2 btn-lg btn-block" onClick={ () => navigate("/history")}>
+            Drafts
+          </button>
+      
+        </div>
+        </div>
         <p></p>
         <div className="centerLink">
           <Link className="linkStyle" to="/about">
