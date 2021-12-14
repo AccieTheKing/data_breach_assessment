@@ -1,11 +1,12 @@
-import React from 'react';
+import { useContext } from 'react';
 import './style.css';
-import { GearIcon } from '@primer/octicons-react';
 import Navbar from '../Navbar/Nav';
 import './About.page';
 import { Link, useNavigate } from 'react-router-dom';
+import { AppContext } from '../../providers';
 
 const Homepage = () => {
+   const { assessorData } = useContext(AppContext);
    const navigate = useNavigate();
 
    return (
@@ -16,6 +17,12 @@ const Homepage = () => {
                <b>First name</b>
                <div className="col-lg-4 offset-lg-4">
                   <input
+                     onChange={(e) =>
+                        assessorData?.dispatch({
+                           type: 'addFirstName',
+                           payload: e.target.value,
+                        })
+                     }
                      type="text"
                      className="form-control"
                      placeholder="Enter first name"
@@ -27,6 +34,12 @@ const Homepage = () => {
                <b>Last name</b>
                <div className="col-lg-4 offset-lg-4">
                   <input
+                     onChange={(e) =>
+                        assessorData?.dispatch({
+                           type: 'addLastName',
+                           payload: e.target.value,
+                        })
+                     }
                      type="text"
                      className="form-control"
                      placeholder="Enter last name"
@@ -38,6 +51,12 @@ const Homepage = () => {
                <b>Incident number</b>
                <div className="col-lg-4 offset-lg-4">
                   <input
+                     onChange={(e) =>
+                        assessorData?.dispatch({
+                           type: 'addIncidentNumber',
+                           payload: e.target.value,
+                        })
+                     }
                      type="text"
                      className="form-control"
                      placeholder="Enter incident number"
@@ -51,6 +70,12 @@ const Homepage = () => {
             <div className="row">
                <div className="col-lg-4 offset-lg-4 mb-5">
                   <input
+                     onChange={(e) =>
+                        assessorData?.dispatch({
+                           type: 'addDataBreachDate',
+                           payload: new Date(e.target.value),
+                        })
+                     }
                      style={{ width: '100%', display: 'block' }}
                      className="form-control"
                      type="date"
