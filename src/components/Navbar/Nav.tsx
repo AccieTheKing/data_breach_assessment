@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
 						<Link to='/'>Home</Link>
 					</button>
 					<button className='btn'>
-						<label>Assessments</label>
+					<Link to='/history'>Assessments</Link>
 					</button>
 
 					<button className='btn ms-auto'>

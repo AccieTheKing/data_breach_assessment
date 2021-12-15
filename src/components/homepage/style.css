@@ -1,5 +1,9 @@
 .h1Style {
-  color: #ea650d;
+  font-size: var(--h1fontSize);
+	background: var(--titleBackground);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
 .classPosition {

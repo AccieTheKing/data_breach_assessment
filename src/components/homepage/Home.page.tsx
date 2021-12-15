@@ -78,7 +78,7 @@ const Homepage = () => {
                   <button
                      type="submit"
                      className="btn btn-colour-2 btn-lg btn-block"
-                     onClick={() => navigate('/history')}
+                     onClick={() => navigate('/draft')}
                   >
                      Drafts
                   </button>

@@ -1,11 +1,15 @@
-.h1Hist {
+.h1Draft {
    text-align: center;
-   color: #e64415;
+   font-size: var(--h1fontSize);
+   background: var(--titleBackground);
+   background-clip: text;
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
    margin-top: 20px;
    margin-bottom: 25px;
 }
 
-.card {
+.cardDraft {
    background: #f1edeb;
    border-radius: 10px;
    padding: 25px;
@@ -17,26 +21,25 @@
    font-weight: bold;
 }
 
-.square {
+.squareDraft {
    display: flex;
    justify-content: center;
    align-items: center;
    font-weight: bold;
    color: white;
    font-size: 28px;
-   background-color: #fd9800;
+   background-color: gray;
    width: 100%;
    height: 100%;
    border-radius: 5px;
 }
 
-.assessmentCard button.btn {
+.buttonDraft {
    font-weight: bold;
-   align-items: center;
    color: white;
    font-size: 28px;
    background-color: gray;
-   height: 100%;
    width: 100%;
+   height: 100%;
    border-radius: 5px;
 }
