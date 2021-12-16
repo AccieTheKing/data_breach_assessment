@@ -1,4 +1,8 @@
 import React, { useReducer } from 'react';
+import assessmentReducer, {
+   assessmentInitialState,
+   IAssessmentState,
+} from './reducers/assessment';
 import assessorReducer, { IAssessorState } from './reducers/assessor';
 import { assessorInitialState } from './reducers/assessor';
 
@@ -7,8 +11,6 @@ import { assessorInitialState } from './reducers/assessor';
 //    assessor: {
 //       firstName: string | null;
 //       lastName: string | null;
-//       incidentNumber: string | null;
-//       dataBreachDate: Date | null;
 //    };
 //    assessment?: {
 //       current: {};
@@ -22,23 +24,39 @@ import { assessorInitialState } from './reducers/assessor';
 // }
 
 interface IAppState {
-   assessorData?: IAssessorState;
+   assessor?: IAssessorState;
+   assessment?: IAssessmentState;
 }
 
 // Putting the context of the app in variable
 export const AppContext = React.createContext<IAppState>({});
 
+/**
+ * This component will be wrapped around the whole app in order to make the functions inside it
+ * available for the child components (components that are wrapped by this component)
+ *
+ * @param children
+ * @returns
+ */
 const AppProvider: React.FC = ({ children }) => {
    // All functions for changing app value states
    const [assessorState, assessorDispatch] = useReducer(
       assessorReducer,
       assessorInitialState
    );
+   const [assessmentState, assessmentDispatch] = useReducer(
+      assessmentReducer,
+      assessmentInitialState
+   );
 
    const appState: IAppState = {
-      assessorData: {
+      assessor: {
          state: assessorState,
          dispatch: assessorDispatch,
+      },
+      assessment: {
+         state: assessmentState,
+         dispatch: assessmentDispatch,
       },
    };
 
