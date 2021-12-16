@@ -4,6 +4,8 @@ export interface IAssessment {
       incidentNumber: string | null;
       dataBreachDate: Date | null;
       assessmentDate: Date | null;
+      impactScore: number;
+      result: number;
    };
    drafts: Array<{}> | null;
    history: Array<{}> | null;
@@ -21,6 +23,8 @@ export enum ASSESSMENT_STATE_ACTIONS {
    ADD_INCIDENT_NUMBER = 'addIncidentNumber',
    ADD_DATA_BREACH_DATE = 'addDataBreachDate',
    ADD_ASSESSMENT_DATE = 'addAssessmentDate',
+   ADD_ASSESSMENT_SCORE = 'addAssessmentScore',
+   ADD_ASSESSMENT_RESULT = 'addAssessmentResult',
 }
 
 // The default value of the assessment context
@@ -29,6 +33,8 @@ export const assessmentInitialState: IAssessment = {
       incidentNumber: null,
       dataBreachDate: null,
       assessmentDate: new Date(),
+      impactScore: 1,
+      result: 1,
    },
    drafts: null,
    history: null,
@@ -54,6 +60,16 @@ const assessmentReducer = (
          return {
             ...state,
             current: { ...state.current, assessmentDate: action.payload },
+         };
+      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_SCORE:
+         return {
+            ...state,
+            current: { ...state.current, impactScore: action.payload },
+         };
+      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_RESULT:
+         return {
+            ...state,
+            current: { ...state.current, result: action.payload },
          };
       default:
          return state;
