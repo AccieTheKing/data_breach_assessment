@@ -25,6 +25,8 @@ export enum ASSESSMENT_STATE_ACTIONS {
    ADD_ASSESSMENT_DATE = 'addAssessmentDate',
    ADD_ASSESSMENT_SCORE = 'addAssessmentScore',
    ADD_ASSESSMENT_RESULT = 'addAssessmentResult',
+   ADD_ASSESSMENT_DRAFTS = 'addAssessmentDrafts',
+   ADD_ASSESSMENT_HISTORY = 'addAssessmentHistory',
 }
 
 // The default value of the assessment context
@@ -70,6 +72,16 @@ const assessmentReducer = (
          return {
             ...state,
             current: { ...state.current, result: action.payload },
+         };
+      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_DRAFTS:
+         return {
+            ...state,
+            drafts: action.payload,
+         };
+      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_HISTORY:
+         return {
+            ...state,
+            history: action.payload,
          };
       default:
          return state;
