@@ -4,6 +4,7 @@ export interface IAssessor {
    lastName: string | null;
    incidentNumber: string | null;
    dataBreachDate: Date | null;
+   assessmentDate: Date | null;
 }
 
 // blueprint for how the state will look like, with state variable and dispatch function to change
@@ -19,6 +20,7 @@ export const assessorInitialState: IAssessor = {
    lastName: null,
    incidentNumber: null,
    dataBreachDate: null,
+   assessmentDate: new Date(),
 };
 
 // Reducer funtion, takes two inputs and returns one
