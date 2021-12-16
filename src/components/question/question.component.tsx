@@ -35,10 +35,10 @@ const QuestionItem: React.FC<QuestionItemProps> = ({ id, type, questions }) => {
          >
             <div className="accordion-body">
                {questions.map((question, id) => (
-                  <>
+                  <div key={id}>
                      <strong>{question.headerText}</strong>
                      <p key={id}>{question.text}</p>
-                  </>
+                  </div>
                ))}
             </div>
          </div>
