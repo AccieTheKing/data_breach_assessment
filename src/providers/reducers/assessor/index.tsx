@@ -14,6 +14,15 @@ export interface IAssessorState {
    dispatch: React.Dispatch<{ type: string; payload: any }>;
 }
 
+// These are the actions to trigger the reducer functions
+export enum ASSESSOR_STATE_ACTIONS {
+   ADD_FIRST_NAME = 'addFirstName',
+   ADD_LAST_NAME = 'addLastName',
+   ADD_INCIDENT_NUMBER = 'addIncidentNumber',
+   ADD_DATA_BREACH_DATE = 'addDataBreachDate',
+   ADD_ASSESSMENT_DATE = 'addAssessmentDate',
+}
+
 // The default value of the app context
 export const assessorInitialState: IAssessor = {
    firstName: null,
@@ -26,17 +35,19 @@ export const assessorInitialState: IAssessor = {
 // Reducer funtion, takes two inputs and returns one
 const assessorReducer = (
    state: IAssessor,
-   action: { type: string; payload: any }
+   action: { type: string; payload?: any }
 ): IAssessor => {
    switch (action.type) {
-      case 'addFirstName':
+      case ASSESSOR_STATE_ACTIONS.ADD_FIRST_NAME:
          return { ...state, firstName: action.payload };
-      case 'addLastName':
+      case ASSESSOR_STATE_ACTIONS.ADD_LAST_NAME:
          return { ...state, lastName: action.payload };
-      case 'addIncidentNumber':
+      case ASSESSOR_STATE_ACTIONS.ADD_INCIDENT_NUMBER:
          return { ...state, incidentNumber: action.payload };
-      case 'addDataBreachDate':
+      case ASSESSOR_STATE_ACTIONS.ADD_DATA_BREACH_DATE:
          return { ...state, dataBreachDate: action.payload };
+      case ASSESSOR_STATE_ACTIONS.ADD_ASSESSMENT_DATE:
+         return { ...state, assessmentDate: new Date() };
       default:
          return state;
    }
