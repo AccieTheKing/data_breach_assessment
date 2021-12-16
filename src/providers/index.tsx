@@ -23,7 +23,7 @@ import { assessorInitialState } from './reducers/assessor';
 //    };
 // }
 
-interface IAppState {
+export interface IAppState {
    assessor?: IAssessorState;
    assessment?: IAssessmentState;
 }

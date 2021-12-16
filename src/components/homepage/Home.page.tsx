@@ -3,12 +3,12 @@ import './style.css';
 import Navbar from '../Navbar/Nav';
 import './About.page';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../providers';
+import { AppContext, IAppState } from '../../providers';
 import { ASSESSOR_STATE_ACTIONS } from '../../providers/reducers/assessor';
 import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
 
 const Homepage = () => {
-   const { assessor, assessment } = useContext(AppContext);
+   const { assessor, assessment } = useContext<IAppState>(AppContext);
    const navigate = useNavigate();
    const dataBreachDate = assessment?.state.current.dataBreachDate;
 
@@ -97,7 +97,11 @@ const Homepage = () => {
                </div>
             </div>
 
-            <button type="submit" className="btn btn-colour-1 btn-lg btn-block">
+            <button
+               type="submit"
+               className="btn btn-colour-1 btn-lg btn-block"
+               onClick={() => navigate('/result')}
+            >
                START <br></br>
                ASSESSMENT
             </button>
