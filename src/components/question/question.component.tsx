@@ -44,12 +44,17 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
          >
             <div className="accordion-body">
                {questions.map((question, id) => (
-                  <div key={id} className="row mb-3">
-                     <div className="col-12 col-lg-10">
-                        <strong>{question.headerText}</strong>
-                        <p className="m-0">{question.text}</p>
+                  <div key={id} className="row mb-2">
+                     <div className="col-11 col-md-10">
+                        <span className="question_number_wrap">
+                           {question.id}.
+                        </span>
+                        <div className="question_wrap">
+                           <strong>{question.headerText}</strong>
+                           <p className="m-0">{question.text}</p>
+                        </div>
                      </div>
-                     <div className="col-12 col-lg-2">
+                     <div className="col-12 col-md-2">
                         <div
                            className="btn-group"
                            role="group"
@@ -98,7 +103,9 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
    );
 };
 
-export const QuestionsComponentTest: React.FC = () => {
+export const QuestionsComponentTest: React.FC<{
+   interactive?: boolean;
+}> = ({ interactive }) => {
    const { assessment } = useContext<IAppState>(AppContext);
    const { t } = useTranslation();
    const questions: Array<QuestionItemProps> = t(
@@ -107,6 +114,10 @@ export const QuestionsComponentTest: React.FC = () => {
          returnObjects: true,
       }
    );
+
+   if (interactive) {
+      return <div></div>;
+   }
 
    return (
       <div className="accordion" id="breachassessmetcontainer">

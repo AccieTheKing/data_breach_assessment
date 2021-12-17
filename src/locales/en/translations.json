@@ -12,7 +12,6 @@
                 },
                 {
                     "id": 2,
-                    "headerText": "Header or something",
                     "text": "This is question 2",
                     "ignoreQuestionsWhenAnswered": []
                 },
