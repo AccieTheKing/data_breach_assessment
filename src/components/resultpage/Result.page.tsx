@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext, IAppState } from '../../providers';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import { QuestionsComponentTest } from '../question/question.component';
@@ -11,31 +12,13 @@ enum ASSESSMENT_IMPACT_TITLE {
    CRITICAL = 'CRITICAL',
 }
 
-interface AssessmentData {
-   assessmentNumber: number;
-   assessmentDate: string;
-   performedBy: string;
-   result: number;
-   impact_score: number;
-}
-
-const mockData: AssessmentData = {
-   assessmentNumber: 1503,
-   assessmentDate: new Date().toDateString(),
-   performedBy: 'Stijn',
-   result: 15,
-   impact_score: 4,
-};
-
-const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
+const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
    // based on the score decide what value to show
-   const title = Object.values(ASSESSMENT_IMPACT_TITLE)[props.score - 1];
+   const title = Object.values(ASSESSMENT_IMPACT_TITLE)[score - 1];
    return (
       <div className="impact_card card">
          <div className="impact_score_container">
-            <div className={`impact_score score_${title}`}>
-               {mockData.impact_score}
-            </div>
+            <div className={`impact_score score_${title}`}>{score}</div>
          </div>
          <h2 className="impact_title">{title}</h2>
       </div>
@@ -43,6 +26,10 @@ const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
 };
 
 const Resultpage: React.FC = () => {
+   const { assessor, assessment } = useContext<IAppState>(AppContext);
+   const assessorData = assessor?.state;
+   const assessmentData = assessment?.state;
+
    return (
       <>
          <Navbar />
@@ -54,16 +41,27 @@ const Resultpage: React.FC = () => {
             </div>
             <div className="row">
                <div className="col-12 col-lg-8 offset-lg-2">
-                  <ImpactScoreVisual score={mockData.impact_score} />
+                  <ImpactScoreVisual
+                     score={assessmentData?.current.impactScore ?? 0}
+                  />
                </div>
             </div>
             <div className="row">
                <div className="col-12">
                   <div className="assessor_info_container">
-                     <p>Assessment number: {mockData.assessmentNumber}</p>
-                     <p>Assessment date: {mockData.assessmentDate}</p>
-                     <p>Performed by: {mockData.performedBy}</p>
-                     <p>Result: {mockData.result}</p>
+                     <p>
+                        Assessment number:{' '}
+                        {assessmentData?.current.incidentNumber}
+                     </p>
+                     <p>
+                        Assessment date:{' '}
+                        {assessmentData?.current.assessmentDate?.toDateString()}
+                     </p>
+                     <p>
+                        Performed by:{' '}
+                        {`${assessorData?.firstName} ${assessorData?.lastName}`}
+                     </p>
+                     <p>Result: {assessmentData?.current.result}</p>
                   </div>
                </div>
             </div>
