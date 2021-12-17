@@ -6,6 +6,11 @@
 	-webkit-text-fill-color: transparent;
 }
 
+.bPos{
+  display: flex;
+  justify-content: left;
+}
+
 .classPosition {
   margin-top: 50px;
 }
@@ -14,8 +19,7 @@
 .gridPos {
   align-items: center;
   display: grid;
-  width: 15.5em;
-  /* grid-gap: 14px; */
+  width: 17em;
 	grid-template-columns: repeat(2, 1fr);
  	
 }
@@ -41,12 +45,13 @@
 .btn-colour-2 {
   color: black;
   background-color: #f1edeb;
-  font-size: 10px;
+  font-size: 15px;
   font-weight: bold;
-  width: 10em;
-  height: 8em;
+  width: 7.5em;
+  height: 6em;
   filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
 }
+
 .linkStyle {
   color: black;
   text-align: center;

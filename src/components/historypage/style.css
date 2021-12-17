@@ -13,6 +13,22 @@
    margin-bottom: 1em;
 }
 
+.card.border_LOW {
+   border-color: #4A9C09;
+}
+
+.border_MEDIUM {
+   border-color:#E9D418;
+}
+
+.border_HIGH {
+   border-color:#FD9800
+}
+
+.border_CRITICAL {
+   border-color:#FE0000
+}
+
 .card-text {
    font-weight: bold;
 }
@@ -24,7 +40,6 @@
    font-weight: bold;
    color: white;
    font-size: 28px;
-   background-color: #fd9800;
    width: 100%;
    height: 100%;
    border-radius: 5px;
@@ -39,4 +54,22 @@
    height: 100%;
    width: 100%;
    border-radius: 5px;
+}
+
+.score_LOW {
+	background-color: #4A9C09;
+   height: 2em;
+}
+
+.score_MEDIUM {
+	background-color: #E9D418;
+   height: 2em;
+}
+.score_HIGH {
+	background-color: #FD9800;
+   height: 2em;
+}
+.score_CRITICAL {
+	background-color: #FE0000;
+   height: 2em;
 }

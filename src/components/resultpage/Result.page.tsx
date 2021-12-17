@@ -24,7 +24,7 @@ const mockData: AssessmentData = {
    assessmentDate: new Date().toDateString(),
    performedBy: 'Stijn',
    result: 15,
-   impact_score: 3,
+   impact_score: 4,
 };
 
 const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
