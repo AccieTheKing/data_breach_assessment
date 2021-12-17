@@ -8,19 +8,19 @@ import Homepage from './components/homepage/Home.page';
 import Resultpage from './components/resultpage/Result.page';
 
 function App() {
-	return (
-		<Router>
-			<div className='App'>
-				<Routes>
-					<Route path='/' element={<Homepage />} />
-					<Route path='/about' element={<Aboutpage />} />
-					<Route path='/history' element={<Historypage/>} />
-					<Route path='/draft' element={<Draftpage/>} />
-					<Route path='/result' element={<Resultpage />} />
-				</Routes>
-			</div>
-		</Router>
-	);
+   return (
+      <Router>
+         <div className="App">
+            <Routes>
+               <Route path="/" element={<Homepage />} />
+               <Route path="/about" element={<Aboutpage />} />
+               <Route path="/history" element={<Historypage />} />
+               <Route path="/draft" element={<Draftpage />} />
+               <Route path="/result" element={<Resultpage />} />
+            </Routes>
+         </div>
+      </Router>
+   );
 }
 
 export default App;
