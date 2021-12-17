@@ -6,6 +6,16 @@
   margin-top: 50px;
 }
 
+
+.gridPos {
+  align-items: center;
+  display: grid;
+  width: 15.5em;
+  /* grid-gap: 14px; */
+	grid-template-columns: repeat(2, 1fr);
+ 	
+}
+
 .classPosition b,
 .classPosition button.btn {
   text-align: center;
@@ -21,15 +31,17 @@
   background-color: #ea650d;
   font-weight: bold;
   padding: 40px 60px;
-  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(48, 47, 47));
+  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
 }
 
 .btn-colour-2 {
   color: black;
   background-color: #f1edeb;
+  font-size: 10px;
   font-weight: bold;
-  padding: 20px 25px;
-  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(48, 47, 47));
+  width: 10em;
+  height: 8em;
+  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
 }
 .linkStyle {
   color: black;
@@ -40,3 +52,11 @@
   text-align: center;
 }
 
+
+.btn-colour-1:hover {
+    background-color: #925422;
+}
+
+.btn-colour-2:hover {
+    background-color: #8f8780;
+}

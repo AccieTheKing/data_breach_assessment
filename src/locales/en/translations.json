@@ -1,0 +1,144 @@
+{
+    "test": "Yes",
+    "dataBreachAssessmentQuestions": [
+        {
+            "type": "Simple data",
+            "questions": [
+                {
+                    "id": 1,
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 2,
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 3,
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 4,
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 5,
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        },
+        {
+            "type": "Behavioral data",
+            "questions": [
+                {
+                    "id": 6,
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 7,
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 8,
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 9,
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 10,
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        },
+        {
+            "type": "Financial data",
+            "questions": [
+                {
+                    "id": 11,
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 12,
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 13,
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 14,
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 15,
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        },
+        {
+            "type": "Sensitive data",
+            "questions": [
+                {
+                    "id": 16,
+                    "headerText": "Header or something",
+                    "text": "This is question 1",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 17,
+                    "headerText": "Header or something",
+                    "text": "This is question 2",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 18,
+                    "headerText": "Header or something",
+                    "text": "This is question 3",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 19,
+                    "headerText": "Header or something",
+                    "text": "This is question 4",
+                    "ignoreQuestionsWhenAnswered": []
+                },
+                {
+                    "id": 20,
+                    "headerText": "Header or something",
+                    "text": "This is question 5",
+                    "ignoreQuestionsWhenAnswered": []
+                }
+            ]
+        }
+    ]
+}
