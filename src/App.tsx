@@ -11,17 +11,17 @@ import AppProvider from './providers';
 function App() {
    return (
       <AppProvider>
-		<Router>
-			<div className='App'>
-				<Routes>
-					<Route path='/' element={<Homepage />} />
-					<Route path='/about' element={<Aboutpage />} />
-					<Route path='/history' element={<Historypage/>} />
-					<Route path='/draft' element={<Draftpage/>} />
-					<Route path='/result' element={<Resultpage />} />
-				</Routes>
-			</div>
-		</Router>
+         <Router>
+            <div className="App">
+               <Routes>
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/about" element={<Aboutpage />} />
+                  <Route path="/history" element={<Historypage />} />
+                  <Route path="/draft" element={<Draftpage />} />
+                  <Route path="/result" element={<Resultpage />} />
+               </Routes>
+            </div>
+         </Router>
       </AppProvider>
    );
 }
