@@ -63,8 +63,8 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                            <input
                               type="radio"
                               className="btn-check"
-                              name={`btnradio${id}`}
-                              id={`btnradio${id}`}
+                              name={`btnradio${question.id}`}
+                              id={`btnradio${question.id}`}
                               autoComplete="off"
                               onClick={() =>
                                  save({ id: question.id, answer: true })
@@ -72,7 +72,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                            />
                            <label
                               className="btn btn-outline-primary"
-                              htmlFor={`btnradio${id}`}
+                              htmlFor={`btnradio${question.id}`}
                            >
                               Yes
                            </label>
@@ -80,8 +80,8 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                            <input
                               type="radio"
                               className="btn-check"
-                              name={`btnradio${id}`}
-                              id={`btnradio${id + 'no'}`}
+                              name={`btnradio${question.id}`}
+                              id={`btnradio${question.id}no`}
                               onClick={() =>
                                  save({ id: question.id, answer: false })
                               }
@@ -89,7 +89,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                            />
                            <label
                               className="btn btn-outline-primary"
-                              htmlFor={`btnradio${id + 'no'}`}
+                              htmlFor={`btnradio${question.id}no`}
                            >
                               No
                            </label>
