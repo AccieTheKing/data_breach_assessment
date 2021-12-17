@@ -12,9 +12,9 @@ const Homepage = () => {
       <div>
          <Navbar></Navbar>
          <div className="container classPosition">
-            <div className="row">
-               <b>First name</b>
-               <div className="col-lg-4 offset-lg-4">
+            <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
+               <b className="bPos">First name</b>
+               <div>
                   <input
                      type="text"
                      className="form-control"
@@ -23,9 +23,9 @@ const Homepage = () => {
                   />
                </div>
             </div>
-            <div className="row">
-               <b>Last name</b>
-               <div className="col-lg-4 offset-lg-4">
+            <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
+               <b className="bPos">Last name</b>
+               <div>
                   <input
                      type="text"
                      className="form-control"
@@ -34,9 +34,9 @@ const Homepage = () => {
                   />
                </div>
             </div>
-            <div className="row">
-               <b>Incident number</b>
-               <div className="col-lg-4 offset-lg-4">
+            <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
+               <b className="bPos">Incident number</b>
+               <div>
                   <input
                      type="text"
                      className="form-control"
@@ -45,11 +45,11 @@ const Homepage = () => {
                   />
                </div>
             </div>
-            <div className="row">
-               <b>Data breach date</b>
+            <div className="row offset-lg-4 col-lg-4 offset-lg-4">
+               <b className="bPos">Data breach date</b>
             </div>
-            <div className="row">
-               <div className="col-lg-4 offset-lg-4 mb-5">
+            <div className="row offset-lg-4 col-lg-4 offset-lg-4">
+               <div className="mb-5">
                   <input
                      style={{ width: '100%', display: 'block' }}
                      className="form-control"
@@ -68,17 +68,16 @@ const Homepage = () => {
                <div className="grid gridPos">
                   <button
                      type="submit"
-                     className="btn btn-colour-2 btn-lg btn-block"
+                     className="btn btn-colour-2"
                      onClick={() => navigate('/history')}
                   >
-                     Historic <br></br>
-                     assessments
+                     Historic assessments
                   </button>
 
                   <button
                      type="submit"
-                     className="btn btn-colour-2 btn-lg btn-block"
-                     onClick={() => navigate('/history')}
+                     className="btn btn-colour-2"
+                     onClick={() => navigate('/draft')}
                   >
                      Drafts
                   </button>
