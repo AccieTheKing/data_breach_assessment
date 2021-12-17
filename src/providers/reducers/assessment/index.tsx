@@ -6,6 +6,7 @@ export interface IAssessment {
       assessmentDate: Date | null;
       impactScore: number;
       result: number;
+      answers: Array<{ id: number; answer: boolean }>;
    };
    drafts: Array<{}> | null;
    history: Array<{}> | null;
@@ -27,6 +28,7 @@ export enum ASSESSMENT_STATE_ACTIONS {
    ADD_ASSESSMENT_RESULT = 'addAssessmentResult',
    ADD_ASSESSMENT_DRAFTS = 'addAssessmentDrafts',
    ADD_ASSESSMENT_HISTORY = 'addAssessmentHistory',
+   ADD_ASSESSMENT_ANSWER = 'addAssessmentAnswer',
 }
 
 // The default value of the assessment context
@@ -37,6 +39,7 @@ export const assessmentInitialState: IAssessment = {
       assessmentDate: new Date(),
       impactScore: 1,
       result: 1,
+      answers: [],
    },
    drafts: null,
    history: null,
@@ -72,6 +75,24 @@ const assessmentReducer = (
          return {
             ...state,
             current: { ...state.current, result: action.payload },
+         };
+      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_ANSWER:
+         const { id, answer } = action.payload;
+         const items = state.current.answers;
+         const foundIndex = items.findIndex((el) => el.id === id);
+
+         if (foundIndex !== -1) {
+            items[foundIndex].answer = answer;
+            state.current.answers = items;
+            return { ...state };
+         }
+
+         return {
+            ...state,
+            current: {
+               ...state.current,
+               answers: [...state.current.answers, action.payload],
+            },
          };
       case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_DRAFTS:
          return {
