@@ -1,12 +1,16 @@
-import React from 'react';
+import { useContext } from 'react';
 import './style.css';
-import { GearIcon } from '@primer/octicons-react';
 import Navbar from '../Navbar/Nav';
 import './About.page';
 import { Link, useNavigate } from 'react-router-dom';
+import { AppContext, IAppState } from '../../providers';
+import { ASSESSOR_STATE_ACTIONS } from '../../providers/reducers/assessor';
+import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
 
 const Homepage = () => {
+   const { assessor, assessment } = useContext<IAppState>(AppContext);
    const navigate = useNavigate();
+   const dataBreachDate = assessment?.state.current.dataBreachDate;
 
    return (
       <div>
@@ -16,6 +20,13 @@ const Homepage = () => {
                <b className="bPos">First name</b>
                <div>
                   <input
+                     onChange={(e) =>
+                        assessor?.dispatch({
+                           type: ASSESSOR_STATE_ACTIONS.ADD_FIRST_NAME,
+                           payload: e.target.value,
+                        })
+                     }
+                     value={assessor?.state.firstName ?? ''}
                      type="text"
                      className="form-control"
                      placeholder="Enter first name"
@@ -27,6 +38,13 @@ const Homepage = () => {
                <b className="bPos">Last name</b>
                <div>
                   <input
+                     onChange={(e) =>
+                        assessor?.dispatch({
+                           type: ASSESSOR_STATE_ACTIONS.ADD_LAST_NAME,
+                           payload: e.target.value,
+                        })
+                     }
+                     value={assessor?.state.lastName ?? ''}
                      type="text"
                      className="form-control"
                      placeholder="Enter last name"
@@ -39,6 +57,13 @@ const Homepage = () => {
                <div>
                   <input
                      type="text"
+                     onChange={(e) =>
+                        assessment?.dispatch({
+                           type: ASSESSMENT_STATE_ACTIONS.ADD_INCIDENT_NUMBER,
+                           payload: e.target.value,
+                        })
+                     }
+                     value={assessment?.state.current.incidentNumber ?? ''}
                      className="form-control"
                      placeholder="Enter incident number"
                      aria-label="Incident number"
@@ -55,6 +80,19 @@ const Homepage = () => {
                      className="form-control"
                      type="date"
                      id="formFile"
+                     onChange={(e) =>
+                        assessment?.dispatch({
+                           type: ASSESSMENT_STATE_ACTIONS.ADD_DATA_BREACH_DATE,
+                           payload: new Date(e.target.value),
+                        })
+                     }
+                     value={
+                        dataBreachDate
+                           ? new Date(dataBreachDate)
+                                .toISOString()
+                                .split('T')[0]
+                           : ''
+                     }
                   />
                </div>
             </div>

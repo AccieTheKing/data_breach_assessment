@@ -6,9 +6,10 @@ import Historypage from './components/historypage/historypage';
 import Aboutpage from './components/homepage/About.page';
 import Homepage from './components/homepage/Home.page';
 import Resultpage from './components/resultpage/Result.page';
+import AppProvider from './providers';
 
 function App() {
-	return (
+      <AppProvider>
 		<Router>
 			<div className='App'>
 				<Routes>
@@ -20,7 +21,7 @@ function App() {
 				</Routes>
 			</div>
 		</Router>
-	);
+      </AppProvider>
 }
 
 export default App;
