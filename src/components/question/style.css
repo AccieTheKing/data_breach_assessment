@@ -10,7 +10,8 @@
    overflow: hidden;
 }
 
-#breachassessmetcontainer .accordion-button:not(.collapsed) {
+#breachassessmetcontainer .accordion-button:not(.collapsed),
+#breachassessmetcontainer .accordion-collapse:not(.show) + .accordion-button {
    color: #000;
    background-color: rgba(234, 101, 13, 0.25);
 }
