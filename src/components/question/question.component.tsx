@@ -23,12 +23,16 @@ interface QuestionInteractionProp {
    save: (value: { id: number; answer: boolean }) => void;
 }
 
+// Interface for the questions in json file
 interface QuestionContainerProp extends QuestionInteractionProp {
    id: number;
    type: string;
    questions: Array<QuestionBodyProp>;
 }
 
+/**
+ * This component contains the questions with the yes and no buttons
+ */
 const QuestionItemBody: React.FC<QuestionBodyProp> = ({
    id,
    headerText,
@@ -94,6 +98,11 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
    );
 };
 
+/**
+ * This component will display the card like questions with the header title
+ * "Financial data", "Simple data", "Sensitive data" and "Behavioral data"
+ *
+ */
 const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
@@ -147,6 +156,12 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    );
 };
 
+/**
+ * This is the main question component, it fetches the questions from the json file
+ * and passes it to the QuestionItemContainer component. This component also has the
+ * functionality to save the answers to the state.
+ *
+ */
 const QuestionsComponentTest: React.FC<{
    interactive: boolean;
 }> = ({ interactive }) => {
