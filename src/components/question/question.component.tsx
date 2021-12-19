@@ -47,7 +47,7 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
             </div>
          </div>
          <div className="col-12 col-md-2">
-            {!toggleAnswer && isAnswered && (
+            {save && (
                <div
                   className="btn-group"
                   role="group"
@@ -58,10 +58,11 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
                      className="btn-check"
                      name={`btnradio${id}`}
                      id={`btnradio${id}`}
-                     autoComplete="off"
-                     readOnly={true}
-                     disabled={isAnswered.answer !== true}
-                     checked={isAnswered.answer === true}
+                     disabled={!toggleAnswer && isAnswered?.answer === false}
+                     checked={isAnswered?.answer === true}
+                     onClick={() => {
+                        if (toggleAnswer) save({ id, answer: true });
+                     }}
                   />
                   <label
                      className="btn btn-outline-primary"
@@ -74,47 +75,11 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
                      className="btn-check"
                      name={`btnradio${id}`}
                      id={`btnradio${id}no`}
-                     autoComplete="off"
-                     readOnly={true}
-                     disabled={isAnswered.answer !== false}
-                     checked={isAnswered.answer === false}
-                  />
-                  <label
-                     className="btn btn-outline-primary"
-                     htmlFor={`btnradio${id}no`}
-                  >
-                     No
-                  </label>
-               </div>
-            )}
-            {toggleAnswer && save && (
-               <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="Basic radio toggle button group"
-               >
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${id}`}
-                     id={`btnradio${id}`}
-                     autoComplete="off"
-                     onClick={() => save({ id, answer: true })}
-                  />
-                  <label
-                     className="btn btn-outline-primary"
-                     htmlFor={`btnradio${id}`}
-                  >
-                     Yes
-                  </label>
-
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${id}`}
-                     id={`btnradio${id}no`}
-                     onClick={() => save({ id, answer: false })}
-                     autoComplete="off"
+                     disabled={!toggleAnswer && isAnswered?.answer === true}
+                     checked={isAnswered?.answer === false}
+                     onClick={() => {
+                        if (toggleAnswer) save({ id, answer: false });
+                     }}
                   />
                   <label
                      className="btn btn-outline-primary"
