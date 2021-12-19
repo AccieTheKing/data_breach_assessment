@@ -62,7 +62,11 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
                      className="btn-check"
                      name={`btnradio${id}`}
                      id={`btnradio${id}`}
-                     disabled={!toggleAnswer && isAnswered?.answer === false}
+                     disabled={
+                        (!toggleAnswer && isAnswered?.answer === false) ||
+                        (isAnswered?.answer !== false &&
+                           isAnswered?.answer !== true)
+                     }
                      checked={isAnswered?.answer === true}
                      onClick={() => {
                         if (toggleAnswer) save({ id, answer: true });
@@ -79,7 +83,11 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
                      className="btn-check"
                      name={`btnradio${id}`}
                      id={`btnradio${id}no`}
-                     disabled={!toggleAnswer && isAnswered?.answer === true}
+                     disabled={
+                        (!toggleAnswer && isAnswered?.answer === true) ||
+                        (isAnswered?.answer !== false &&
+                           isAnswered?.answer !== true)
+                     }
                      checked={isAnswered?.answer === false}
                      onClick={() => {
                         if (toggleAnswer) save({ id, answer: false });
