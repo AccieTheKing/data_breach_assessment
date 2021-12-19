@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { AppContext, IAppState } from '../../providers';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
-import { QuestionsComponentTest } from '../question/question.component';
+import QuestionsComponentTest from '../question/question.component';
 import './styles.css';
 
 enum ASSESSMENT_IMPACT_TITLE {
@@ -69,7 +69,7 @@ const Resultpage: React.FC = () => {
          <main className="container">
             <div className="row">
                <div className="col-12">
-                  <QuestionsComponentTest />
+                  <QuestionsComponentTest interactive={false} />
                </div>
             </div>
 

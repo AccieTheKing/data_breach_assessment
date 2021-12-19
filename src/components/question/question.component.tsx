@@ -4,32 +4,146 @@ import { AppContext, IAppState } from '../../providers';
 import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
 import './style.css';
 
-interface QuestionItemProps {
-   id?: number;
-   type: string;
+// The interface for a single question
+interface QuestionBodyProp extends Partial<QuestionInteractionProp> {
+   id: number;
+   headerText: string;
+   text: string | Array<string>;
+   ignoreQuestionsWhenAnswered: Array<number>;
+   toggleAnswer: boolean;
+   isAnswered?: { id: number; answer: boolean };
+}
+
+// The interface for interacting with the assessment state
+interface QuestionInteractionProp {
    answeredQuestions: {
-      status: boolean;
+      show: boolean;
       value: Array<{ id: number; answer: boolean }>;
    };
-   questions: Array<{
-      id: number;
-      headerText: string;
-      text: string | Array<string>;
-      ignoreQuestionsWhenAnswered: Array<number>;
-   }>;
    save: (value: { id: number; answer: boolean }) => void;
 }
 
-const QuestionItem: React.FC<QuestionItemProps> = ({
+interface QuestionContainerProp extends QuestionInteractionProp {
+   id: number;
+   type: string;
+   questions: Array<QuestionBodyProp>;
+}
+
+const QuestionItemBody: React.FC<QuestionBodyProp> = ({
+   id,
+   headerText,
+   text,
+   toggleAnswer,
+   isAnswered,
+   save,
+}) => {
+   return (
+      <div className="row mb-2">
+         <div className="col-11 col-md-10">
+            <span className="question_number_wrap">{id}.</span>
+            <div className="question_wrap">
+               <strong>{headerText}</strong>
+               <p className="m-0">{text}</p>
+            </div>
+         </div>
+         <div className="col-12 col-md-2">
+            {!toggleAnswer && isAnswered && (
+               <div
+                  className="btn-group"
+                  role="group"
+                  aria-label="Basic radio toggle button group"
+               >
+                  <input
+                     type="radio"
+                     className="btn-check"
+                     name={`btnradio${id}`}
+                     id={`btnradio${id}`}
+                     autoComplete="off"
+                     readOnly={true}
+                     disabled={isAnswered.answer !== true}
+                     checked={isAnswered.answer === true}
+                  />
+                  <label
+                     className="btn btn-outline-primary"
+                     htmlFor={`btnradio${id}`}
+                  >
+                     Yes
+                  </label>
+                  <input
+                     type="radio"
+                     className="btn-check"
+                     name={`btnradio${id}`}
+                     id={`btnradio${id}no`}
+                     autoComplete="off"
+                     readOnly={true}
+                     disabled={isAnswered.answer !== false}
+                     checked={isAnswered.answer === false}
+                  />
+                  <label
+                     className="btn btn-outline-primary"
+                     htmlFor={`btnradio${id}no`}
+                  >
+                     No
+                  </label>
+               </div>
+            )}
+            {toggleAnswer && save && (
+               <div
+                  className="btn-group"
+                  role="group"
+                  aria-label="Basic radio toggle button group"
+               >
+                  <input
+                     type="radio"
+                     className="btn-check"
+                     name={`btnradio${id}`}
+                     id={`btnradio${id}`}
+                     autoComplete="off"
+                     onClick={() => save({ id, answer: true })}
+                  />
+                  <label
+                     className="btn btn-outline-primary"
+                     htmlFor={`btnradio${id}`}
+                  >
+                     Yes
+                  </label>
+
+                  <input
+                     type="radio"
+                     className="btn-check"
+                     name={`btnradio${id}`}
+                     id={`btnradio${id}no`}
+                     onClick={() => save({ id, answer: false })}
+                     autoComplete="off"
+                  />
+                  <label
+                     className="btn btn-outline-primary"
+                     htmlFor={`btnradio${id}no`}
+                  >
+                     No
+                  </label>
+               </div>
+            )}
+         </div>
+      </div>
+   );
+};
+
+const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
    answeredQuestions,
    save,
 }) => {
-   const { status, value } = answeredQuestions;
-   const displayAnswers = useMemo(() => {
-      return value.sort((a, b) => a.id - b.id);
+   // The answered questions and if they need to be shown
+   const { show, value } = answeredQuestions;
+   // Finds question in answered questions
+   const findQuestion = useMemo(() => {
+      return (questionID: number) => {
+         const indexOfEl = value.findIndex((el) => el.id === questionID);
+         return value[indexOfEl];
+      };
    }, [value]);
 
    return (
@@ -54,139 +168,13 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
          >
             <div className="accordion-body">
                {questions.map((question, id) => (
-                  <div key={id} className="row mb-2">
-                     <div className="col-11 col-md-10">
-                        <span className="question_number_wrap">
-                           {question.id}.
-                        </span>
-                        <div className="question_wrap">
-                           <strong>{question.headerText}</strong>
-                           <p className="m-0">{question.text}</p>
-                        </div>
-                     </div>
-                     <div className="col-12 col-md-2">
-                        {!status &&
-                           displayAnswers[question.id - 1] &&
-                           displayAnswers[question.id - 1].answer === true && (
-                              <div
-                                 className="btn-group"
-                                 role="group"
-                                 aria-label="Basic radio toggle button group"
-                              >
-                                 <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name={`btnradio${question.id}`}
-                                    id={`btnradio${question.id}`}
-                                    autoComplete="off"
-                                    readOnly
-                                    defaultChecked
-                                 />
-                                 <label
-                                    className="btn btn-outline-primary"
-                                    htmlFor={`btnradio${question.id}`}
-                                 >
-                                    Yes
-                                 </label>
-                                 <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name={`btnradio${question.id}`}
-                                    id={`btnradio${question.id}no`}
-                                    autoComplete="off"
-                                    disabled
-                                 />
-                                 <label
-                                    className="btn btn-outline-primary"
-                                    htmlFor={`btnradio${question.id}no`}
-                                 >
-                                    No
-                                 </label>
-                              </div>
-                           )}
-                        {!status &&
-                           displayAnswers[question.id - 1] &&
-                           displayAnswers[question.id - 1].answer === false && (
-                              <div
-                                 className="btn-group"
-                                 role="group"
-                                 aria-label="Basic radio toggle button group"
-                              >
-                                 <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name={`btnradio${question.id}`}
-                                    id={`btnradio${question.id}`}
-                                    autoComplete="off"
-                                    readOnly
-                                    disabled
-                                 />
-                                 <label
-                                    className="btn btn-outline-primary"
-                                    htmlFor={`btnradio${question.id}`}
-                                 >
-                                    Yes
-                                 </label>
-                                 <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name={`btnradio${question.id}`}
-                                    id={`btnradio${question.id}no`}
-                                    autoComplete="off"
-                                    readOnly
-                                    defaultChecked
-                                 />
-                                 <label
-                                    className="btn btn-outline-primary"
-                                    htmlFor={`btnradio${question.id}no`}
-                                 >
-                                    No
-                                 </label>
-                              </div>
-                           )}
-                        {status && (
-                           <div
-                              className="btn-group"
-                              role="group"
-                              aria-label="Basic radio toggle button group"
-                           >
-                              <input
-                                 type="radio"
-                                 className="btn-check"
-                                 name={`btnradio${question.id}`}
-                                 id={`btnradio${question.id}`}
-                                 autoComplete="off"
-                                 onClick={() =>
-                                    save({ id: question.id, answer: true })
-                                 }
-                              />
-                              <label
-                                 className="btn btn-outline-primary"
-                                 htmlFor={`btnradio${question.id}`}
-                              >
-                                 Yes
-                              </label>
-
-                              <input
-                                 type="radio"
-                                 className="btn-check"
-                                 name={`btnradio${question.id}`}
-                                 id={`btnradio${question.id}no`}
-                                 onClick={() =>
-                                    save({ id: question.id, answer: false })
-                                 }
-                                 autoComplete="off"
-                              />
-                              <label
-                                 className="btn btn-outline-primary"
-                                 htmlFor={`btnradio${question.id}no`}
-                              >
-                                 No
-                              </label>
-                           </div>
-                        )}
-                     </div>
-                  </div>
+                  <QuestionItemBody
+                     key={id}
+                     {...question}
+                     save={save}
+                     toggleAnswer={show}
+                     isAnswered={findQuestion(question.id)}
+                  />
                ))}
             </div>
          </div>
@@ -194,12 +182,14 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
    );
 };
 
-export const QuestionsComponentTest: React.FC<{
-   interactive?: boolean;
+const QuestionsComponentTest: React.FC<{
+   interactive: boolean;
 }> = ({ interactive }) => {
+   // Make use of the assessment state functionalities
    const { assessment } = useContext<IAppState>(AppContext);
-   const { t } = useTranslation();
-   const questions: Array<QuestionItemProps> = t(
+   const { t } = useTranslation(); // for accessing the json files
+   // Fetch the questions from the json file
+   const questions: Array<QuestionContainerProp> = t(
       'dataBreachAssessmentQuestions',
       {
          returnObjects: true,
@@ -209,13 +199,13 @@ export const QuestionsComponentTest: React.FC<{
    return (
       <div className="accordion" id="breachassessmetcontainer">
          {questions.map((el, id) => (
-            <QuestionItem
+            <QuestionItemContainer
                key={id}
                id={id}
                type={el.type}
                questions={el.questions}
                answeredQuestions={{
-                  status: interactive ?? false,
+                  show: interactive ?? false,
                   value: assessment?.state.current.answers ?? [],
                }}
                save={(value) => {
@@ -229,3 +219,5 @@ export const QuestionsComponentTest: React.FC<{
       </div>
    );
 };
+
+export default QuestionsComponentTest;
