@@ -1,46 +1,65 @@
 import React, { useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { AppContext, IAppState } from '../../providers';
 import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
+import { IQuestion } from '../../providers/reducers/questions';
 import './style.css';
 
 // The interface for a single question
-interface QuestionBodyProp extends Partial<QuestionInteractionProp> {
+interface QuestionProp extends Partial<QuestionInteraction> {
    id: number;
    headerText: string;
    text: string | Array<string>;
-   ignoreQuestionsWhenAnswered: Array<number>;
    toggleAnswer: boolean;
-   isAnswered?: { id: number; answer: boolean };
+   question?: {
+      current: { id: number; answer: boolean };
+      all: Array<{ id: number; answer: boolean }>;
+   };
 }
 
 // The interface for interacting with the assessment state
-interface QuestionInteractionProp {
+interface QuestionInteraction {
    answeredQuestions: {
       show: boolean;
       value: Array<{ id: number; answer: boolean }>;
    };
-   save: (value: { id: number; answer: boolean }) => void;
+   giveAnswer: (value: { id: number; answer: boolean }) => void;
 }
 
 // Interface for the questions in json file
-interface QuestionContainerProp extends QuestionInteractionProp {
+interface QuestionContainerProp extends QuestionInteraction {
    id: number;
    type: string;
-   questions: Array<QuestionBodyProp>;
+   questions: Array<IQuestion>;
 }
 
 /**
  * This component contains the questions with the yes and no buttons
  */
-const QuestionItemBody: React.FC<QuestionBodyProp> = ({
+const Question: React.FC<QuestionProp> = ({
    id,
    headerText,
    text,
    toggleAnswer,
-   isAnswered,
-   save,
+   question,
+   giveAnswer,
 }) => {
+   // About the position
+   const isFirstQuestion = id === 1;
+
+   // About the answers
+   const previousQuestionAnswered =
+      question?.all &&
+      (id - 1 === question?.all.length || id - 1 < question?.all.length);
+   const currentQuestion = question?.current;
+
+   const disableYesWhen =
+      (!isFirstQuestion && !previousQuestionAnswered) ||
+      (!toggleAnswer && currentQuestion?.answer === false);
+
+   const disableNoWhen =
+      (!isFirstQuestion && !previousQuestionAnswered) ||
+      (!toggleAnswer && currentQuestion?.answer === true);
+
    return (
       <div className="row mb-2">
          <div className="col-11 col-md-10">
@@ -51,7 +70,7 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
             </div>
          </div>
          <div className="col-12 col-md-2">
-            {save && (
+            {giveAnswer && (
                <div
                   className="btn-group"
                   role="group"
@@ -62,14 +81,10 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
                      className="btn-check"
                      name={`btnradio${id}`}
                      id={`btnradio${id}`}
-                     disabled={
-                        (!toggleAnswer && isAnswered?.answer === false) ||
-                        (isAnswered?.answer !== false &&
-                           isAnswered?.answer !== true)
-                     }
-                     checked={isAnswered?.answer === true}
+                     disabled={disableYesWhen}
+                     defaultChecked={currentQuestion?.answer === true}
                      onClick={() => {
-                        if (toggleAnswer) save({ id, answer: true });
+                        if (toggleAnswer) giveAnswer({ id, answer: true });
                      }}
                   />
                   <label
@@ -83,14 +98,10 @@ const QuestionItemBody: React.FC<QuestionBodyProp> = ({
                      className="btn-check"
                      name={`btnradio${id}`}
                      id={`btnradio${id}no`}
-                     disabled={
-                        (!toggleAnswer && isAnswered?.answer === true) ||
-                        (isAnswered?.answer !== false &&
-                           isAnswered?.answer !== true)
-                     }
-                     checked={isAnswered?.answer === false}
+                     disabled={disableNoWhen}
+                     defaultChecked={currentQuestion?.answer === false}
                      onClick={() => {
-                        if (toggleAnswer) save({ id, answer: false });
+                        if (toggleAnswer) giveAnswer({ id, answer: false });
                      }}
                   />
                   <label
@@ -116,7 +127,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    type,
    questions,
    answeredQuestions,
-   save,
+   giveAnswer,
 }) => {
    // The answered questions and if they need to be shown
    const { show, value } = answeredQuestions;
@@ -150,12 +161,15 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
          >
             <div className="accordion-body">
                {questions.map((question, id) => (
-                  <QuestionItemBody
+                  <Question
                      key={id}
                      {...question}
-                     save={save}
+                     giveAnswer={giveAnswer}
                      toggleAnswer={show}
-                     isAnswered={findQuestion(question.id)}
+                     question={{
+                        current: findQuestion(question.id),
+                        all: value,
+                     }}
                   />
                ))}
             </div>
@@ -174,19 +188,11 @@ const QuestionsComponentTest: React.FC<{
    interactive: boolean;
 }> = ({ interactive }) => {
    // Make use of the assessment state functionalities
-   const { assessment } = useContext<IAppState>(AppContext);
-   const { t } = useTranslation(); // for accessing the json files
-   // Fetch the questions from the json file
-   const questions: Array<QuestionContainerProp> = t(
-      'dataBreachAssessmentQuestions',
-      {
-         returnObjects: true,
-      }
-   );
+   const { assessment, questionTypes } = useContext<IAppState>(AppContext);
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {questions.map((el, id) => (
+         {questionTypes?.map((el, id) => (
             <QuestionItemContainer
                key={id}
                id={id}
@@ -196,7 +202,7 @@ const QuestionsComponentTest: React.FC<{
                   show: interactive ?? false,
                   value: assessment?.state.current.answers ?? [],
                }}
-               save={(value) => {
+               giveAnswer={(value) => {
                   assessment?.dispatch({
                      type: ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_ANSWER,
                      payload: { id: value.id, answer: value.answer },
