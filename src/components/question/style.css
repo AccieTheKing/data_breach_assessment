@@ -44,6 +44,10 @@
    padding-bottom: 5px;
 }
 
+#breachassessmetcontainer .row.disabled_question_true > div:first-child {
+   opacity: 0.5;
+}
+
 #breachassessmetcontainer .accordion-item .question_number_wrap {
    color: var(--nnOrange);
    margin-right: 5px;

@@ -61,7 +61,9 @@ const Question: React.FC<QuestionProp> = ({
       (!toggleAnswer && currentQuestion?.answer === true);
 
    return (
-      <div className="row mb-2">
+      <div
+         className={`row mb-2 disabled_question_${!previousQuestionAnswered}`}
+      >
          <div className="col-11 col-md-10">
             <span className="question_number_wrap">{id}.</span>
             <div className="question_wrap">
