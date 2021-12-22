@@ -53,6 +53,15 @@
    margin-right: 5px;
 }
 
+#breachassessmetcontainer .accordion-item .question_wrap strong {
+   font-size: calc(var(--appFontSize) + 0.3em);
+}
+
+#breachassessmetcontainer .accordion-item .question_wrap p {
+   font-size: var(--appFontSize);
+   font-weight: 600;
+}
+
 #breachassessmetcontainer .accordion-item .row > div,
 #breachassessmetcontainer .row > div:first-child {
    display: flex;
