@@ -104,7 +104,7 @@ const Question: React.FC<QuestionProp> = ({
                            onGiveAnswer({
                               id,
                               answer: true,
-                              weight: questionWeight,
+                              weight: questionWeight.yes,
                            });
                      }}
                   />
@@ -126,7 +126,7 @@ const Question: React.FC<QuestionProp> = ({
                            onGiveAnswer({
                               id,
                               answer: false,
-                              weight: questionWeight,
+                              weight: questionWeight.no,
                            });
                      }}
                   />

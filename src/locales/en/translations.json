@@ -7,28 +7,43 @@
                 {
                     "id": 1,
                     "text": "Does the data breach involve simple data?",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 2,
                     "headerText": "This is just a test",
                     "text": "Can the data breach lead to profiling of the individual or assumptions about the individual's social/economic status.",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 3,
                     "text": "Can the data or the characteristics of the controller lead to assumptions about the individual’s health status, sexual preferences, political or religious beliefs?",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 4,
                     "text": " Are any of the data subjects considered within vulnerable groups such as minors, political refugees, (political leaders, celebrities) etc.?",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 5,
                     "text": "Can the data breach lead to a breach in their personal security or affect their physical/psychological conditions?",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 }
             ]
         },
@@ -39,31 +54,46 @@
                     "id": 6,
                     "headerText": "Header or something",
                     "text": "This is question 1",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 7,
                     "headerText": "Header or something",
                     "text": "This is question 2",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 8,
                     "headerText": "Header or something",
                     "text": "This is question 3",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 9,
                     "headerText": "Header or something",
                     "text": "This is question 4",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 10,
                     "headerText": "Header or something",
                     "text": "This is question 5",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 }
             ]
         },
@@ -74,31 +104,46 @@
                     "id": 11,
                     "headerText": "Header or something",
                     "text": "This is question 1",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 12,
                     "headerText": "Header or something",
                     "text": "This is question 2",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 13,
                     "headerText": "Header or something",
                     "text": "This is question 3",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 14,
                     "headerText": "Header or something",
                     "text": "This is question 4",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 15,
                     "headerText": "Header or something",
                     "text": "This is question 5",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 }
             ]
         },
@@ -109,31 +154,46 @@
                     "id": 16,
                     "headerText": "Header or something",
                     "text": "This is question 1",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 17,
                     "headerText": "Header or something",
                     "text": "This is question 2",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 18,
                     "headerText": "Header or something",
                     "text": "This is question 3",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 19,
                     "headerText": "Header or something",
                     "text": "This is question 4",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 },
                 {
                     "id": 20,
                     "headerText": "Header or something",
                     "text": "This is question 5",
-                    "weight": 1
+                    "weight": {
+                        "yes": 1,
+                        "no": 2
+                    }
                 }
             ]
         }

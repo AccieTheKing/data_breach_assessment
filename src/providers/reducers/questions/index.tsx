@@ -8,5 +8,5 @@ export interface IQuestion {
    id: number;
    headerText: string;
    text: string | Array<string>;
-   weight: number;
+   weight: { yes: number; no: number };
 }
