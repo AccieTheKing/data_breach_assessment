@@ -1,12 +1,15 @@
 import React, { useMemo, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+   IQuestion,
+   QuestionTypes,
+} from '../components/question/question.component';
 import assessmentReducer, {
    assessmentInitialState,
    IAssessmentState,
 } from './reducers/assessment';
 import assessorReducer, { IAssessorState } from './reducers/assessor';
 import { assessorInitialState } from './reducers/assessor';
-import { IQuestion, QuestionTypes } from './reducers/questions';
 
 // This is how the global state of the app will look like
 // interface IAppContext {

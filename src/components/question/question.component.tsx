@@ -1,8 +1,20 @@
 import React, { useContext, useMemo } from 'react';
 import { AppContext, IAppState } from '../../providers';
 import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
-import { IQuestion } from '../../providers/reducers/questions';
 import './style.css';
+
+export interface QuestionTypes {
+   id: number;
+   type: string;
+   questions: Array<IQuestion>;
+}
+
+export interface IQuestion {
+   id: number;
+   headerText: string;
+   text: string | Array<string>;
+   weight: { yes: number; no: number };
+}
 
 // The interface for a single question
 interface QuestionProp extends Partial<QuestionInteraction> {
@@ -36,6 +48,10 @@ interface QuestionContainerProp extends QuestionInteraction {
    id: number;
    type: string;
    questions: Array<IQuestion>;
+}
+
+function onCalculateSeverityScore(currentScore: number): number {
+   return 1;
 }
 
 /**

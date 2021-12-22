@@ -5,7 +5,7 @@ export interface IAssessment {
       dataBreachDate: Date | null;
       assessmentDate: Date | null;
       impactScore: number;
-      result: number;
+      score: { [key: string]: number };
       answers: Array<{ id: number; answer: boolean; weight: number }>;
    };
    drafts: Array<{}> | null;
@@ -25,7 +25,6 @@ export enum ASSESSMENT_STATE_ACTIONS {
    ADD_DATA_BREACH_DATE = 'addDataBreachDate',
    ADD_ASSESSMENT_DATE = 'addAssessmentDate',
    ADD_ASSESSMENT_SCORE = 'addAssessmentScore',
-   ADD_ASSESSMENT_RESULT = 'addAssessmentResult',
    ADD_ASSESSMENT_DRAFTS = 'addAssessmentDrafts',
    ADD_ASSESSMENT_HISTORY = 'addAssessmentHistory',
    ADD_ASSESSMENT_ANSWER = 'addAssessmentAnswer',
@@ -37,8 +36,8 @@ export const assessmentInitialState: IAssessment = {
       incidentNumber: null,
       dataBreachDate: null,
       assessmentDate: new Date(),
-      impactScore: 1,
-      result: 1,
+      impactScore: 3,
+      score: { simple: 0, behavioral: 0, financial: 0, sensitive: 0 },
       answers: [],
    },
    drafts: null,
@@ -71,13 +70,8 @@ const assessmentReducer = (
             ...state,
             current: { ...state.current, impactScore: action.payload },
          };
-      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_RESULT:
-         return {
-            ...state,
-            current: { ...state.current, result: action.payload },
-         };
       case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_ANSWER:
-         const { id, answer } = action.payload;
+         const { id, answer, weight } = action.payload;
          const items = state.current.answers;
          const foundIndex = items.findIndex((el) => el.id === id);
 

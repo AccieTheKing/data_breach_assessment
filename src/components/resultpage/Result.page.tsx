@@ -61,7 +61,6 @@ const Resultpage: React.FC = () => {
                         Performed by:{' '}
                         {`${assessorData?.firstName} ${assessorData?.lastName}`}
                      </p>
-                     <p>Result: {assessmentData?.current.result}</p>
                   </div>
                </div>
             </div>
