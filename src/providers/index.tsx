@@ -1,14 +1,12 @@
-import React, { useReducer } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import assessmentReducer, {
    assessmentInitialState,
    IAssessmentState,
 } from './reducers/assessment';
-import assessorReducer, {
-   assessorInitialState,
-   IAssessorState,
-} from './reducers/assessor';
-import { QuestionTypes } from './reducers/questions';
+import assessorReducer, { IAssessorState } from './reducers/assessor';
+import { assessorInitialState } from './reducers/assessor';
+import { IQuestion, QuestionTypes } from './reducers/questions';
 
 // This is how the global state of the app will look like
 // interface IAppContext {
@@ -30,7 +28,10 @@ import { QuestionTypes } from './reducers/questions';
 export interface IAppState {
    assessor?: IAssessorState;
    assessment?: IAssessmentState;
-   questionTypes?: Array<QuestionTypes>;
+   questions?: {
+      withTypes: Array<QuestionTypes>;
+      withoutTypes: Array<IQuestion>;
+   };
 }
 
 // Putting the context of the app in variable
@@ -53,6 +54,15 @@ const AppProvider: React.FC = ({ children }) => {
       }
    );
 
+   // Only the questions, without the type (SIMPLE DATA etc.)
+   const allQuestions: Array<IQuestion> = useMemo(() => {
+      const list: Array<IQuestion> = [];
+      questionTypes.forEach((question) => {
+         list.push(...question.questions);
+      });
+      return list;
+   }, [questionTypes]);
+
    // All functions for changing app value states
    const [assessorState, assessorDispatch] = useReducer(
       assessorReducer,
@@ -72,7 +82,10 @@ const AppProvider: React.FC = ({ children }) => {
          state: assessmentState,
          dispatch: assessmentDispatch,
       },
-      questionTypes: questionTypes,
+      questions: {
+         withTypes: questionTypes,
+         withoutTypes: allQuestions,
+      },
    };
 
    return (

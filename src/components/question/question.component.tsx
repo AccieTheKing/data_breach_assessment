@@ -10,9 +10,10 @@ interface QuestionProp extends Partial<QuestionInteraction> {
    headerText: string;
    text: string | Array<string>;
    toggleAnswer: boolean;
-   question?: {
-      current: { id: number; answer: boolean };
-      all: Array<{ id: number; answer: boolean }>;
+   question: {
+      current: { id: number; answer: boolean; weight: number };
+      allAnswers: Array<{ id: number; answer: boolean; weight: number }>;
+      allQuestions: Array<IQuestion>;
    };
 }
 
@@ -20,9 +21,14 @@ interface QuestionProp extends Partial<QuestionInteraction> {
 interface QuestionInteraction {
    answeredQuestions: {
       show: boolean;
-      value: Array<{ id: number; answer: boolean }>;
+      stateValue: Array<{ id: number; answer: boolean; weight: number }>;
+      allWithoutypes: Array<IQuestion>;
    };
-   giveAnswer: (value: { id: number; answer: boolean }) => void;
+   onGiveAnswer: (value: {
+      id: number;
+      answer: boolean;
+      weight: number;
+   }) => void;
 }
 
 // Interface for the questions in json file
@@ -41,22 +47,30 @@ const Question: React.FC<QuestionProp> = ({
    text,
    toggleAnswer,
    question,
-   giveAnswer,
+   onGiveAnswer,
 }) => {
    // About the position
    const isFirstQuestion = id === 1;
 
    // About the answers
    const previousQuestionAnswered =
-      question?.all &&
-      (id - 1 === question?.all.length || id - 1 < question?.all.length);
-   const currentQuestion = question?.current;
+      toggleAnswer &&
+      question?.allAnswers &&
+      (id - 1 === question?.allAnswers.length ||
+         id - 1 < question?.allAnswers.length);
 
+   // Questions
+   const currentQuestion = question?.current;
+   const questionWeight = question.allQuestions[id - 1].weight;
+
+   // Disable buttons
    const disableYesWhen =
+      !toggleAnswer ||
       (!isFirstQuestion && !previousQuestionAnswered) ||
       (!toggleAnswer && currentQuestion?.answer === false);
 
    const disableNoWhen =
+      !toggleAnswer ||
       (!isFirstQuestion && !previousQuestionAnswered) ||
       (!toggleAnswer && currentQuestion?.answer === true);
 
@@ -72,7 +86,7 @@ const Question: React.FC<QuestionProp> = ({
             </div>
          </div>
          <div className="col-12 col-md-2">
-            {giveAnswer && (
+            {onGiveAnswer && (
                <div
                   className="btn-group"
                   role="group"
@@ -86,7 +100,12 @@ const Question: React.FC<QuestionProp> = ({
                      disabled={disableYesWhen}
                      defaultChecked={currentQuestion?.answer === true}
                      onClick={() => {
-                        if (toggleAnswer) giveAnswer({ id, answer: true });
+                        if (toggleAnswer)
+                           onGiveAnswer({
+                              id,
+                              answer: true,
+                              weight: questionWeight,
+                           });
                      }}
                   />
                   <label
@@ -103,7 +122,12 @@ const Question: React.FC<QuestionProp> = ({
                      disabled={disableNoWhen}
                      defaultChecked={currentQuestion?.answer === false}
                      onClick={() => {
-                        if (toggleAnswer) giveAnswer({ id, answer: false });
+                        if (toggleAnswer)
+                           onGiveAnswer({
+                              id,
+                              answer: false,
+                              weight: questionWeight,
+                           });
                      }}
                   />
                   <label
@@ -129,17 +153,17 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    type,
    questions,
    answeredQuestions,
-   giveAnswer,
+   onGiveAnswer,
 }) => {
    // The answered questions and if they need to be shown
-   const { show, value } = answeredQuestions;
+   const { show, stateValue, allWithoutypes } = answeredQuestions;
    // Finds question in answered questions
    const findQuestion = useMemo(() => {
       return (questionID: number) => {
-         const indexOfEl = value.findIndex((el) => el.id === questionID);
-         return value[indexOfEl];
+         const indexOfEl = stateValue.findIndex((el) => el.id === questionID);
+         return stateValue[indexOfEl];
       };
-   }, [value]);
+   }, [stateValue]);
 
    return (
       <div className="accordion-item">
@@ -166,11 +190,12 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                   <Question
                      key={id}
                      {...question}
-                     giveAnswer={giveAnswer}
+                     onGiveAnswer={onGiveAnswer}
                      toggleAnswer={show}
                      question={{
                         current: findQuestion(question.id),
-                        all: value,
+                        allAnswers: stateValue,
+                        allQuestions: allWithoutypes,
                      }}
                   />
                ))}
@@ -190,11 +215,11 @@ const QuestionsComponentTest: React.FC<{
    interactive: boolean;
 }> = ({ interactive }) => {
    // Make use of the assessment state functionalities
-   const { assessment, questionTypes } = useContext<IAppState>(AppContext);
+   const { assessment, questions } = useContext<IAppState>(AppContext);
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {questionTypes?.map((el, id) => (
+         {questions?.withTypes.map((el, id) => (
             <QuestionItemContainer
                key={id}
                id={id}
@@ -202,12 +227,17 @@ const QuestionsComponentTest: React.FC<{
                questions={el.questions}
                answeredQuestions={{
                   show: interactive ?? false,
-                  value: assessment?.state.current.answers ?? [],
+                  stateValue: assessment?.state.current.answers ?? [],
+                  allWithoutypes: questions.withoutTypes,
                }}
-               giveAnswer={(value) => {
+               onGiveAnswer={(value) => {
                   assessment?.dispatch({
                      type: ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_ANSWER,
-                     payload: { id: value.id, answer: value.answer },
+                     payload: {
+                        id: value.id,
+                        answer: value.answer,
+                        weight: value.weight,
+                     },
                   });
                }}
             />

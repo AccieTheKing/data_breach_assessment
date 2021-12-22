@@ -6,32 +6,29 @@
             "questions": [
                 {
                     "id": 1,
-                    "headerText": "Header or something",
-                    "text": "This is question 1",
-                    "ignoreQuestionsWhenAnswered": []
+                    "text": "Does the data breach involve simple data?",
+                    "weight": 1
                 },
                 {
                     "id": 2,
-                    "text": "This is question 2",
-                    "ignoreQuestionsWhenAnswered": []
+                    "headerText": "This is just a test",
+                    "text": "Can the data breach lead to profiling of the individual or assumptions about the individual's social/economic status.",
+                    "weight": 1
                 },
                 {
                     "id": 3,
-                    "headerText": "Header or something",
-                    "text": "This is question 3",
-                    "ignoreQuestionsWhenAnswered": []
+                    "text": "Can the data or the characteristics of the controller lead to assumptions about the individual’s health status, sexual preferences, political or religious beliefs?",
+                    "weight": 1
                 },
                 {
                     "id": 4,
-                    "headerText": "Header or something",
-                    "text": "This is question 4",
-                    "ignoreQuestionsWhenAnswered": []
+                    "text": " Are any of the data subjects considered within vulnerable groups such as minors, political refugees, (political leaders, celebrities) etc.?",
+                    "weight": 1
                 },
                 {
                     "id": 5,
-                    "headerText": "Header or something",
-                    "text": "This is question 5",
-                    "ignoreQuestionsWhenAnswered": []
+                    "text": "Can the data breach lead to a breach in their personal security or affect their physical/psychological conditions?",
+                    "weight": 1
                 }
             ]
         },
@@ -42,31 +39,31 @@
                     "id": 6,
                     "headerText": "Header or something",
                     "text": "This is question 1",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 7,
                     "headerText": "Header or something",
                     "text": "This is question 2",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 8,
                     "headerText": "Header or something",
                     "text": "This is question 3",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 9,
                     "headerText": "Header or something",
                     "text": "This is question 4",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 10,
                     "headerText": "Header or something",
                     "text": "This is question 5",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 }
             ]
         },
@@ -77,31 +74,31 @@
                     "id": 11,
                     "headerText": "Header or something",
                     "text": "This is question 1",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 12,
                     "headerText": "Header or something",
                     "text": "This is question 2",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 13,
                     "headerText": "Header or something",
                     "text": "This is question 3",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 14,
                     "headerText": "Header or something",
                     "text": "This is question 4",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 15,
                     "headerText": "Header or something",
                     "text": "This is question 5",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 }
             ]
         },
@@ -112,31 +109,31 @@
                     "id": 16,
                     "headerText": "Header or something",
                     "text": "This is question 1",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 17,
                     "headerText": "Header or something",
                     "text": "This is question 2",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 18,
                     "headerText": "Header or something",
                     "text": "This is question 3",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 19,
                     "headerText": "Header or something",
                     "text": "This is question 4",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 },
                 {
                     "id": 20,
                     "headerText": "Header or something",
                     "text": "This is question 5",
-                    "ignoreQuestionsWhenAnswered": []
+                    "weight": 1
                 }
             ]
         }

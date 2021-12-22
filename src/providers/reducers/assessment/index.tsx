@@ -6,7 +6,7 @@ export interface IAssessment {
       assessmentDate: Date | null;
       impactScore: number;
       result: number;
-      answers: Array<{ id: number; answer: boolean }>;
+      answers: Array<{ id: number; answer: boolean; weight: number }>;
    };
    drafts: Array<{}> | null;
    history: Array<{}> | null;
