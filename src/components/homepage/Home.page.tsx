@@ -100,7 +100,7 @@ const Homepage = () => {
             <button
                type="submit"
                className="btn btn-colour-1 btn-lg btn-block"
-               onClick={() => navigate('/result')}
+               onClick={() => navigate('/start')}
             >
                START <br></br>
                ASSESSMENT

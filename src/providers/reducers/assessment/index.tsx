@@ -5,6 +5,7 @@ export interface IAssessment {
       dataBreachDate: Date | null;
       assessmentDate: Date | null;
       impactScore: number;
+      descriptiveTitle: string;
       score: { [key: string]: number };
       answers: Array<{ id: number; answer: boolean; weight: number }>;
    };
@@ -24,6 +25,7 @@ export enum ASSESSMENT_STATE_ACTIONS {
    ADD_INCIDENT_NUMBER = 'addIncidentNumber',
    ADD_DATA_BREACH_DATE = 'addDataBreachDate',
    ADD_ASSESSMENT_DATE = 'addAssessmentDate',
+   ADD_ASSESSMENT_DESCRIPTIVE_TITLE = 'addDescriptiveTitle',
    ADD_ASSESSMENT_SCORE = 'addAssessmentScore',
    ADD_ASSESSMENT_DRAFTS = 'addAssessmentDrafts',
    ADD_ASSESSMENT_HISTORY = 'addAssessmentHistory',
@@ -36,6 +38,7 @@ export const assessmentInitialState: IAssessment = {
       incidentNumber: null,
       dataBreachDate: null,
       assessmentDate: new Date(),
+      descriptiveTitle: '',
       impactScore: 3,
       score: { simple: 0, behavioral: 0, financial: 0, sensitive: 0 },
       answers: [],
@@ -59,6 +62,11 @@ const assessmentReducer = (
          return {
             ...state,
             current: { ...state.current, dataBreachDate: action.payload },
+         };
+      case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_DESCRIPTIVE_TITLE:
+         return {
+            ...state,
+            current: { ...state.current, descriptiveTitle: action.payload },
          };
       case ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_DATE:
          return {

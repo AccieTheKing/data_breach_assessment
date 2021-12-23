@@ -1,160 +1,49 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { AppContext, IAppState } from '../../providers';
-import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
 import './style.css';
 
 export interface QuestionTypes {
-   id: number;
    type: string;
    questions: Array<IQuestion>;
+}
+
+export interface ICiaType {
+   id: number;
+   headerText?: string;
+   text: string;
+   weight: {
+      [key: string]: {
+         value: number;
+         action: string;
+      };
+   };
 }
 
 export interface IQuestion {
    id: number;
-   headerText: string;
-   text: string | Array<string>;
-   weight: { yes: number; no: number };
-}
-
-// The interface for a single question
-interface QuestionProp extends Partial<QuestionInteraction> {
-   id: number;
-   headerText: string;
-   text: string | Array<string>;
-   toggleAnswer: boolean;
-   question: {
-      current: { id: number; answer: boolean; weight: number };
-      allAnswers: Array<{ id: number; answer: boolean; weight: number }>;
-      allQuestions: Array<IQuestion>;
+   headerText?: string;
+   cia_type?: string;
+   text: string;
+   questions?: Array<ICiaType>;
+   weight?: {
+      [key: string]: {
+         value: number;
+         action: string;
+      };
    };
-}
-
-// The interface for interacting with the assessment state
-interface QuestionInteraction {
-   answeredQuestions: {
-      show: boolean;
-      stateValue: Array<{ id: number; answer: boolean; weight: number }>;
-      allWithoutypes: Array<IQuestion>;
-   };
-   onGiveAnswer: (value: {
-      id: number;
-      answer: boolean;
-      weight: number;
-   }) => void;
 }
 
 // Interface for the questions in json file
-interface QuestionContainerProp extends QuestionInteraction {
+interface QuestionContainerProp {
    id: number;
    type: string;
    questions: Array<IQuestion>;
 }
 
-function onCalculateSeverityScore(currentScore: number): number {
-   return 1;
-}
-
-/**
- * This component contains the questions with the yes and no buttons
- */
-const Question: React.FC<QuestionProp> = ({
-   id,
-   headerText,
-   text,
-   toggleAnswer,
-   question,
-   onGiveAnswer,
-}) => {
-   // About the position
-   const isFirstQuestion = id === 1;
-
-   // About the answers
-   const previousQuestionAnswered =
-      toggleAnswer &&
-      question?.allAnswers &&
-      (id - 1 === question?.allAnswers.length ||
-         id - 1 < question?.allAnswers.length);
-
-   // Questions
-   const currentQuestion = question?.current;
-   const questionWeight = question.allQuestions[id - 1].weight;
-
-   // Disable buttons
-   const disableYesWhen =
-      !toggleAnswer ||
-      (!isFirstQuestion && !previousQuestionAnswered) ||
-      (!toggleAnswer && currentQuestion?.answer === false);
-
-   const disableNoWhen =
-      !toggleAnswer ||
-      (!isFirstQuestion && !previousQuestionAnswered) ||
-      (!toggleAnswer && currentQuestion?.answer === true);
-
+const Test = () => {
    return (
-      <div
-         className={`row mb-2 disabled_question_${!previousQuestionAnswered}`}
-      >
-         <div className="col-11 col-md-10">
-            <span className="question_number_wrap">{id}.</span>
-            <div className="question_wrap">
-               <strong>{headerText}</strong>
-               <p className="m-0">{text}</p>
-            </div>
-         </div>
-         <div className="col-12 col-md-2">
-            {onGiveAnswer && (
-               <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="Basic radio toggle button group"
-               >
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${id}`}
-                     id={`btnradio${id}`}
-                     disabled={disableYesWhen}
-                     defaultChecked={currentQuestion?.answer === true}
-                     onClick={() => {
-                        if (toggleAnswer)
-                           onGiveAnswer({
-                              id,
-                              answer: true,
-                              weight: questionWeight.yes,
-                           });
-                     }}
-                  />
-                  <label
-                     className="btn btn-outline-primary"
-                     htmlFor={`btnradio${id}`}
-                  >
-                     Yes
-                  </label>
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${id}`}
-                     id={`btnradio${id}no`}
-                     disabled={disableNoWhen}
-                     defaultChecked={currentQuestion?.answer === false}
-                     onClick={() => {
-                        if (toggleAnswer)
-                           onGiveAnswer({
-                              id,
-                              answer: false,
-                              weight: questionWeight.no,
-                           });
-                     }}
-                  />
-                  <label
-                     className="btn btn-outline-primary"
-                     htmlFor={`btnradio${id}no`}
-                  >
-                     No
-                  </label>
-               </div>
-            )}
-         </div>
+      <div>
+         <h1>Hello</h1>
       </div>
    );
 };
@@ -168,19 +57,8 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
-   answeredQuestions,
-   onGiveAnswer,
 }) => {
-   // The answered questions and if they need to be shown
-   const { show, stateValue, allWithoutypes } = answeredQuestions;
-   // Finds question in answered questions
-   const findQuestion = useMemo(() => {
-      return (questionID: number) => {
-         const indexOfEl = stateValue.findIndex((el) => el.id === questionID);
-         return stateValue[indexOfEl];
-      };
-   }, [stateValue]);
-
+   console.log(questions);
    return (
       <div className="accordion-item">
          <h2 className="accordion-header" id={`heading${id}`}>
@@ -202,19 +80,49 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
             data-bs-parent="#breachassessmetcontainer"
          >
             <div className="accordion-body">
-               {questions.map((question, id) => (
-                  <Question
-                     key={id}
-                     {...question}
-                     onGiveAnswer={onGiveAnswer}
-                     toggleAnswer={show}
-                     question={{
-                        current: findQuestion(question.id),
-                        allAnswers: stateValue,
-                        allQuestions: allWithoutypes,
-                     }}
-                  />
-               ))}
+               {questions.map((question, id) =>
+                  question.id === 20 ? (
+                     <Test key={id} />
+                  ) : (
+                     <div key={id} className={`row mb-2`}>
+                        <div className="col-11 col-md-10">
+                           <span className="question_number_wrap">
+                              {question.id}.
+                           </span>
+                           <div className="question_wrap">
+                              <strong>{question.headerText}</strong>
+                              <p className="m-0">{question.text}</p>
+                           </div>
+                        </div>
+                        <div className="col-12 col-md-2">
+                           <input
+                              type="radio"
+                              className="btn-check"
+                              name={`btnradio${id}`}
+                              id={`btnradio${id}`}
+                           />
+                           <label
+                              className="btn btn-outline-primary"
+                              htmlFor={`btnradio${id}`}
+                           >
+                              Yes
+                           </label>
+                           <input
+                              type="radio"
+                              className="btn-check"
+                              name={`btnradio${id}`}
+                              id={`btnradio${id}no`}
+                           />
+                           <label
+                              className="btn btn-outline-primary"
+                              htmlFor={`btnradio${id}no`}
+                           >
+                              No
+                           </label>
+                        </div>
+                     </div>
+                  )
+               )}
             </div>
          </div>
       </div>
@@ -227,7 +135,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
  * functionality to save the answers to the state.
  *
  */
-const QuestionsComponentTest: React.FC<{
+const QuestionsResultComponent: React.FC<{
    interactive: boolean;
 }> = ({ interactive }) => {
    // Make use of the assessment state functionalities
@@ -241,25 +149,10 @@ const QuestionsComponentTest: React.FC<{
                id={id}
                type={el.type}
                questions={el.questions}
-               answeredQuestions={{
-                  show: interactive ?? false,
-                  stateValue: assessment?.state.current.answers ?? [],
-                  allWithoutypes: questions.withoutTypes,
-               }}
-               onGiveAnswer={(value) => {
-                  assessment?.dispatch({
-                     type: ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_ANSWER,
-                     payload: {
-                        id: value.id,
-                        answer: value.answer,
-                        weight: value.weight,
-                     },
-                  });
-               }}
             />
          ))}
       </div>
    );
 };
 
-export default QuestionsComponentTest;
+export default QuestionsResultComponent;
