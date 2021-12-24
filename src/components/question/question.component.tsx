@@ -40,10 +40,76 @@ interface QuestionContainerProp {
    questions: Array<IQuestion>;
 }
 
-const Test = () => {
+const EaseOfIndentification: React.FC<{ value: IQuestion }> = ({ value }) => {
+   const questionTitle = value.text;
+   const radioButtonTexts = Object.keys(value.weight ?? {});
+   const radioButtonValues = Object.values(value.weight ?? {});
+
    return (
       <div>
-         <h1>Hello</h1>
+         <p className="m-0">{questionTitle}</p>
+         <div className="eoi_container">
+            {radioButtonTexts.map((text, index) => (
+               <div key={index} className="eoi_container_item">
+                  <label htmlFor={`ease_of_indentication${index}`}>
+                     {text}
+                  </label>
+                  <input
+                     type="radio"
+                     name="ease_of_indentication"
+                     id={`ease_of_indentication${index}`}
+                     value={radioButtonValues[index].value}
+                  />
+               </div>
+            ))}
+         </div>
+      </div>
+   );
+};
+
+const AggravatingCircumstances: React.FC<{ value: IQuestion }> = ({
+   value,
+}) => {
+   const questionsCIA = value.questions;
+
+   return (
+      <div className="mb-2 bottom_lined">
+         {questionsCIA?.map((element, index) => (
+            <div key={index} className={`row mb-2`}>
+               <div className="col-11 col-md-10">
+                  <div className="question_wrap">
+                     <strong> {element.headerText}</strong>
+                     <p className="m-0"> {element.text}</p>
+                  </div>
+               </div>
+               <div className="col-12 col-md-2">
+                  <input
+                     type="radio"
+                     className="btn-check"
+                     name={`btnradio${element.id}`}
+                     id={`btnradio${element.id}`}
+                  />
+                  <label
+                     className="btn btn-outline-primary"
+                     htmlFor={`btnradio${element.id}`}
+                  >
+                     Yes
+                  </label>
+                  <input
+                     type="radio"
+                     className="btn-check"
+                     name={`btnradio${element.id}`}
+                     id={`btnradio${element.id}no`}
+                  />
+                  <label
+                     className="btn btn-outline-primary"
+                     htmlFor={`btnradio${element.id}no`}
+                  >
+                     No
+                  </label>
+               </div>
+            </div>
+         ))}
       </div>
    );
 };
@@ -82,7 +148,9 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
             <div className="accordion-body">
                {questions.map((question, id) =>
                   question.id === 20 ? (
-                     <Test key={id} />
+                     <EaseOfIndentification key={id} value={question} />
+                  ) : question.cia_type ? (
+                     <AggravatingCircumstances value={question} />
                   ) : (
                      <div key={id} className={`row mb-2`}>
                         <div className="col-11 col-md-10">
@@ -98,24 +166,24 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                            <input
                               type="radio"
                               className="btn-check"
-                              name={`btnradio${id}`}
-                              id={`btnradio${id}`}
+                              name={`btnradio${question.id}`}
+                              id={`btnradio${question.id}`}
                            />
                            <label
                               className="btn btn-outline-primary"
-                              htmlFor={`btnradio${id}`}
+                              htmlFor={`btnradio${question.id}`}
                            >
                               Yes
                            </label>
                            <input
                               type="radio"
                               className="btn-check"
-                              name={`btnradio${id}`}
-                              id={`btnradio${id}no`}
+                              name={`btnradio${question.id}`}
+                              id={`btnradio${question.id}no`}
                            />
                            <label
                               className="btn btn-outline-primary"
-                              htmlFor={`btnradio${id}no`}
+                              htmlFor={`btnradio${question.id}no`}
                            >
                               No
                            </label>
