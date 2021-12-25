@@ -1,12 +1,10 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import currentAssessmentState, {
-   ICurrentAssessment,
-} from '../../recoil/question';
-import typedQuestionState, {
-   ITypedQuestionState,
-} from '../../recoil/question/typed';
-import { currentQuestionState } from '../../recoil/question/untyped';
+import assessmentAnswersState, {
+   ICurrentAssessmentAnswers,
+} from '../../recoil/question/answer';
+import { typedQuestionState } from '../../recoil/question/atom';
+import { currentQuestionState } from '../../recoil/question/selector';
 import './style.css';
 
 export interface QuestionTypes {
@@ -276,46 +274,41 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
 const QuestionsResultComponent: React.FC<{
    interactive: boolean;
 }> = ({ interactive }) => {
-   const typedQuestions =
-      useRecoilValue<ITypedQuestionState>(typedQuestionState).questions;
+   const typedQuestions = useRecoilValue<QuestionTypes[]>(typedQuestionState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
-   const [assessmentState, setAssessmentState] =
-      useRecoilState<ICurrentAssessment>(currentAssessmentState);
+   const [assessmentAnswers, setAssessmentAnswersState] = useRecoilState<
+      ICurrentAssessmentAnswers[]
+   >(assessmentAnswersState);
 
    const onAddAnswer = useMemo(() => {
       return (value: IQuestionAnswer) => {
-         const answersArray = assessmentState.answers;
-         const foundIndex = answersArray.findIndex((el) => el.id === value.id);
+         const foundIndex = assessmentAnswers.findIndex(
+            (el) => el.id === value.id
+         );
 
          if (foundIndex !== -1) {
-            const updatedAnswers = answersArray.map((el) => {
+            const updatedAnswers = assessmentAnswers.map((el) => {
                if (el.id === value.id)
                   return { id: el.id, answer: value.answer };
                return el;
             });
-            setAssessmentState({
-               ...assessmentState,
-               answers: updatedAnswers,
-            });
+            setAssessmentAnswersState(updatedAnswers);
             return;
          }
 
-         setAssessmentState({
-            ...assessmentState,
-            answers: [
-               ...assessmentState.answers,
-               {
-                  id: value.id,
-                  answer: value.answer,
-               },
-            ],
-         });
+         setAssessmentAnswersState([
+            ...assessmentAnswers,
+            {
+               id: value.id,
+               answer: value.answer,
+            },
+         ]);
       };
-   }, [assessmentState, setAssessmentState]);
+   }, [assessmentAnswers, setAssessmentAnswersState]);
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {assessmentState.answers.map((question, index) => (
+         {assessmentAnswers.map((question, index) => (
             <div key={index}>
                <span>{question.id}</span>
                <span>{JSON.stringify(question.answer)}</span>

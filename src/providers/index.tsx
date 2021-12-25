@@ -1,16 +1,20 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
    IQuestion,
    QuestionTypes,
 } from '../components/question/question.component';
-import typedQuestionState, {
-   ITypedQuestionState,
-} from '../recoil/question/typed';
-import untypedQuestionState, {
-   IUnTypedQuestionState,
-} from '../recoil/question/untyped';
+import {
+   currentQuestionIdState,
+   currentQuestionTypeState,
+   QUESTIONNAIR_STATE,
+   typedQuestionState,
+   untypedQuestionState,
+} from '../recoil/question/atom';
+import assessmentAnswersState, {
+   ICurrentAssessmentAnswers,
+} from '../recoil/question/answer';
 
 // This is how the global state of the app will look like
 // interface IAppContext {
@@ -46,9 +50,18 @@ const AppProvider: React.FC = ({ children }) => {
       }
    );
    const setTypedQuestions =
-      useSetRecoilState<ITypedQuestionState>(typedQuestionState);
+      useSetRecoilState<QuestionTypes[]>(typedQuestionState);
    const setUntypedQuestions =
-      useSetRecoilState<IUnTypedQuestionState>(untypedQuestionState);
+      useSetRecoilState<IQuestion[]>(untypedQuestionState);
+   const [currentQuestionID, setCurrentQuestionID] = useRecoilState<number>(
+      currentQuestionIdState
+   );
+   const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(
+      currentQuestionTypeState
+   );
+   const [assessmentAnswers, setAssessmentAnswersState] = useRecoilState<
+      ICurrentAssessmentAnswers[]
+   >(assessmentAnswersState);
 
    // Only the questions, without the type (SIMPLE DATA etc.)
    const allQuestions: Array<IQuestion> = useMemo(() => {
@@ -59,10 +72,46 @@ const AppProvider: React.FC = ({ children }) => {
       return list;
    }, [questionTypes]);
 
+   // All the categories of questions
+   const allCategories: Array<string> = useMemo(() => {
+      return questionTypes.map((question) => question.type);
+   }, [questionTypes]);
+
+   // Storing all the questions into the state
    useEffect(() => {
-      setTypedQuestions({ questions: questionTypes });
-      setUntypedQuestions({ questions: allQuestions });
+      // Current question type has to match the initialization of the first question
+      setCurrentQuestionType(questionTypes[0].type);
+      setTypedQuestions(questionTypes);
+      setUntypedQuestions(allQuestions);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [setTypedQuestions, setUntypedQuestions, questionTypes, allQuestions]);
+
+   // Decision making for the next questions
+   useEffect(() => {
+      // Find index of current question
+      const foundIndex = allQuestions.findIndex(
+         (el) => el.id === currentQuestionID
+      );
+      // Get current question
+      const question = allQuestions[foundIndex];
+      // Compare the answer to get next action
+      assessmentAnswers.forEach((givenAnswer) => {
+         if (question.weight && givenAnswer.id === question.id) {
+            const weightIndex = givenAnswer.answer ? 'yes' : 'no';
+            const nextAction = question.weight[weightIndex].action;
+
+            switch (nextAction) {
+               case QUESTIONNAIR_STATE.CONTINUE:
+                  setCurrentQuestionID(currentQuestionID + 1);
+                  break;
+               case QUESTIONNAIR_STATE.NEXT_TYPE:
+                  // Get the first question of the next type
+                  break;
+            }
+         }
+         // If answer changes, check previous answer for new values
+      });
+   }, [assessmentAnswers, allQuestions, currentQuestionID]);
 
    return <div>{children}</div>;
 };
