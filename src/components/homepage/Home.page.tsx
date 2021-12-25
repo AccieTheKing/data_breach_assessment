@@ -1,16 +1,20 @@
-import { useContext } from 'react';
 import './style.css';
 import Navbar from '../Navbar/Nav';
 import './About.page';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext, IAppState } from '../../providers';
-import { ASSESSOR_STATE_ACTIONS } from '../../providers/reducers/assessor';
-import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import assessorState, { IAssessor } from '../../recoil/assessor';
+import currentAssessmentDetailState, {
+   dataBreachDateState,
+   IAssessmentDetailState,
+} from '../../recoil/assessment';
 
 const Homepage = () => {
-   const { assessor, assessment } = useContext<IAppState>(AppContext);
    const navigate = useNavigate();
-   const dataBreachDate = assessment?.state.current.dataBreachDate;
+   const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
+   const dataBreachDate = useRecoilValue<string>(dataBreachDateState);
+   const [assessmentDetail, setAssessmentDetail] =
+      useRecoilState<IAssessmentDetailState>(currentAssessmentDetailState);
 
    return (
       <div>
@@ -21,12 +25,12 @@ const Homepage = () => {
                <div>
                   <input
                      onChange={(e) =>
-                        assessor?.dispatch({
-                           type: ASSESSOR_STATE_ACTIONS.ADD_FIRST_NAME,
-                           payload: e.target.value,
+                        setAssessor({
+                           ...assessor,
+                           firstName: e.target.value,
                         })
                      }
-                     value={assessor?.state.firstName ?? ''}
+                     value={assessor.firstName ?? ''}
                      type="text"
                      className="form-control"
                      placeholder="Enter first name"
@@ -39,12 +43,12 @@ const Homepage = () => {
                <div>
                   <input
                      onChange={(e) =>
-                        assessor?.dispatch({
-                           type: ASSESSOR_STATE_ACTIONS.ADD_LAST_NAME,
-                           payload: e.target.value,
+                        setAssessor({
+                           ...assessor,
+                           lastName: e.target.value,
                         })
                      }
-                     value={assessor?.state.lastName ?? ''}
+                     value={assessor.lastName ?? ''}
                      type="text"
                      className="form-control"
                      placeholder="Enter last name"
@@ -58,12 +62,12 @@ const Homepage = () => {
                   <input
                      type="text"
                      onChange={(e) =>
-                        assessment?.dispatch({
-                           type: ASSESSMENT_STATE_ACTIONS.ADD_INCIDENT_NUMBER,
-                           payload: e.target.value,
+                        setAssessmentDetail({
+                           ...assessmentDetail,
+                           incidentNumber: e.target.value,
                         })
                      }
-                     value={assessment?.state.current.incidentNumber ?? ''}
+                     value={assessmentDetail.incidentNumber ?? ''}
                      className="form-control"
                      placeholder="Enter incident number"
                      aria-label="Incident number"
@@ -81,18 +85,12 @@ const Homepage = () => {
                      type="date"
                      id="formFile"
                      onChange={(e) =>
-                        assessment?.dispatch({
-                           type: ASSESSMENT_STATE_ACTIONS.ADD_DATA_BREACH_DATE,
-                           payload: new Date(e.target.value),
+                        setAssessmentDetail({
+                           ...assessmentDetail,
+                           dataBreachDate: e.target.value,
                         })
                      }
-                     value={
-                        dataBreachDate
-                           ? new Date(dataBreachDate)
-                                .toISOString()
-                                .split('T')[0]
-                           : ''
-                     }
+                     value={dataBreachDate}
                   />
                </div>
             </div>

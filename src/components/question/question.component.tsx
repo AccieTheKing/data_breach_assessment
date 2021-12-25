@@ -1,5 +1,12 @@
-import React, { useContext } from 'react';
-import { AppContext, IAppState } from '../../providers';
+import React, { useMemo } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import currentAssessmentState, {
+   ICurrentAssessment,
+} from '../../recoil/question';
+import typedQuestionState, {
+   ITypedQuestionState,
+} from '../../recoil/question/typed';
+import { currentQuestionState } from '../../recoil/question/untyped';
 import './style.css';
 
 export interface QuestionTypes {
@@ -33,15 +40,29 @@ export interface IQuestion {
    };
 }
 
+export interface IQuestionAnswer {
+   id: number;
+   answer: boolean | string;
+}
+
 // Interface for the questions in json file
-interface QuestionContainerProp {
+interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
    questions: Array<IQuestion>;
+   currentQuestion: IQuestion;
 }
 
-const EaseOfIndentification: React.FC<{ value: IQuestion }> = ({ value }) => {
+interface QuestonInteraction {
+   onAnswerQuestion: (value: IQuestionAnswer) => void;
+}
+
+const EaseOfIndentification: React.FC<{
+   value: IQuestion;
+   onAction: (value: IQuestionAnswer) => void;
+}> = ({ value, onAction }) => {
    const questionTitle = value.text;
+   const questionId = value.id;
    const radioButtonTexts = Object.keys(value.weight ?? {});
    const radioButtonValues = Object.values(value.weight ?? {});
 
@@ -59,6 +80,12 @@ const EaseOfIndentification: React.FC<{ value: IQuestion }> = ({ value }) => {
                      name="ease_of_indentication"
                      id={`ease_of_indentication${index}`}
                      value={radioButtonValues[index].value}
+                     onChange={(e) =>
+                        onAction({
+                           id: questionId,
+                           answer: radioButtonTexts[index],
+                        })
+                     }
                   />
                </div>
             ))}
@@ -67,9 +94,10 @@ const EaseOfIndentification: React.FC<{ value: IQuestion }> = ({ value }) => {
    );
 };
 
-const AggravatingCircumstances: React.FC<{ value: IQuestion }> = ({
-   value,
-}) => {
+const AggravatingCircumstances: React.FC<{
+   value: IQuestion;
+   onAction: (value: { id: number; answer: boolean }) => void;
+}> = ({ value, onAction }) => {
    const questionsCIA = value.questions;
 
    return (
@@ -88,6 +116,12 @@ const AggravatingCircumstances: React.FC<{ value: IQuestion }> = ({
                      className="btn-check"
                      name={`btnradio${element.id}`}
                      id={`btnradio${element.id}`}
+                     onChange={(e) =>
+                        onAction({
+                           id: element.id,
+                           answer: true,
+                        })
+                     }
                   />
                   <label
                      className="btn btn-outline-primary"
@@ -100,6 +134,12 @@ const AggravatingCircumstances: React.FC<{ value: IQuestion }> = ({
                      className="btn-check"
                      name={`btnradio${element.id}`}
                      id={`btnradio${element.id}no`}
+                     onChange={(e) =>
+                        onAction({
+                           id: element.id,
+                           answer: false,
+                        })
+                     }
                   />
                   <label
                      className="btn btn-outline-primary"
@@ -123,8 +163,13 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
+   currentQuestion,
+   onAnswerQuestion,
 }) => {
-   console.log(questions);
+   const showCurrentQuestion = (id: number): boolean => {
+      if (id === currentQuestion.id) return true;
+      return false;
+   };
    return (
       <div className="accordion-item">
          <h2 className="accordion-header" id={`heading${id}`}>
@@ -148,11 +193,24 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
             <div className="accordion-body">
                {questions.map((question, id) =>
                   question.id === 20 ? (
-                     <EaseOfIndentification key={id} value={question} />
+                     <EaseOfIndentification
+                        key={id}
+                        value={question}
+                        onAction={onAnswerQuestion}
+                     />
                   ) : question.cia_type ? (
-                     <AggravatingCircumstances value={question} />
+                     <AggravatingCircumstances
+                        key={id}
+                        value={question}
+                        onAction={onAnswerQuestion}
+                     />
                   ) : (
-                     <div key={id} className={`row mb-2`}>
+                     <div
+                        key={id}
+                        className={`row mb-2 bottom_lined disable_question_${showCurrentQuestion(
+                           question.id
+                        )}`}
+                     >
                         <div className="col-11 col-md-10">
                            <span className="question_number_wrap">
                               {question.id}.
@@ -168,6 +226,12 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                               className="btn-check"
                               name={`btnradio${question.id}`}
                               id={`btnradio${question.id}`}
+                              onChange={(e) =>
+                                 onAnswerQuestion({
+                                    id: question.id,
+                                    answer: true,
+                                 })
+                              }
                            />
                            <label
                               className="btn btn-outline-primary"
@@ -180,6 +244,12 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                               className="btn-check"
                               name={`btnradio${question.id}`}
                               id={`btnradio${question.id}no`}
+                              onChange={(e) =>
+                                 onAnswerQuestion({
+                                    id: question.id,
+                                    answer: false,
+                                 })
+                              }
                            />
                            <label
                               className="btn btn-outline-primary"
@@ -206,17 +276,59 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
 const QuestionsResultComponent: React.FC<{
    interactive: boolean;
 }> = ({ interactive }) => {
-   // Make use of the assessment state functionalities
-   const { assessment, questions } = useContext<IAppState>(AppContext);
+   const typedQuestions =
+      useRecoilValue<ITypedQuestionState>(typedQuestionState).questions;
+   const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
+   const [assessmentState, setAssessmentState] =
+      useRecoilState<ICurrentAssessment>(currentAssessmentState);
+
+   const onAddAnswer = useMemo(() => {
+      return (value: IQuestionAnswer) => {
+         const answersArray = assessmentState.answers;
+         const foundIndex = answersArray.findIndex((el) => el.id === value.id);
+
+         if (foundIndex !== -1) {
+            const updatedAnswers = answersArray.map((el) => {
+               if (el.id === value.id)
+                  return { id: el.id, answer: value.answer };
+               return el;
+            });
+            setAssessmentState({
+               ...assessmentState,
+               answers: updatedAnswers,
+            });
+            return;
+         }
+
+         setAssessmentState({
+            ...assessmentState,
+            answers: [
+               ...assessmentState.answers,
+               {
+                  id: value.id,
+                  answer: value.answer,
+               },
+            ],
+         });
+      };
+   }, [assessmentState, setAssessmentState]);
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {questions?.withTypes.map((el, id) => (
+         {assessmentState.answers.map((question, index) => (
+            <div key={index}>
+               <span>{question.id}</span>
+               <span>{JSON.stringify(question.answer)}</span>
+            </div>
+         ))}
+         {typedQuestions.map((el, id) => (
             <QuestionItemContainer
                key={id}
                id={id}
                type={el.type}
                questions={el.questions}
+               currentQuestion={currentQuestion}
+               onAnswerQuestion={onAddAnswer}
             />
          ))}
       </div>

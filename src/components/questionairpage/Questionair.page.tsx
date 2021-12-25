@@ -1,24 +1,18 @@
-import React, { useContext } from 'react';
-import { AppContext, IAppState } from '../../providers';
-import { ASSESSMENT_STATE_ACTIONS } from '../../providers/reducers/assessment';
+import React from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import currentAssessmentDetailState, {
+   assessmentDateState,
+} from '../../recoil/assessment';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import QuestionsComponentTest from '../question/question.component';
 import './style.css';
 
 const Questionairpage: React.FC = () => {
-   const { assessment } = useContext<IAppState>(AppContext);
-   const assessmentDispatch = assessment?.dispatch;
-   const assessmentState = assessment?.state;
-   const assessmentDate = assessmentState?.current.assessmentDate;
-   const dataBreachDate = assessmentState?.current.dataBreachDate;
-
-   const txtDatabreachDate = transFormDate(dataBreachDate ?? new Date());
-   const txtAssessmentDate = transFormDate(assessmentDate ?? new Date());
-
-   function transFormDate(value: Date) {
-      return new Date(value).toISOString().split('T')[0];
-   }
+   const assessmentDate = useRecoilValue(assessmentDateState);
+   const [assessmentDetail, setAssessmentDetail] = useRecoilState(
+      currentAssessmentDetailState
+   );
 
    return (
       <>
@@ -44,29 +38,24 @@ const Questionairpage: React.FC = () => {
                      className="form-control"
                      placeholder="Descriptive title"
                      onChange={(e) => {
-                        if (assessmentDispatch)
-                           assessmentDispatch({
-                              type: ASSESSMENT_STATE_ACTIONS.ADD_ASSESSMENT_DESCRIPTIVE_TITLE,
-                              payload: e.target.value,
-                           });
+                        setAssessmentDetail({
+                           ...assessmentDetail,
+                           descriptiveTitle: e.target.value,
+                        });
                      }}
-                     value={assessmentState?.current.descriptiveTitle}
+                     value={assessmentDetail.descriptiveTitle}
                   />
                </div>
                <div className="col-12 col-lg-3">
                   <input
                      type="date"
                      className="form-control"
-                     placeholder="Descriptive title"
-                     value={txtDatabreachDate}
+                     value={assessmentDetail.dataBreachDate ?? ''}
                      readOnly
                   />
                </div>
                <div className="col-12 col-lg-4">
-                  <p>
-                     Assessment date:
-                     {` ${txtAssessmentDate}`}
-                  </p>
+                  <p>Assessment date: {assessmentDate}</p>
                </div>
             </div>
          </header>
