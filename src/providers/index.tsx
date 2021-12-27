@@ -6,6 +6,8 @@ import {
    QuestionTypes,
 } from '../components/question/question.component';
 import {
+   ciaQuestionState,
+   currentCiaTypeState,
    currentQuestionIdState,
    currentQuestionTypeState,
    QUESTIONNAIR_STATE,
@@ -15,6 +17,7 @@ import {
 import assessmentAnswersState, {
    ICurrentAssessmentAnswers,
 } from '../recoil/question/answer';
+import { currentQuestionState } from '../recoil/question/selector';
 
 /**
  * This component will be wrapped around the whole app in order to make the functions inside it
@@ -36,6 +39,9 @@ const AppProvider: React.FC = ({ children }) => {
       useSetRecoilState<QuestionTypes[]>(typedQuestionState);
    const setUntypedQuestions =
       useSetRecoilState<IQuestion[]>(untypedQuestionState);
+   const setAllCiaQuestions = useSetRecoilState<IQuestion[]>(ciaQuestionState);
+   const [currentCiaType, setCurrentCiaType] =
+      useRecoilState<string>(currentCiaTypeState);
    const [currentQuestionID, setCurrentQuestionID] = useRecoilState<number>(
       currentQuestionIdState
    );
@@ -45,6 +51,7 @@ const AppProvider: React.FC = ({ children }) => {
    const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(
       assessmentAnswersState
    );
+   const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
 
    // Only the questions, without the type (SIMPLE DATA etc.)
    const allQuestions: Array<IQuestion> = useMemo(() => {
@@ -60,61 +67,99 @@ const AppProvider: React.FC = ({ children }) => {
       return questionTypes.map((question) => question.type);
    }, [questionTypes]);
 
+   // All the CIA clustered questions
+   const ciaQuestions = useMemo(() => {
+      return allQuestions
+         .filter((el) => el.cia_type)
+         .filter((el) => el.questions);
+   }, [allQuestions]);
+
+   // Actions for answering not nested questions
+   const onDesicionMaking = (nextAction: string, nextType: string) => {
+      switch (nextAction) {
+         case QUESTIONNAIR_STATE.CONTINUE:
+            console.log(currentQuestionID, nextType, currentQuestionType);
+            setCurrentQuestionID(currentQuestionID + 1);
+            break;
+         case QUESTIONNAIR_STATE.NEXT_TYPE:
+            // Store next question type
+            setCurrentQuestionType(nextType);
+            // Grab the first question of the next type
+            const nextQuestion = questionTypes.find(
+               (el) => el.type === nextType
+            )?.questions[0] as IQuestion;
+
+            console.log(nextQuestion.id, nextType, currentQuestionType);
+            setCurrentQuestionID(nextQuestion.id);
+            break;
+         case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
+            const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
+            const index = allTypes.indexOf(currentCiaType);
+            const nextCiaType = allTypes[index + 1];
+            setCurrentCiaType(nextCiaType);
+
+            // Grab the first question of the next cia type
+            const nextCiaQuestion = (
+               ciaQuestions.find((el) => el.cia_type === nextCiaType)
+                  ?.questions as IQuestion[]
+            )[0];
+
+            console.log(nextCiaQuestion.id, nextType, currentQuestionType);
+            setCurrentQuestionID(nextCiaQuestion.id);
+            break;
+      }
+   };
+
    // Storing all the questions into the state
    useEffect(() => {
       // Current question type has to match the initialization of the first question
       setCurrentQuestionType(questionTypes[0].type);
       setTypedQuestions(questionTypes);
       setUntypedQuestions(allQuestions);
+      setAllCiaQuestions(ciaQuestions);
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
-   // Decision making for the questionaire
+   // If questions are answerd, this function will be called
    useEffect(() => {
-      // Find index of current question
-      const foundIndex = allQuestions.findIndex(
-         (el) => el.id === currentQuestionID
-      );
       // Get current question
-      const question = allQuestions[foundIndex];
+      const question = currentQuestion;
+
+      // Get index of current question type in order to find next question type
+      const typeIndex = allCategories.findIndex(
+         (el) => el === currentQuestionType
+      );
+
+      // Set the current type of question
+      const currentType = allCategories[typeIndex];
+      // Set next question type
+      const nextType = allCategories[typeIndex + 1];
+
       // Compare the answer to get next action
-      assessmentAnswers.forEach((givenAnswer, index) => {
+      assessmentAnswers.forEach((givenAnswer) => {
          if (question.weight && givenAnswer.id === question.id) {
             const weightIndex = givenAnswer.answer ? 'yes' : 'no';
-            const nextAction = question.weight[weightIndex].action;
-
-            switch (nextAction) {
-               case QUESTIONNAIR_STATE.CONTINUE:
-                  setCurrentQuestionID(currentQuestionID + 1);
-                  break;
-               case QUESTIONNAIR_STATE.NEXT_TYPE:
-                  // Find index of current question type
-                  const typeIndex = allCategories.findIndex(
-                     (el) => el === currentQuestionType
-                  );
-                  // Set next question type
-                  const nextType = allCategories[typeIndex + 1];
-
-                  // Store next question type
-                  setCurrentQuestionType(nextType);
-
-                  // Grab the first question of the next type
-                  const nextQuestion = questionTypes.find(
-                     (el) => el.type === nextType
-                  )?.questions[0];
-
-                  // Set the id of the next question to highlight
-                  if (nextQuestion?.id) {
-                     // console.log(
-                     //    nextQuestion.id,
-                     //    nextType,
-                     //    currentQuestionType
-                     // );
-                     setCurrentQuestionID(nextQuestion.id);
+            // Check if current question is type of Ease of identification, because of special weights
+            if (currentType === 'Ease of identification') {
+               //All the answers given results in nextType, but wont work in the normal desicion function
+               // so we have to manually set the next question type
+               const firstCiaQuestion = ciaQuestions[0];
+               if (
+                  firstCiaQuestion.cia_type &&
+                  firstCiaQuestion.questions &&
+                  firstCiaQuestion.questions[0].weight
+               ) {
+                  setCurrentCiaType(firstCiaQuestion.cia_type);
+                  const confidQuestions = firstCiaQuestion.questions[0];
+                  const questionWeight = confidQuestions.weight;
+                  if (questionWeight) {
+                     setCurrentQuestionID(confidQuestions.id);
+                     setCurrentQuestionType(nextType);
                   }
-                  break;
-               default:
-                  break;
+               }
+            } else {
+               const nextAction = question.weight[weightIndex].action;
+               onDesicionMaking(nextAction, nextType);
             }
          }
       });
