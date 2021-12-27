@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { assessmentTypeScoreState } from '../../recoil/assessment';
 import assessmentAnswersState, {
    ICurrentAssessmentAnswers,
 } from '../../recoil/question/answer';
@@ -35,6 +36,7 @@ export interface IQuestionAnswer {
 interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
+   score: number;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
 }
@@ -171,6 +173,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
+   score,
    currentQuestion,
    onAnswerQuestion,
 }) => {
@@ -189,7 +192,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                aria-expanded="false"
                aria-controls={`collapse${id}`}
             >
-               {type}
+               {id + 1}. {type} | {score}
             </button>
          </h2>
          <div
@@ -291,6 +294,9 @@ const QuestionsResultComponent: React.FC<{
    const [assessmentAnswers, setAssessmentAnswersState] = useRecoilState<
       ICurrentAssessmentAnswers[]
    >(assessmentAnswersState);
+   const assessmentTypeScores = useRecoilValue<number[]>(
+      assessmentTypeScoreState
+   );
 
    const onAddAnswer = useMemo(() => {
       return (value: IQuestionAnswer) => {
@@ -330,6 +336,7 @@ const QuestionsResultComponent: React.FC<{
             <QuestionItemContainer
                key={id}
                id={id}
+               score={assessmentTypeScores[id]}
                type={el.type}
                questions={el.questions}
                currentQuestion={currentQuestion}
