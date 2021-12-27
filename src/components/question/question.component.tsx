@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { assessmentTypeScoreState } from '../../recoil/assessment';
-import assessmentAnswersState, {
-   ICurrentAssessmentAnswers,
-} from '../../recoil/question/answer';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../recoil/question/answer';
 import { typedQuestionState } from '../../recoil/question/atom';
 import { currentQuestionState } from '../../recoil/question/selector';
 import './style.css';
@@ -51,11 +49,7 @@ interface ISpecialQuestions {
    showQuestion: (value: number) => void;
 }
 
-const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
-   value,
-   onAction,
-   showQuestion,
-}) => {
+const EaseOfIndentification: React.FC<ISpecialQuestions> = ({ value, onAction, showQuestion }) => {
    const questionTitle = value.text;
    const questionId = value.id;
    const radioButtonTexts = Object.keys(value.weight ?? {});
@@ -71,9 +65,7 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
                <div className="eoi_container">
                   {radioButtonTexts.map((text, index) => (
                      <div key={index} className="eoi_container_item">
-                        <label htmlFor={`ease_of_indentication${index}`}>
-                           {text}
-                        </label>
+                        <label htmlFor={`ease_of_indentication${index}`}>{text}</label>
                         <input
                            type="radio"
                            name="ease_of_indentication"
@@ -95,27 +87,18 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    );
 };
 
-const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
-   value,
-   onAction,
-   showQuestion,
-}) => {
+const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({ value, onAction, showQuestion }) => {
    const questionsCIA = value.questions;
 
    return (
       <div className="mb-2 bottom_lined">
          {questionsCIA?.map((element, index) => (
-            <div
-               key={index}
-               className={`row disable_question_${showQuestion(element.id)}`}
-            >
+            <div key={index} className={`row disable_question_${showQuestion(element.id)}`}>
                <div className="col-12 col-md-10">
                   <div className="question_wrap">
                      <strong> {element.headerText}</strong>
                      <div className="flex_inline">
-                        <span className="question_number_wrap">
-                           {element.id}.
-                        </span>
+                        <span className="question_number_wrap">{element.id}.</span>
                         <p className="m-0"> {element.text}</p>
                      </div>
                   </div>
@@ -133,10 +116,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                         })
                      }
                   />
-                  <label
-                     className="btn btn-outline-primary"
-                     htmlFor={`btnradio${element.id}`}
-                  >
+                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}`}>
                      Yes
                   </label>
                   <input
@@ -151,10 +131,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                         })
                      }
                   />
-                  <label
-                     className="btn btn-outline-primary"
-                     htmlFor={`btnradio${element.id}no`}
-                  >
+                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}no`}>
                      No
                   </label>
                </div>
@@ -225,9 +202,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         )}`}
                      >
                         <div className="col-12 col-md-10">
-                           <span className="question_number_wrap">
-                              {question.id}.
-                           </span>
+                           <span className="question_number_wrap">{question.id}.</span>
                            <div className="question_wrap">
                               <strong>{question.headerText}</strong>
                               <p className="m-0">{question.text}</p>
@@ -246,10 +221,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                                  })
                               }
                            />
-                           <label
-                              className="btn btn-outline-primary"
-                              htmlFor={`btnradio${question.id}`}
-                           >
+                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}`}>
                               Yes
                            </label>
                            <input
@@ -264,10 +236,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                                  })
                               }
                            />
-                           <label
-                              className="btn btn-outline-primary"
-                              htmlFor={`btnradio${question.id}no`}
-                           >
+                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}no`}>
                               No
                            </label>
                         </div>
@@ -291,23 +260,17 @@ const QuestionsResultComponent: React.FC<{
 }> = ({ interactive }) => {
    const typedQuestions = useRecoilValue<QuestionTypes[]>(typedQuestionState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
-   const [assessmentAnswers, setAssessmentAnswersState] = useRecoilState<
-      ICurrentAssessmentAnswers[]
-   >(assessmentAnswersState);
-   const assessmentTypeScores = useRecoilValue<number[]>(
-      assessmentTypeScoreState
-   );
+   const [assessmentAnswers, setAssessmentAnswersState] =
+      useRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+   const assessmentTypeScores = useRecoilValue<number[]>(assessmentTypeScoreState);
 
    const onAddAnswer = useMemo(() => {
       return (value: IQuestionAnswer) => {
-         const foundIndex = assessmentAnswers.findIndex(
-            (el) => el.id === value.id
-         );
+         const foundIndex = assessmentAnswers.findIndex((el) => el.id === value.id);
 
          if (foundIndex !== -1) {
             const updatedAnswers = assessmentAnswers.map((el) => {
-               if (el.id === value.id)
-                  return { id: el.id, answer: value.answer };
+               if (el.id === value.id) return { id: el.id, answer: value.answer };
                return el;
             });
             setAssessmentAnswersState(updatedAnswers);

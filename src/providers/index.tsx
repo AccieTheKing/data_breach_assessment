@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-   IQuestion,
-   QuestionTypes,
-} from '../components/question/question.component';
+import { IQuestion, QuestionTypes } from '../components/question/question.component';
+import currentAssessmentDetailState, { IAssessmentDetailState } from '../recoil/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../recoil/question/answer';
 import {
    ciaQuestionState,
    currentCiaTypeState,
@@ -14,9 +13,6 @@ import {
    typedQuestionState,
    untypedQuestionState,
 } from '../recoil/question/atom';
-import assessmentAnswersState, {
-   ICurrentAssessmentAnswers,
-} from '../recoil/question/answer';
 import { currentQuestionState } from '../recoil/question/selector';
 
 /**
@@ -29,29 +25,20 @@ import { currentQuestionState } from '../recoil/question/selector';
 const AppProvider: React.FC = ({ children }) => {
    const { t } = useTranslation(); // for accessing the json files
    // Fetch the questions from the json file
-   const questionTypes: Array<QuestionTypes> = t(
-      'dataBreachAssessmentQuestions',
-      {
-         returnObjects: true,
-      }
-   );
-   const setTypedQuestions =
-      useSetRecoilState<QuestionTypes[]>(typedQuestionState);
-   const setUntypedQuestions =
-      useSetRecoilState<IQuestion[]>(untypedQuestionState);
+   const questionTypes: Array<QuestionTypes> = t('dataBreachAssessmentQuestions', {
+      returnObjects: true,
+   });
+   const setTypedQuestions = useSetRecoilState<QuestionTypes[]>(typedQuestionState);
+   const setUntypedQuestions = useSetRecoilState<IQuestion[]>(untypedQuestionState);
    const setAllCiaQuestions = useSetRecoilState<IQuestion[]>(ciaQuestionState);
-   const [currentCiaType, setCurrentCiaType] =
-      useRecoilState<string>(currentCiaTypeState);
-   const [currentQuestionID, setCurrentQuestionID] = useRecoilState<number>(
-      currentQuestionIdState
-   );
-   const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(
-      currentQuestionTypeState
-   );
-   const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(
-      assessmentAnswersState
-   );
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
+   const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+   const [currentCiaType, setCurrentCiaType] = useRecoilState<string>(currentCiaTypeState);
+   const [currentQuestionID, setCurrentQuestionID] = useRecoilState<number>(currentQuestionIdState);
+   const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(currentQuestionTypeState);
+   const [currentAssessment, setCurrentAssessment] = useRecoilState<IAssessmentDetailState>(
+      currentAssessmentDetailState
+   );
 
    // Only the questions, without the type (SIMPLE DATA etc.)
    const allQuestions: Array<IQuestion> = useMemo(() => {
@@ -69,27 +56,23 @@ const AppProvider: React.FC = ({ children }) => {
 
    // All the CIA clustered questions
    const ciaQuestions = useMemo(() => {
-      return allQuestions
-         .filter((el) => el.cia_type)
-         .filter((el) => el.questions);
+      return allQuestions.filter((el) => el.cia_type).filter((el) => el.questions);
    }, [allQuestions]);
 
    // Actions for answering not nested questions
    const onDesicionMaking = (nextAction: string, nextType: string) => {
       switch (nextAction) {
          case QUESTIONNAIR_STATE.CONTINUE:
-            console.log(currentQuestionID, nextType, currentQuestionType);
+            // console.log(currentQuestionID, nextType, currentQuestionType);
             setCurrentQuestionID(currentQuestionID + 1);
             break;
          case QUESTIONNAIR_STATE.NEXT_TYPE:
             // Store next question type
             setCurrentQuestionType(nextType);
             // Grab the first question of the next type
-            const nextQuestion = questionTypes.find(
-               (el) => el.type === nextType
-            )?.questions[0] as IQuestion;
+            const nextQuestion = questionTypes.find((el) => el.type === nextType)?.questions[0] as IQuestion;
 
-            console.log(nextQuestion.id, nextType, currentQuestionType);
+            // console.log(nextQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextQuestion.id);
             break;
          case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
@@ -100,14 +83,23 @@ const AppProvider: React.FC = ({ children }) => {
 
             // Grab the first question of the next cia type
             const nextCiaQuestion = (
-               ciaQuestions.find((el) => el.cia_type === nextCiaType)
-                  ?.questions as IQuestion[]
+               ciaQuestions.find((el) => el.cia_type === nextCiaType)?.questions as IQuestion[]
             )[0];
 
-            console.log(nextCiaQuestion.id, nextType, currentQuestionType);
+            // console.log(nextCiaQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
       }
+   };
+
+   const onStoreScore = (type: string, value: number) => {
+      setCurrentAssessment({
+         ...currentAssessment,
+         score: {
+            ...currentAssessment.score,
+            [type]: value,
+         },
+      });
    };
 
    // Storing all the questions into the state
@@ -126,9 +118,7 @@ const AppProvider: React.FC = ({ children }) => {
       const question = currentQuestion;
 
       // Get index of current question type in order to find next question type
-      const typeIndex = allCategories.findIndex(
-         (el) => el === currentQuestionType
-      );
+      const typeIndex = allCategories.findIndex((el) => el === currentQuestionType);
 
       // Set the current type of question
       const currentType = allCategories[typeIndex];
@@ -152,13 +142,23 @@ const AppProvider: React.FC = ({ children }) => {
                   setCurrentCiaType(firstCiaQuestion.cia_type);
                   const confidQuestions = firstCiaQuestion.questions[0];
                   const questionWeight = confidQuestions.weight;
+
                   if (questionWeight) {
                      setCurrentQuestionID(confidQuestions.id);
                      setCurrentQuestionType(nextType);
                   }
                }
+
+               // Get the value for calulating score for Ease of identification
+               const key = givenAnswer.answer.toString();
+               const newValue = question.weight[key].value;
+               onStoreScore(currentType, newValue);
             } else {
                const nextAction = question.weight[weightIndex].action;
+               const questionValue = question.weight[weightIndex].value;
+               const newValue = currentAssessment.score[currentType] + questionValue;
+               console.log(currentType, newValue);
+               onStoreScore(currentType, newValue);
                onDesicionMaking(nextAction, nextType);
             }
          }
