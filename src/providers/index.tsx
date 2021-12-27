@@ -157,7 +157,6 @@ const AppProvider: React.FC = ({ children }) => {
                const nextAction = question.weight[weightIndex].action;
                const questionValue = question.weight[weightIndex].value;
                const newValue = currentAssessment.score[currentType] + questionValue;
-               console.log(currentType, newValue);
                onStoreScore(currentType, newValue);
                onDesicionMaking(nextAction, nextType);
             }

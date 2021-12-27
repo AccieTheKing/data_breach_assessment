@@ -4,6 +4,7 @@
 
 #breachassessmetcontainer .accordion-button {
    font-size: 0.8em;
+   background: #f1edeb;
 }
 
 #breachassessmetcontainer .accordion-item {
@@ -56,6 +57,12 @@
 #breachassessmetcontainer .row.disable_question_false .question_wrap p,
 #breachassessmetcontainer .row.disable_question_false label {
    opacity: 0.5;
+}
+
+#breachassessmetcontainer .row.is_answered_true .question_number_wrap,
+#breachassessmetcontainer .row.is_answered_true .question_wrap p,
+#breachassessmetcontainer .row.is_answered_true label {
+   opacity: 1;
 }
 
 #breachassessmetcontainer .accordion-item .question_number_wrap {

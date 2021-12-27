@@ -37,6 +37,7 @@ interface QuestionContainerProp extends QuestonInteraction {
    score: number;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
+   allAnswers: IQuestionAnswer[];
 }
 
 interface QuestonInteraction {
@@ -45,18 +46,36 @@ interface QuestonInteraction {
 
 interface ISpecialQuestions {
    value: IQuestion;
-   onAction: (value: IQuestionAnswer) => void;
+   allAnswers: IQuestionAnswer[];
    showQuestion: (value: number) => void;
+   onAction: (value: IQuestionAnswer) => void;
 }
 
-const EaseOfIndentification: React.FC<ISpecialQuestions> = ({ value, onAction, showQuestion }) => {
+const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
+   value,
+   allAnswers,
+   onAction,
+   showQuestion,
+}) => {
+   const hasBeenAnswered = useMemo(() => {
+      return (id: number): boolean => {
+         const found = allAnswers.find((element) => element.id === id);
+         console.log(found, allAnswers);
+         if (found) return true;
+         return false;
+      };
+   }, [allAnswers]);
    const questionTitle = value.text;
    const questionId = value.id;
    const radioButtonTexts = Object.keys(value.weight ?? {});
    const radioButtonValues = Object.values(value.weight ?? {});
 
    return (
-      <div className={`row disable_question_${showQuestion(questionId)}`}>
+      <div
+         className={`row disable_question_${showQuestion(questionId)} is_answered_${hasBeenAnswered(
+            questionId
+         )}`}
+      >
          <div className="col-12">
             <div>
                <div className="question_wrap">
@@ -87,13 +106,30 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({ value, onAction, s
    );
 };
 
-const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({ value, onAction, showQuestion }) => {
+const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
+   value,
+   allAnswers,
+   onAction,
+   showQuestion,
+}) => {
    const questionsCIA = value.questions;
-
+   const hasBeenAnswered = useMemo(() => {
+      return (id: number): boolean => {
+         const found = allAnswers.find((element) => element.id === id);
+         console.log(found, allAnswers);
+         if (found) return true;
+         return false;
+      };
+   }, [allAnswers]);
    return (
       <div className="mb-2 bottom_lined">
          {questionsCIA?.map((element, index) => (
-            <div key={index} className={`row disable_question_${showQuestion(element.id)}`}>
+            <div
+               key={index}
+               className={`row disable_question_${showQuestion(element.id)} is_answered_${hasBeenAnswered(
+                  element.id
+               )}`}
+            >
                <div className="col-12 col-md-10">
                   <div className="question_wrap">
                      <strong> {element.headerText}</strong>
@@ -152,12 +188,22 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    questions,
    score,
    currentQuestion,
+   allAnswers,
    onAnswerQuestion,
 }) => {
    const showCurrentQuestion = (id: number): boolean => {
       if (id === currentQuestion.id) return true;
       return false;
    };
+   const hasBeenAnswered = useMemo(() => {
+      return (id: number): boolean => {
+         const found = allAnswers.find((element) => element.id === id);
+         console.log(found, allAnswers);
+         if (found) return true;
+         return false;
+      };
+   }, [allAnswers]);
+
    return (
       <div className="accordion-item">
          <h2 className="accordion-header" id={`heading${id}`}>
@@ -184,6 +230,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                      <EaseOfIndentification
                         key={id}
                         value={question}
+                        allAnswers={allAnswers}
                         onAction={onAnswerQuestion}
                         showQuestion={showCurrentQuestion}
                      />
@@ -191,15 +238,16 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                      <AggravatingCircumstances
                         key={id}
                         value={question}
+                        allAnswers={allAnswers}
                         onAction={onAnswerQuestion}
                         showQuestion={showCurrentQuestion}
                      />
                   ) : (
                      <div
                         key={id}
-                        className={`row mb-2 bottom_lined disable_question_${showCurrentQuestion(
+                        className={`row mb-2 bottom_lined is_answered_${hasBeenAnswered(
                            question.id
-                        )}`}
+                        )} disable_question_${showCurrentQuestion(question.id)}`}
                      >
                         <div className="col-12 col-md-10">
                            <span className="question_number_wrap">{question.id}.</span>
@@ -264,6 +312,7 @@ const QuestionsResultComponent: React.FC<{
       useRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
    const assessmentTypeScores = useRecoilValue<number[]>(assessmentTypeScoreState);
 
+   // Method for answering the questions
    const onAddAnswer = useMemo(() => {
       return (value: IQuestionAnswer) => {
          const foundIndex = assessmentAnswers.findIndex((el) => el.id === value.id);
@@ -304,6 +353,7 @@ const QuestionsResultComponent: React.FC<{
                questions={el.questions}
                currentQuestion={currentQuestion}
                onAnswerQuestion={onAddAnswer}
+               allAnswers={assessmentAnswers}
             />
          ))}
       </div>
