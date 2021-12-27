@@ -1,3 +1,7 @@
+.flex_inline {
+   display: inline-flex;
+}
+
 #breachassessmetcontainer .accordion-button {
    font-size: 0.8em;
 }
@@ -40,11 +44,17 @@
 }
 
 #breachassessmetcontainer .accordion-item .row {
-   border-bottom: solid 1px #000;
    padding-bottom: 5px;
 }
 
-#breachassessmetcontainer .row.disabled_question_true > div:first-child {
+.bottom_lined {
+   border-bottom: solid 1px #000;
+}
+
+/* Disable questions styling */
+#breachassessmetcontainer .row.disable_question_false .question_number_wrap,
+#breachassessmetcontainer .row.disable_question_false .question_wrap p,
+#breachassessmetcontainer .row.disable_question_false label {
    opacity: 0.5;
 }
 
@@ -54,6 +64,7 @@
 }
 
 #breachassessmetcontainer .accordion-item .question_wrap strong {
+   display: block;
    font-size: calc(var(--appFontSize) + 0.3em);
 }
 
@@ -68,13 +79,21 @@
    align-items: center;
 }
 
-#breachassessmetcontainer .row > div:first-child {
-   display: flex;
-}
-
 @media (min-width: 768px) {
    #breachassessmetcontainer .accordion-item .row > div:last-child {
-      /* align-items: end; */
+      align-items: end;
       justify-content: center;
    }
+}
+
+/* Ease of indentification */
+.eoi_container {
+   display: flex;
+   justify-content: space-evenly;
+}
+
+.eoi_container_item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
 }

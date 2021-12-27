@@ -12,24 +12,12 @@ export interface QuestionTypes {
    questions: Array<IQuestion>;
 }
 
-export interface ICiaType {
-   id: number;
-   headerText?: string;
-   text: string;
-   weight: {
-      [key: string]: {
-         value: number;
-         action: string;
-      };
-   };
-}
-
 export interface IQuestion {
    id: number;
    headerText?: string;
    cia_type?: string;
    text: string;
-   questions?: Array<ICiaType>;
+   questions?: Array<IQuestion>;
    weight?: {
       [key: string]: {
          value: number;
@@ -55,57 +43,79 @@ interface QuestonInteraction {
    onAnswerQuestion: (value: IQuestionAnswer) => void;
 }
 
-const EaseOfIndentification: React.FC<{
+interface ISpecialQuestions {
    value: IQuestion;
    onAction: (value: IQuestionAnswer) => void;
-}> = ({ value, onAction }) => {
+   showQuestion: (value: number) => void;
+}
+
+const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
+   value,
+   onAction,
+   showQuestion,
+}) => {
    const questionTitle = value.text;
    const questionId = value.id;
    const radioButtonTexts = Object.keys(value.weight ?? {});
    const radioButtonValues = Object.values(value.weight ?? {});
 
    return (
-      <div>
-         <p className="m-0">{questionTitle}</p>
-         <div className="eoi_container">
-            {radioButtonTexts.map((text, index) => (
-               <div key={index} className="eoi_container_item">
-                  <label htmlFor={`ease_of_indentication${index}`}>
-                     {text}
-                  </label>
-                  <input
-                     type="radio"
-                     name="ease_of_indentication"
-                     id={`ease_of_indentication${index}`}
-                     value={radioButtonValues[index].value}
-                     onChange={(e) =>
-                        onAction({
-                           id: questionId,
-                           answer: radioButtonTexts[index],
-                        })
-                     }
-                  />
+      <div className={`row disable_question_${showQuestion(questionId)}`}>
+         <div className="col-12">
+            <div>
+               <div className="question_wrap">
+                  <p className="m-0">{questionTitle}</p>
                </div>
-            ))}
+               <div className="eoi_container">
+                  {radioButtonTexts.map((text, index) => (
+                     <div key={index} className="eoi_container_item">
+                        <label htmlFor={`ease_of_indentication${index}`}>
+                           {text}
+                        </label>
+                        <input
+                           type="radio"
+                           name="ease_of_indentication"
+                           id={`ease_of_indentication${index}`}
+                           value={radioButtonValues[index].value}
+                           onChange={(e) =>
+                              onAction({
+                                 id: questionId,
+                                 answer: radioButtonTexts[index],
+                              })
+                           }
+                        />
+                     </div>
+                  ))}
+               </div>
+            </div>
          </div>
       </div>
    );
 };
 
-const AggravatingCircumstances: React.FC<{
-   value: IQuestion;
-   onAction: (value: { id: number; answer: boolean }) => void;
-}> = ({ value, onAction }) => {
+const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
+   value,
+   onAction,
+   showQuestion,
+}) => {
    const questionsCIA = value.questions;
 
    return (
       <div className="mb-2 bottom_lined">
          {questionsCIA?.map((element, index) => (
-            <div key={index} className={`row mb-2`}>
-               <div className="col-11 col-md-10">
+            <div
+               key={index}
+               className={`row disable_question_${showQuestion(element.id)}`}
+            >
+               <div className="col-12 col-md-10">
                   <div className="question_wrap">
                      <strong> {element.headerText}</strong>
-                     <p className="m-0"> {element.text}</p>
+                     <div className="flex_inline">
+                        <span className="question_number_wrap">
+                           {element.id}.
+                        </span>
+                        <p className="m-0"> {element.text}</p>
+                     </div>
                   </div>
                </div>
                <div className="col-12 col-md-2">
@@ -195,12 +205,14 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         value={question}
                         onAction={onAnswerQuestion}
+                        showQuestion={showCurrentQuestion}
                      />
                   ) : question.cia_type ? (
                      <AggravatingCircumstances
                         key={id}
                         value={question}
                         onAction={onAnswerQuestion}
+                        showQuestion={showCurrentQuestion}
                      />
                   ) : (
                      <div
@@ -209,7 +221,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                            question.id
                         )}`}
                      >
-                        <div className="col-11 col-md-10">
+                        <div className="col-12 col-md-10">
                            <span className="question_number_wrap">
                               {question.id}.
                            </span>
