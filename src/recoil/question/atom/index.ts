@@ -7,17 +7,22 @@ import {
 export enum QUESTIONNAIR_STATE {
    CONTINUE = 'continue',
    NEXT_TYPE = 'nextType',
-   NEXT_CIA_TYPE = 'nextCIA',
+   NEXT_CIA_TYPE = 'nextCiaType',
    CALCULATE = 'calculate',
 }
 
 export const untypedQuestionState = atom<IQuestion[]>({
-   key: 'untypedQuestion',
+   key: 'untypedQuestions',
+   default: [],
+});
+
+export const ciaQuestionState = atom<IQuestion[]>({
+   key: 'ciaQuestions',
    default: [],
 });
 
 export const typedQuestionState = atom<QuestionTypes[]>({
-   key: 'typedQuestion',
+   key: 'typedQuestions',
    default: [],
 });
 
@@ -33,5 +38,10 @@ export const currentQuestionActionState = atom<QUESTIONNAIR_STATE | null>({
 
 export const currentQuestionTypeState = atom<string>({
    key: 'currentQuestionType',
+   default: '',
+});
+
+export const currentCiaTypeState = atom<string>({
+   key: 'currentCiaType',
    default: '',
 });
