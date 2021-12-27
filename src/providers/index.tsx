@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
    IQuestion,
    QuestionTypes,
@@ -15,23 +15,6 @@ import {
 import assessmentAnswersState, {
    ICurrentAssessmentAnswers,
 } from '../recoil/question/answer';
-
-// This is how the global state of the app will look like
-// interface IAppContext {
-//    assessor: {
-//       firstName: string | null;
-//       lastName: string | null;
-//    };
-//    assessment?: {
-//       current: {};
-//       drafts: Array<{}>;
-//       history: Array<{}>;
-//    };
-//    settings?: {
-//       language: string;
-//       darkMode: boolean;
-//    };
-// }
 
 /**
  * This component will be wrapped around the whole app in order to make the functions inside it
@@ -59,9 +42,9 @@ const AppProvider: React.FC = ({ children }) => {
    const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(
       currentQuestionTypeState
    );
-   const [assessmentAnswers, setAssessmentAnswersState] = useRecoilState<
-      ICurrentAssessmentAnswers[]
-   >(assessmentAnswersState);
+   const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(
+      assessmentAnswersState
+   );
 
    // Only the questions, without the type (SIMPLE DATA etc.)
    const allQuestions: Array<IQuestion> = useMemo(() => {
@@ -84,9 +67,9 @@ const AppProvider: React.FC = ({ children }) => {
       setTypedQuestions(questionTypes);
       setUntypedQuestions(allQuestions);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [setTypedQuestions, setUntypedQuestions, questionTypes, allQuestions]);
+   }, []);
 
-   // Decision making for the next questions
+   // Decision making for the questionaire
    useEffect(() => {
       // Find index of current question
       const foundIndex = allQuestions.findIndex(
@@ -95,7 +78,7 @@ const AppProvider: React.FC = ({ children }) => {
       // Get current question
       const question = allQuestions[foundIndex];
       // Compare the answer to get next action
-      assessmentAnswers.forEach((givenAnswer) => {
+      assessmentAnswers.forEach((givenAnswer, index) => {
          if (question.weight && givenAnswer.id === question.id) {
             const weightIndex = givenAnswer.answer ? 'yes' : 'no';
             const nextAction = question.weight[weightIndex].action;
@@ -105,13 +88,38 @@ const AppProvider: React.FC = ({ children }) => {
                   setCurrentQuestionID(currentQuestionID + 1);
                   break;
                case QUESTIONNAIR_STATE.NEXT_TYPE:
-                  // Get the first question of the next type
+                  // Find index of current question type
+                  const typeIndex = allCategories.findIndex(
+                     (el) => el === currentQuestionType
+                  );
+                  // Set next question type
+                  const nextType = allCategories[typeIndex + 1];
+
+                  // Store next question type
+                  setCurrentQuestionType(nextType);
+
+                  // Grab the first question of the next type
+                  const nextQuestion = questionTypes.find(
+                     (el) => el.type === nextType
+                  )?.questions[0];
+
+                  // Set the id of the next question to highlight
+                  if (nextQuestion?.id) {
+                     // console.log(
+                     //    nextQuestion.id,
+                     //    nextType,
+                     //    currentQuestionType
+                     // );
+                     setCurrentQuestionID(nextQuestion.id);
+                  }
+                  break;
+               default:
                   break;
             }
          }
-         // If answer changes, check previous answer for new values
       });
-   }, [assessmentAnswers, allQuestions, currentQuestionID]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [assessmentAnswers]);
 
    return <div>{children}</div>;
 };
