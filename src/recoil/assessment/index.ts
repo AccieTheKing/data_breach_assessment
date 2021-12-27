@@ -33,6 +33,15 @@ export const assessmentDateState = selector<string>({
    },
 });
 
+export const assessmentTypeScoreState = selector<number[]>({
+   key: 'assessmentTypeScore',
+   get: ({ get }) => {
+      const assessmentDetail = get(currentAssessmentDetailState);
+      const stateValue = assessmentDetail.score;
+      return [...Object.values(stateValue)];
+   },
+});
+
 const currentAssessmentDetailState = atom<IAssessmentDetailState>({
    key: 'currentAssessmentDetail',
    default: {
@@ -41,7 +50,15 @@ const currentAssessmentDetailState = atom<IAssessmentDetailState>({
       descriptiveTitle: '',
       incidentNumber: null,
       impactScore: 0,
-      score: { simple: 0, behavioral: 0, financial: 0, sensitive: 0 },
+      score: {
+         simple: 0,
+         behavioral: 0,
+         financial: 0,
+         sensitive: 0,
+         ease_of_identification: 0,
+         aggreveting_circumstances: 0,
+         mitigating_circumstances: 0,
+      },
    },
 });
 
