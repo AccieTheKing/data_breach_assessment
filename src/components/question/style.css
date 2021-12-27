@@ -15,6 +15,10 @@
    overflow: hidden;
 }
 
+#breachassessmetcontainer .accordion-item.focus_dropdown_true {
+   border: solid 2px var(--nnOrange);
+}
+
 #breachassessmetcontainer .accordion-button:not(.collapsed),
 #breachassessmetcontainer .accordion-collapse:not(.show) + .accordion-button {
    color: #000;

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { assessmentTypeScoreState } from '../../recoil/assessment';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../recoil/question/answer';
-import { typedQuestionState } from '../../recoil/question/atom';
+import { currentQuestionTypeState, typedQuestionState } from '../../recoil/question/atom';
 import { currentQuestionState } from '../../recoil/question/selector';
 import './style.css';
 
@@ -35,6 +35,7 @@ interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
    score: number;
+   currentQuestionType: string;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
    allAnswers: IQuestionAnswer[];
@@ -47,7 +48,8 @@ interface QuestonInteraction {
 interface ISpecialQuestions {
    value: IQuestion;
    allAnswers: IQuestionAnswer[];
-   showQuestion: (value: number) => void;
+   focusDropdown: boolean;
+   showQuestion: (value: number) => boolean;
    onAction: (value: IQuestionAnswer) => void;
 }
 
@@ -60,7 +62,6 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    const hasBeenAnswered = useMemo(() => {
       return (id: number): boolean => {
          const found = allAnswers.find((element) => element.id === id);
-         console.log(found, allAnswers);
          if (found) return true;
          return false;
       };
@@ -90,6 +91,9 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
                            name="ease_of_indentication"
                            id={`ease_of_indentication${index}`}
                            value={radioButtonValues[index].value}
+                           disabled={
+                              hasBeenAnswered(questionId) === false && showQuestion(questionId) === false
+                           }
                            onChange={(e) =>
                               onAction({
                                  id: questionId,
@@ -116,7 +120,6 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
    const hasBeenAnswered = useMemo(() => {
       return (id: number): boolean => {
          const found = allAnswers.find((element) => element.id === id);
-         console.log(found, allAnswers);
          if (found) return true;
          return false;
       };
@@ -145,6 +148,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                      className="btn-check"
                      name={`btnradio${element.id}`}
                      id={`btnradio${element.id}`}
+                     disabled={hasBeenAnswered(element.id) === false && showQuestion(element.id) === false}
                      onChange={(e) =>
                         onAction({
                            id: element.id,
@@ -160,6 +164,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                      className="btn-check"
                      name={`btnradio${element.id}`}
                      id={`btnradio${element.id}no`}
+                     disabled={hasBeenAnswered(element.id) === false && showQuestion(element.id) === false}
                      onChange={(e) =>
                         onAction({
                            id: element.id,
@@ -188,6 +193,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    questions,
    score,
    currentQuestion,
+   currentQuestionType,
    allAnswers,
    onAnswerQuestion,
 }) => {
@@ -198,14 +204,13 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    const hasBeenAnswered = useMemo(() => {
       return (id: number): boolean => {
          const found = allAnswers.find((element) => element.id === id);
-         console.log(found, allAnswers);
          if (found) return true;
          return false;
       };
    }, [allAnswers]);
 
    return (
-      <div className="accordion-item">
+      <div className={`accordion-item focus_dropdown_${type === currentQuestionType}`}>
          <h2 className="accordion-header" id={`heading${id}`}>
             <button
                className="accordion-button collapsed"
@@ -231,6 +236,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         value={question}
                         allAnswers={allAnswers}
+                        focusDropdown={type === currentQuestionType}
                         onAction={onAnswerQuestion}
                         showQuestion={showCurrentQuestion}
                      />
@@ -239,6 +245,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         value={question}
                         allAnswers={allAnswers}
+                        focusDropdown={type === currentQuestionType}
                         onAction={onAnswerQuestion}
                         showQuestion={showCurrentQuestion}
                      />
@@ -262,6 +269,10 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                               className="btn-check"
                               name={`btnradio${question.id}`}
                               id={`btnradio${question.id}`}
+                              disabled={
+                                 hasBeenAnswered(question.id) === false &&
+                                 showCurrentQuestion(question.id) === false
+                              }
                               onChange={(e) =>
                                  onAnswerQuestion({
                                     id: question.id,
@@ -277,6 +288,10 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                               className="btn-check"
                               name={`btnradio${question.id}`}
                               id={`btnradio${question.id}no`}
+                              disabled={
+                                 hasBeenAnswered(question.id) === false &&
+                                 showCurrentQuestion(question.id) === false
+                              }
                               onChange={(e) =>
                                  onAnswerQuestion({
                                     id: question.id,
@@ -311,6 +326,7 @@ const QuestionsResultComponent: React.FC<{
    const [assessmentAnswers, setAssessmentAnswersState] =
       useRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
    const assessmentTypeScores = useRecoilValue<number[]>(assessmentTypeScoreState);
+   const currentQuestionType = useRecoilValue<string>(currentQuestionTypeState);
 
    // Method for answering the questions
    const onAddAnswer = useMemo(() => {
@@ -352,6 +368,7 @@ const QuestionsResultComponent: React.FC<{
                type={el.type}
                questions={el.questions}
                currentQuestion={currentQuestion}
+               currentQuestionType={currentQuestionType}
                onAnswerQuestion={onAddAnswer}
                allAnswers={assessmentAnswers}
             />
