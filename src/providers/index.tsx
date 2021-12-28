@@ -94,6 +94,9 @@ const AppProvider: React.FC = ({ children }) => {
             console.log(nextCiaQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
+         case QUESTIONNAIR_STATE.CALCULATE:
+            console.log('End of the questionaire');
+            break;
       }
    };
 
@@ -121,12 +124,15 @@ const AppProvider: React.FC = ({ children }) => {
    useEffect(() => {
       // Get current question
       let current_question = currentQuestion;
+
       // If the length of the answers is smaller than the length of the ref, it means that the user has changed
       // a previous given answer and we need to update the current question type
       if (ref.current && assessmentAnswers.length <= ref.current.length) {
          let foundQuestionType = '';
          const lastIndex = assessmentAnswers.length - 1;
          const lastQuestionAnswered = assessmentAnswers[lastIndex]; // last given answer
+         const lastQuestionID = lastQuestionAnswered.id;
+         const weightIndex = lastQuestionAnswered.answer ? 'yes' : 'no';
 
          // Find the question type of the last question answered (SIMPLE DATA, etc)
          const typesArray = Object.values(ASSESSMENT_SCORE_TYPE);
@@ -139,29 +145,65 @@ const AppProvider: React.FC = ({ children }) => {
             }
          }
 
-         const lastQuestionID = lastQuestionAnswered.id;
-         // TODO: Add check for the cia typed questions
-         const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
-         const weightIndex = lastQuestionAnswered.answer ? 'yes' : 'no';
-
          // Get current question
          current_question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
+         const currentTypeIndex = typesArray.findIndex((el) => el === foundQuestionType);
+         const nextCategory = typesArray[currentTypeIndex + 1];
 
-         if (question.weight) {
-            const nextAction = question.weight[weightIndex].action;
-            // const questionValue = question.weight[weightIndex].value;
-            // Get index of current question type in order to find next question type
-            const typeIndex = allCategories.findIndex((el) => el === foundQuestionType);
-            const nextCategory = allCategories[typeIndex + 1];
+         if (foundQuestionType === ASSESSMENT_SCORE_TYPE.ease_of_identification) {
+            const firstCiaQuestion = ciaQuestions[0];
+            if (
+               firstCiaQuestion.cia_type &&
+               firstCiaQuestion.questions &&
+               firstCiaQuestion.questions[0].weight
+            ) {
+               setCurrentCiaType(firstCiaQuestion.cia_type);
+               const confidQuestions = firstCiaQuestion.questions[0];
+               const questionWeight = confidQuestions.weight;
 
-            // setCurrentQuestionID(lastQuestionAnswered.id);
-            setCurrentQuestionType(foundQuestionType);
-            onDesicionMaking(current_question.id, nextAction, nextCategory);
-            return;
+               if (questionWeight) {
+                  setCurrentQuestionID(confidQuestions.id);
+                  setCurrentQuestionType(nextCategory);
+               }
+            }
+
+            // Get the value for calulating score for Ease of identification
+            if (current_question.weight) {
+               const key = lastQuestionAnswered.answer.toString();
+               const newValue = current_question.weight[key].value;
+               console.log(currentQuestionType);
+               onStoreScore(foundQuestionType, newValue);
+            }
+         } else {
+            let question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
+            let found_cia_type = '';
+            // If not found, then look in the cia type questions
+            if (!question) {
+               const type_and_questions = ciaQuestions.find((el) => {
+                  if (el.questions) {
+                     const item = el.questions.find((el2) => el2.id === lastQuestionID) as IQuestion;
+
+                     return item;
+                  }
+                  return null;
+               });
+               found_cia_type = type_and_questions?.cia_type as string;
+            }
+
+            if (question.weight) {
+               console.log(question, found_cia_type);
+               const nextAction = question.weight[weightIndex].action;
+               // const questionValue = question.weight[weightIndex].value;
+               // Get index of current question type in order to find next question type
+               const typeIndex = allCategories.findIndex((el) => el === foundQuestionType);
+               const nextCategory = allCategories[typeIndex + 1];
+
+               // setCurrentQuestionID(lastQuestionAnswered.id);
+               setCurrentQuestionType(foundQuestionType);
+               onDesicionMaking(current_question.id, nextAction, nextCategory);
+            }
          }
-      }
-
-      if (current_question && assessmentAnswers.length > 0) {
+      } else {
          console.log(current_question);
          // Get index of current question type in order to find next question type
          const typeIndex = allCategories.findIndex((el) => el === currentQuestionType);
@@ -176,7 +218,7 @@ const AppProvider: React.FC = ({ children }) => {
             if (current_question.weight && givenAnswer.id === current_question.id) {
                const weightIndex = givenAnswer.answer ? 'yes' : 'no';
                // Check if current question is type of Ease of identification, because of special weights
-               if (currentType === 'Ease of identification') {
+               if (currentType === ASSESSMENT_SCORE_TYPE.ease_of_identification) {
                   //All the answers given results in nextCategory, but wont work in the normal desicion function
                   // so we have to manually set the next question type
                   const firstCiaQuestion = ciaQuestions[0];
@@ -211,6 +253,7 @@ const AppProvider: React.FC = ({ children }) => {
             }
          });
       }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [assessmentAnswers]);
 
