@@ -323,21 +323,27 @@ const QuestionsResultComponent: React.FC<{
 }> = ({ interactive }) => {
    const typedQuestions = useRecoilValue<QuestionTypes[]>(typedQuestionState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
+   const currentQuestionType = useRecoilValue<string>(currentQuestionTypeState);
    const [assessmentAnswers, setAssessmentAnswersState] =
       useRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
    const assessmentTypeScores = useRecoilValue<number[]>(assessmentTypeScoreState);
-   const currentQuestionType = useRecoilValue<string>(currentQuestionTypeState);
 
    // Method for answering the questions
    const onAddAnswer = useMemo(() => {
       return (value: IQuestionAnswer) => {
          const foundIndex = assessmentAnswers.findIndex((el) => el.id === value.id);
-
+         // Check if question has been answered before
          if (foundIndex !== -1) {
-            const updatedAnswers = assessmentAnswers.map((el) => {
+            let updatedAnswers = assessmentAnswers.map((el) => {
                if (el.id === value.id) return { id: el.id, answer: value.answer };
                return el;
             });
+            // Remove the questions after the updated question
+            if (updatedAnswers.length > foundIndex + 1) {
+               // Keep the privous given answers
+               const newQuestionValues = updatedAnswers.filter((_, index) => index <= foundIndex);
+               updatedAnswers = newQuestionValues; // store the filtered answers
+            }
             setAssessmentAnswersState(updatedAnswers);
             return;
          }
