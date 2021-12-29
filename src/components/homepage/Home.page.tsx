@@ -13,8 +13,9 @@ const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
    const dataBreachDate = useRecoilValue<string>(dataBreachDateState);
-   const [assessmentDetail, setAssessmentDetail] =
-      useRecoilState<IAssessmentDetailState>(currentAssessmentDetailState);
+   const [assessmentDetail, setAssessmentDetail] = useRecoilState<IAssessmentDetailState>(
+      currentAssessmentDetailState
+   );
 
    return (
       <div>
@@ -106,19 +107,11 @@ const Homepage = () => {
             <div className="row justify-content-center">
                <p></p>
                <div className="grid gridPos">
-                  <button
-                     type="submit"
-                     className="btn btn-colour-2"
-                     onClick={() => navigate('/history')}
-                  >
+                  <button type="submit" className="btn btn-colour-2" onClick={() => navigate('/history')}>
                      Historic assessments
                   </button>
 
-                  <button
-                     type="submit"
-                     className="btn btn-colour-2"
-                     onClick={() => navigate('/draft')}
-                  >
+                  <button type="submit" className="btn btn-colour-2" onClick={() => navigate('/draft')}>
                      Drafts
                   </button>
                </div>

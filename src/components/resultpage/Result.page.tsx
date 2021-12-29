@@ -1,5 +1,7 @@
-import React, { useContext } from 'react';
-import { AppContext, IAppState } from '../../providers';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
+import currentAssessmentDetailState, { dataBreachDateState } from '../../recoil/assessment';
+import assessorState from '../../recoil/assessor';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import QuestionsComponentTest from '../question/question.component';
@@ -26,9 +28,9 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
 };
 
 const Resultpage: React.FC = () => {
-   const { assessor, assessment } = useContext<IAppState>(AppContext);
-   const assessorData = assessor?.state;
-   const assessmentData = assessment?.state;
+   const currentAssessment = useRecoilValue(currentAssessmentDetailState);
+   const currentAssessmentDatabreachData = useRecoilValue(dataBreachDateState);
+   const assessor = useRecoilValue(assessorState);
 
    return (
       <>
@@ -41,26 +43,15 @@ const Resultpage: React.FC = () => {
             </div>
             <div className="row">
                <div className="col-12 col-lg-8 offset-lg-2">
-                  <ImpactScoreVisual
-                     score={assessmentData?.current.impactScore ?? 0}
-                  />
+                  <ImpactScoreVisual score={currentAssessment.impactScore} />
                </div>
             </div>
             <div className="row">
                <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
-                     <p>
-                        Assessment number:{' '}
-                        {assessmentData?.current.incidentNumber}
-                     </p>
-                     <p>
-                        Assessment date:{' '}
-                        {assessmentData?.current.assessmentDate?.toDateString()}
-                     </p>
-                     <p>
-                        Performed by:{' '}
-                        {`${assessorData?.firstName} ${assessorData?.lastName}`}
-                     </p>
+                     <p>Assessment number: {currentAssessment.incidentNumber}</p>
+                     <p>Assessment date: {currentAssessmentDatabreachData}</p>
+                     <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
                   </div>
                </div>
             </div>
@@ -78,19 +69,16 @@ const Resultpage: React.FC = () => {
                      <h2>Action list</h2>
                      <ol className="action_list">
                         <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing
-                           elit. Beatae optio ducimus consequatur ullam
-                           aspernatur illum quia
+                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
+                           consequatur ullam aspernatur illum quia
                         </li>
                         <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing
-                           elit. Beatae optio ducimus consequatur ullam
-                           aspernatur illum quia
+                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
+                           consequatur ullam aspernatur illum quia
                         </li>
                         <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing
-                           elit. Beatae optio ducimus consequatur ullam
-                           aspernatur illum quia
+                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
+                           consequatur ullam aspernatur illum quia
                         </li>
                      </ol>
                   </div>

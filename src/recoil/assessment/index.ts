@@ -56,7 +56,7 @@ const currentAssessmentDetailState = atom<IAssessmentDetailState>({
       assessmentDate: new Date().toISOString(),
       descriptiveTitle: '',
       incidentNumber: null,
-      impactScore: 0,
+      impactScore: 3,
       score: {
          [ASSESSMENT_SCORE_TYPE.simple]: 0,
          [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
