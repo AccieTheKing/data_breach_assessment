@@ -171,36 +171,62 @@ const AppProvider: React.FC = ({ children }) => {
             if (current_question.weight) {
                const key = lastQuestionAnswered.answer.toString();
                const newValue = current_question.weight[key].value;
-               console.log(currentQuestionType);
                onStoreScore(foundQuestionType, newValue);
             }
-         } else {
-            let question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
+         } else if (foundQuestionType === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
+            const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
+            const index = allTypes.indexOf(currentCiaType);
+            const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
+            if (nextCiaType === 'availability') setCurrentQuestionType(foundQuestionType);
             let found_cia_type = '';
-            // If not found, then look in the cia type questions
-            if (!question) {
-               const type_and_questions = ciaQuestions.find((el) => {
-                  if (el.questions) {
-                     const item = el.questions.find((el2) => el2.id === lastQuestionID) as IQuestion;
+            let question = {} as IQuestion;
 
-                     return item;
-                  }
-                  return null;
-               });
-               found_cia_type = type_and_questions?.cia_type as string;
-            }
+            const type_and_questions = ciaQuestions.find((el) => {
+               if (el.questions) {
+                  question = el.questions.find((el2) => el2.id === lastQuestionID) as IQuestion;
+                  return question;
+               }
+               return null;
+            });
+            found_cia_type = type_and_questions?.cia_type as string;
 
             if (question.weight) {
-               console.log(question, found_cia_type);
                const nextAction = question.weight[weightIndex].action;
-               // const questionValue = question.weight[weightIndex].value;
+               switch (nextAction) {
+                  case QUESTIONNAIR_STATE.CONTINUE:
+                     setCurrentQuestionID(question.id + 1);
+                     setCurrentCiaType(found_cia_type);
+                     return;
+                  case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
+                     // Grab the first question of the next cia type
+                     const bucket = ciaQuestions.find((el) => el.cia_type === nextCiaType)
+                        ?.questions as IQuestion[];
+                     console.log(ciaQuestions);
+                     console.log('check bucket', bucket, nextAction, question, nextCiaType, currentCiaType);
+                     const nextCiaQuestion = bucket[0];
+                     setCurrentQuestionID(nextCiaQuestion.id);
+                     setCurrentCiaType(nextCiaType);
+                     return;
+                  case QUESTIONNAIR_STATE.NEXT_TYPE:
+                     setCurrentQuestionType(nextCategory);
+                     // Grab the first question of the next type
+                     const nextQuestion = questionTypes.find((el) => el.type === nextCategory)
+                        ?.questions[0] as IQuestion;
+                     setCurrentQuestionID(nextQuestion.id);
+                     return;
+               }
+            }
+         } else {
+            const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
+            if (question.weight) {
+               const nextAction = question.weight[weightIndex].action;
+               // // const questionValue = question.weight[weightIndex].value;
                // Get index of current question type in order to find next question type
                const typeIndex = allCategories.findIndex((el) => el === foundQuestionType);
                const nextCategory = allCategories[typeIndex + 1];
 
-               // setCurrentQuestionID(lastQuestionAnswered.id);
                setCurrentQuestionType(foundQuestionType);
-               onDesicionMaking(current_question.id, nextAction, nextCategory);
+               onDesicionMaking(question.id, nextAction, nextCategory);
             }
          }
       } else {
