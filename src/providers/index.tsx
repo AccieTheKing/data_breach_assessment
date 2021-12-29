@@ -34,11 +34,11 @@ const AppProvider: React.FC = ({ children }) => {
    const setTypedQuestions = useSetRecoilState<QuestionTypes[]>(typedQuestionState);
    const setUntypedQuestions = useSetRecoilState<IQuestion[]>(untypedQuestionState);
    const setAllCiaQuestions = useSetRecoilState<IQuestion[]>(ciaQuestionState);
+   const setCurrentQuestionID = useSetRecoilState<number>(currentQuestionIdState);
    const questionTypesDictionary = useRecoilValue(getCurrentQuestionTypeState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
    const [currentCiaType, setCurrentCiaType] = useRecoilState<string>(currentCiaTypeState);
-   const [currentQuestionID, setCurrentQuestionID] = useRecoilState<number>(currentQuestionIdState);
    const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(currentQuestionTypeState);
    const [currentAssessment, setCurrentAssessment] = useRecoilState<IAssessmentDetailState>(
       currentAssessmentDetailState
@@ -68,7 +68,7 @@ const AppProvider: React.FC = ({ children }) => {
    const onDesicionMaking = (currentQuestionId: number, nextAction: string, nextType: string) => {
       switch (nextAction) {
          case QUESTIONNAIR_STATE.CONTINUE:
-            console.log(currentQuestionId, nextType, currentQuestionType);
+            // console.log(currentQuestionId, nextType, currentQuestionType);
             setCurrentQuestionID(currentQuestionId + 1);
             break;
          case QUESTIONNAIR_STATE.NEXT_TYPE:
@@ -77,7 +77,7 @@ const AppProvider: React.FC = ({ children }) => {
             // Grab the first question of the next type
             const nextQuestion = questionTypes.find((el) => el.type === nextType)?.questions[0] as IQuestion;
 
-            console.log(nextQuestion.id, nextType, currentQuestionType);
+            // console.log(nextQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextQuestion.id);
             break;
          case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
@@ -91,7 +91,7 @@ const AppProvider: React.FC = ({ children }) => {
                ciaQuestions.find((el) => el.cia_type === nextCiaType)?.questions as IQuestion[]
             )[0];
 
-            console.log(nextCiaQuestion.id, nextType, currentQuestionType);
+            // console.log(nextCiaQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
          case QUESTIONNAIR_STATE.CALCULATE:
@@ -125,9 +125,73 @@ const AppProvider: React.FC = ({ children }) => {
       // Get current question
       let current_question = currentQuestion;
 
-      // If the length of the answers is smaller than the length of the ref, it means that the user has changed
-      // a previous given answer and we need to update the current question type
-      if (ref.current && assessmentAnswers.length <= ref.current.length) {
+      const onInitCiaQuestions = (nextCategory: string) => {
+         const firstCiaQuestion = ciaQuestions[0];
+         if (
+            firstCiaQuestion.cia_type &&
+            firstCiaQuestion.questions &&
+            firstCiaQuestion.questions[0].weight
+         ) {
+            setCurrentCiaType(firstCiaQuestion.cia_type);
+            const confidQuestions = firstCiaQuestion.questions[0];
+            const questionWeight = confidQuestions.weight;
+
+            if (questionWeight) {
+               setCurrentQuestionID(confidQuestions.id);
+               setCurrentQuestionType(nextCategory);
+            }
+         }
+      };
+
+      const onUpdateAgQuestions = (
+         nextCategory: string,
+         foundQuestionType: string,
+         lastQuestionID: number,
+         weightIndex: string
+      ) => {
+         const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
+         const index = allTypes.indexOf(currentCiaType);
+         const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
+         if (nextCiaType === 'availability') setCurrentQuestionType(foundQuestionType);
+         let found_cia_type = '';
+         let question = {} as IQuestion;
+
+         const type_and_questions = ciaQuestions.find((el) => {
+            if (el.questions) {
+               question = el.questions.find((el2) => el2.id === lastQuestionID) as IQuestion;
+               return question;
+            }
+            return null;
+         });
+         found_cia_type = type_and_questions?.cia_type as string;
+
+         if (question.weight) {
+            const nextAction = question.weight[weightIndex].action;
+            switch (nextAction) {
+               case QUESTIONNAIR_STATE.CONTINUE:
+                  setCurrentQuestionID(question.id + 1);
+                  setCurrentCiaType(found_cia_type);
+                  return;
+               case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
+                  // Grab the first question of the next cia type
+                  const bucket = ciaQuestions.find((el) => el.cia_type === nextCiaType)
+                     ?.questions as IQuestion[];
+                  const nextCiaQuestion = bucket[0];
+                  setCurrentQuestionID(nextCiaQuestion.id);
+                  setCurrentCiaType(nextCiaType);
+                  return;
+               case QUESTIONNAIR_STATE.NEXT_TYPE:
+                  setCurrentQuestionType(nextCategory);
+                  // Grab the first question of the next type
+                  const nextQuestion = questionTypes.find((el) => el.type === nextCategory)
+                     ?.questions[0] as IQuestion;
+                  setCurrentQuestionID(nextQuestion.id);
+                  return;
+            }
+         }
+      };
+
+      const onUpdateQuestions = () => {
          let foundQuestionType = '';
          const lastIndex = assessmentAnswers.length - 1;
          const lastQuestionAnswered = assessmentAnswers[lastIndex]; // last given answer
@@ -151,21 +215,7 @@ const AppProvider: React.FC = ({ children }) => {
          const nextCategory = typesArray[currentTypeIndex + 1];
 
          if (foundQuestionType === ASSESSMENT_SCORE_TYPE.ease_of_identification) {
-            const firstCiaQuestion = ciaQuestions[0];
-            if (
-               firstCiaQuestion.cia_type &&
-               firstCiaQuestion.questions &&
-               firstCiaQuestion.questions[0].weight
-            ) {
-               setCurrentCiaType(firstCiaQuestion.cia_type);
-               const confidQuestions = firstCiaQuestion.questions[0];
-               const questionWeight = confidQuestions.weight;
-
-               if (questionWeight) {
-                  setCurrentQuestionID(confidQuestions.id);
-                  setCurrentQuestionType(nextCategory);
-               }
-            }
+            onInitCiaQuestions(nextCategory);
 
             // Get the value for calulating score for Ease of identification
             if (current_question.weight) {
@@ -174,48 +224,7 @@ const AppProvider: React.FC = ({ children }) => {
                onStoreScore(foundQuestionType, newValue);
             }
          } else if (foundQuestionType === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
-            const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
-            const index = allTypes.indexOf(currentCiaType);
-            const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
-            if (nextCiaType === 'availability') setCurrentQuestionType(foundQuestionType);
-            let found_cia_type = '';
-            let question = {} as IQuestion;
-
-            const type_and_questions = ciaQuestions.find((el) => {
-               if (el.questions) {
-                  question = el.questions.find((el2) => el2.id === lastQuestionID) as IQuestion;
-                  return question;
-               }
-               return null;
-            });
-            found_cia_type = type_and_questions?.cia_type as string;
-
-            if (question.weight) {
-               const nextAction = question.weight[weightIndex].action;
-               switch (nextAction) {
-                  case QUESTIONNAIR_STATE.CONTINUE:
-                     setCurrentQuestionID(question.id + 1);
-                     setCurrentCiaType(found_cia_type);
-                     return;
-                  case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
-                     // Grab the first question of the next cia type
-                     const bucket = ciaQuestions.find((el) => el.cia_type === nextCiaType)
-                        ?.questions as IQuestion[];
-                     console.log(ciaQuestions);
-                     console.log('check bucket', bucket, nextAction, question, nextCiaType, currentCiaType);
-                     const nextCiaQuestion = bucket[0];
-                     setCurrentQuestionID(nextCiaQuestion.id);
-                     setCurrentCiaType(nextCiaType);
-                     return;
-                  case QUESTIONNAIR_STATE.NEXT_TYPE:
-                     setCurrentQuestionType(nextCategory);
-                     // Grab the first question of the next type
-                     const nextQuestion = questionTypes.find((el) => el.type === nextCategory)
-                        ?.questions[0] as IQuestion;
-                     setCurrentQuestionID(nextQuestion.id);
-                     return;
-               }
-            }
+            onUpdateAgQuestions(nextCategory, foundQuestionType, lastQuestionID, weightIndex);
          } else {
             const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
             if (question.weight) {
@@ -229,11 +238,11 @@ const AppProvider: React.FC = ({ children }) => {
                onDesicionMaking(question.id, nextAction, nextCategory);
             }
          }
-      } else {
-         console.log(current_question);
+      };
+
+      const onHandleQuestions = () => {
          // Get index of current question type in order to find next question type
          const typeIndex = allCategories.findIndex((el) => el === currentQuestionType);
-
          // Set the current type of question
          const currentType = allCategories[typeIndex];
          // Set next question type
@@ -247,21 +256,7 @@ const AppProvider: React.FC = ({ children }) => {
                if (currentType === ASSESSMENT_SCORE_TYPE.ease_of_identification) {
                   //All the answers given results in nextCategory, but wont work in the normal desicion function
                   // so we have to manually set the next question type
-                  const firstCiaQuestion = ciaQuestions[0];
-                  if (
-                     firstCiaQuestion.cia_type &&
-                     firstCiaQuestion.questions &&
-                     firstCiaQuestion.questions[0].weight
-                  ) {
-                     setCurrentCiaType(firstCiaQuestion.cia_type);
-                     const confidQuestions = firstCiaQuestion.questions[0];
-                     const questionWeight = confidQuestions.weight;
-
-                     if (questionWeight) {
-                        setCurrentQuestionID(confidQuestions.id);
-                        setCurrentQuestionType(nextCategory);
-                     }
-                  }
+                  onInitCiaQuestions(nextCategory);
 
                   // Get the value for calulating score for Ease of identification
                   const key = givenAnswer.answer.toString();
@@ -278,6 +273,14 @@ const AppProvider: React.FC = ({ children }) => {
                }
             }
          });
+      };
+
+      // If the length of the answers is smaller than the length of the ref, it means that the user has changed
+      // a previous given answer and we need to update the current question type
+      if (ref.current && assessmentAnswers.length <= ref.current.length) {
+         onUpdateQuestions();
+      } else {
+         onHandleQuestions();
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
