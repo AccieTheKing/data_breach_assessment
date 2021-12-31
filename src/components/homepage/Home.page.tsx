@@ -12,6 +12,8 @@ const Homepage = () => {
    const navigate = useNavigate();
    const dataBreachDate = assessment?.state.current.dataBreachDate;
 
+
+
    return (
       <div>
          <Navbar></Navbar>
@@ -109,6 +111,7 @@ const Homepage = () => {
                      className="btn btn-colour-2"
                      onClick={() => navigate('/history')}
                   >
+                   
                      Historic assessments
                   </button>
 
@@ -117,8 +120,10 @@ const Homepage = () => {
                      className="btn btn-colour-2"
                      onClick={() => navigate('/draft')}
                   >
+                     
                      Drafts
                   </button>
+                  
                </div>
             </div>
             <p></p>
@@ -128,8 +133,10 @@ const Homepage = () => {
                </Link>
             </div>
          </div>
+    
       </div>
    );
+   
 };
 
 export default Homepage;
