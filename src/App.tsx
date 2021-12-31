@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import './App.css';
 import Draftpage from './components/draftpage/draftpage';
 import Historypage from './components/historypage/historypage';
 import Aboutpage from './components/homepage/About.page';
 import Homepage from './components/homepage/Home.page';
+import Questionairpage from './components/questionairpage/Questionair.page';
 import Resultpage from './components/resultpage/Result.page';
-import AppProvider from './providers';
 import GridLoader from "react-spinners/GridLoader";
+import AppWrapper from './providers';
 
 
 function App() {
@@ -23,11 +25,11 @@ function App() {
       
       )
    return (
-      
-      <AppProvider>
-         <Router>
-            <div className="App">
-               {
+      <Router>
+         <RecoilRoot>
+            <AppWrapper>
+               <div className="App">
+             {
                   loading ? 
 
                   <div className="Loading">
@@ -47,10 +49,10 @@ function App() {
                   <Route path="/result" element={<Resultpage />} />
                </Routes>
                }
-              
-            </div>
-         </Router>
-      </AppProvider>
+               </div>
+            </AppWrapper>
+         </RecoilRoot>
+      </Router>
    );
 }
 
