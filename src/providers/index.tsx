@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -96,6 +97,7 @@ const AppProvider: React.FC = ({ children }) => {
             break;
          case QUESTIONNAIR_STATE.CALCULATE:
             console.log('End of the questionaire');
+            onCalcuateAssessment();
             break;
       }
    };
@@ -144,6 +146,8 @@ const AppProvider: React.FC = ({ children }) => {
          [ASSESSMENT_SCORE_TYPE.aggreveting_circumstances]: 0,
          [ASSESSMENT_SCORE_TYPE.mitigating_circumstances]: 0,
       };
+      const keep_easeOfIdentification_value =
+         currentAssessment.score[ASSESSMENT_SCORE_TYPE.ease_of_identification];
 
       setCurrentAssessment({
          ...currentAssessment,
@@ -162,6 +166,34 @@ const AppProvider: React.FC = ({ children }) => {
       setCurrentAssessment({
          ...currentAssessment,
          score: resetted_scores,
+      });
+   };
+
+   const onCalcuateAssessment = () => {
+      const severity_score_categories = 4; // will look at the first four categories
+      const all_score_objects = Object.entries(currentAssessment.score);
+      const copy = [...all_score_objects];
+      const score_values = copy.splice(0, severity_score_categories);
+
+      let highest_score = 0;
+
+      for (const [_, value] of score_values) {
+         if (value > highest_score) {
+            highest_score = value;
+         }
+      }
+      console.log(all_score_objects);
+
+      // Trying to apply formula, but not sure about the mitigating circumstances part
+      const [_, ease_oi_value] = all_score_objects[4];
+      const [__, ag_cir_breach] = all_score_objects[5];
+      const [___, mitigating_c_value] = all_score_objects[6];
+      const score = highest_score * ease_oi_value + ag_cir_breach + mitigating_c_value;
+
+      console.log(highest_score, ease_oi_value, ag_cir_breach, mitigating_c_value);
+      setCurrentAssessment({
+         ...currentAssessment,
+         impactScore: score,
       });
    };
 

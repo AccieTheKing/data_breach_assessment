@@ -8,6 +8,7 @@ import QuestionsComponentTest from '../question/question.component';
 import './styles.css';
 
 enum ASSESSMENT_IMPACT_TITLE {
+   NONE = 'NONE',
    LOW = 'LOW',
    MEDIUM = 'MEDIUM',
    HIGH = 'HIGH',
@@ -16,7 +17,24 @@ enum ASSESSMENT_IMPACT_TITLE {
 
 const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
    // based on the score decide what value to show
-   const title = Object.values(ASSESSMENT_IMPACT_TITLE)[score - 1];
+   let title = '';
+   const SL = Math.round(score);
+
+   switch (true) {
+      case SL <= 0:
+         title = ASSESSMENT_IMPACT_TITLE.NONE;
+         break;
+      case SL > 0 && SL < 2:
+         title = ASSESSMENT_IMPACT_TITLE.LOW;
+         break;
+      case SL >= 2 && SL < 3:
+         title = ASSESSMENT_IMPACT_TITLE.MEDIUM;
+         break;
+      case SL >= 4:
+         title = ASSESSMENT_IMPACT_TITLE.HIGH;
+         break;
+   }
+
    return (
       <div className="impact_card card">
          <div className="impact_score_container">
@@ -52,6 +70,7 @@ const Resultpage: React.FC = () => {
                      <p>Assessment number: {currentAssessment.incidentNumber}</p>
                      <p>Assessment date: {currentAssessmentDatabreachData}</p>
                      <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
+                     <p>Result: {`${currentAssessment.impactScore}`}</p>
                   </div>
                </div>
             </div>
