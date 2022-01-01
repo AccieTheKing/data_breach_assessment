@@ -1,8 +1,6 @@
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import currentAssessmentDetailState, {
-   assessmentDateState,
-} from '../../recoil/assessment';
+import currentAssessmentDetailState, { assessmentDateState } from '../../recoil/assessment';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import QuestionsComponentTest from '../question/question.component';
@@ -10,9 +8,7 @@ import './style.css';
 
 const Questionairpage: React.FC = () => {
    const assessmentDate = useRecoilValue(assessmentDateState);
-   const [assessmentDetail, setAssessmentDetail] = useRecoilState(
-      currentAssessmentDetailState
-   );
+   const [assessmentDetail, setAssessmentDetail] = useRecoilState(currentAssessmentDetailState);
 
    return (
       <>
@@ -23,10 +19,8 @@ const Questionairpage: React.FC = () => {
                   <h1>Data breach assessment</h1>
 
                   <p>
-                     Each dropdown is a category. You must answer all questions
-                     under each category to get the severity score. If a
-                     question is left unanswered the assessment will be saved as
-                     a draft
+                     Each dropdown is a category. You must answer all questions under each category to get the
+                     severity score. If a question is left unanswered the assessment will be saved as a draft
                   </p>
                </div>
             </div>
@@ -66,7 +60,7 @@ const Questionairpage: React.FC = () => {
                </div>
             </div>
          </main>
-         <Footer forPage={FOOTER_CONTENT.RESULT} />
+         <Footer forPage={FOOTER_CONTENT.ASSESSMENT} />
       </>
    );
 };
