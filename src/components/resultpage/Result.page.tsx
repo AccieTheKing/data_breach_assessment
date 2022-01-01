@@ -4,7 +4,7 @@ import currentAssessmentDetailState, { dataBreachDateState } from '../../recoil/
 import assessorState from '../../recoil/assessor';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
-import QuestionsComponentTest from '../question/question.component';
+import InteractiveQuestionary from '../question/interactive.questionaire.component';
 import './styles.css';
 
 enum ASSESSMENT_IMPACT_TITLE {
@@ -59,7 +59,7 @@ const Resultpage: React.FC = () => {
          <main className="container">
             <div className="row">
                <div className="col-12">
-                  <QuestionsComponentTest interactive={false} />
+                  <InteractiveQuestionary />
                </div>
             </div>
 

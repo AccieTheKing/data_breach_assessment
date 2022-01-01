@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import currentAssessmentDetailState, { assessmentDateState } from '../../recoil/assessment';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
-import QuestionsComponentTest from '../question/question.component';
+import QuestionsComponentTest from '../question/interactive.questionaire.component';
 import './style.css';
 
 const Questionairpage: React.FC = () => {
@@ -56,7 +56,7 @@ const Questionairpage: React.FC = () => {
          <main className="container">
             <div className="row">
                <div className="col-12">
-                  <QuestionsComponentTest interactive={true} />
+                  <QuestionsComponentTest />
                </div>
             </div>
          </main>

@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { IQuestion } from '../../../components/question/question.component';
+import { IQuestion } from '../../../components/question/interactive.questionaire.component';
 import {
    ciaQuestionState,
    currentCiaTypeState,

@@ -318,9 +318,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
  * functionality to save the answers to the state.
  *
  */
-const QuestionsResultComponent: React.FC<{
-   interactive: boolean;
-}> = ({ interactive }) => {
+const InteractiveQuestionaryComponent: React.FC = () => {
    const typedQuestions = useRecoilValue<QuestionTypes[]>(typedQuestionState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const currentQuestionType = useRecoilValue<string>(currentQuestionTypeState);
@@ -384,4 +382,4 @@ const QuestionsResultComponent: React.FC<{
    );
 };
 
-export default QuestionsResultComponent;
+export default InteractiveQuestionaryComponent;
