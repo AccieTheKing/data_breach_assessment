@@ -43,18 +43,21 @@ interface QuestionContainerProp extends QuestonInteraction {
 
 interface QuestonInteraction {
    onAnswerQuestion: (value: IQuestionAnswer) => void;
+   interactive: boolean;
 }
 
 interface ISpecialQuestions {
    value: IQuestion;
    allAnswers: IQuestionAnswer[];
    focusDropdown: boolean;
+   interactive: boolean;
    showQuestion: (value: number) => boolean;
    onAction: (value: IQuestionAnswer) => void;
 }
 
 const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    value,
+   interactive,
    allAnswers,
    onAction,
    showQuestion,
@@ -113,6 +116,7 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
 const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
    value,
    allAnswers,
+   interactive,
    onAction,
    showQuestion,
 }) => {
@@ -156,7 +160,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                         })
                      }
                   />
-                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}`}>
+                  <label className="btn btn-outline-primary me-1" htmlFor={`btnradio${element.id}`}>
                      Yes
                   </label>
                   <input
@@ -192,6 +196,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    type,
    questions,
    score,
+   interactive,
    currentQuestion,
    currentQuestionType,
    allAnswers,
@@ -236,6 +241,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         value={question}
                         allAnswers={allAnswers}
+                        interactive={interactive}
                         focusDropdown={type === currentQuestionType}
                         onAction={onAnswerQuestion}
                         showQuestion={showCurrentQuestion}
@@ -244,6 +250,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                      <AggravatingCircumstances
                         key={id}
                         value={question}
+                        interactive={interactive}
                         allAnswers={allAnswers}
                         focusDropdown={type === currentQuestionType}
                         onAction={onAnswerQuestion}
@@ -280,7 +287,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                                  })
                               }
                            />
-                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}`}>
+                           <label className="btn btn-outline-primary me-1" htmlFor={`btnradio${question.id}`}>
                               Yes
                            </label>
                            <input
@@ -318,9 +325,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
  * functionality to save the answers to the state.
  *
  */
-const QuestionsResultComponent: React.FC<{
-   interactive: boolean;
-}> = ({ interactive }) => {
+const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ interactive }) => {
    const typedQuestions = useRecoilValue<QuestionTypes[]>(typedQuestionState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const currentQuestionType = useRecoilValue<string>(currentQuestionTypeState);
@@ -374,6 +379,7 @@ const QuestionsResultComponent: React.FC<{
                score={assessmentTypeScores[id]}
                type={el.type}
                questions={el.questions}
+               interactive={interactive}
                currentQuestion={currentQuestion}
                currentQuestionType={currentQuestionType}
                onAnswerQuestion={onAddAnswer}
@@ -384,4 +390,4 @@ const QuestionsResultComponent: React.FC<{
    );
 };
 
-export default QuestionsResultComponent;
+export default InteractiveQuestionaryComponent;

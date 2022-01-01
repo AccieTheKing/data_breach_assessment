@@ -17,8 +17,6 @@ const Homepage = () => {
       currentAssessmentDetailState
    );
 
-
-
    return (
       <div>
          <Navbar></Navbar>
@@ -116,7 +114,6 @@ const Homepage = () => {
                   <button type="submit" className="btn btn-colour-2" onClick={() => navigate('/draft')}>
                      Drafts
                   </button>
-                  
                </div>
             </div>
             <p></p>
@@ -126,10 +123,8 @@ const Homepage = () => {
                </Link>
             </div>
          </div>
-    
       </div>
    );
-   
 };
 
 export default Homepage;

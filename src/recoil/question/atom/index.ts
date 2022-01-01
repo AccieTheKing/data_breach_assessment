@@ -1,8 +1,5 @@
 import { atom } from 'recoil';
-import {
-   IQuestion,
-   QuestionTypes,
-} from '../../../components/question/question.component';
+import { IQuestion, QuestionTypes } from '../../../components/question/interactive.questionaire.component';
 
 export enum QUESTIONNAIR_STATE {
    CONTINUE = 'continue',
