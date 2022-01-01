@@ -56,7 +56,7 @@ const Questionairpage: React.FC = () => {
          <main className="container">
             <div className="row">
                <div className="col-12">
-                  <QuestionsComponentTest />
+                  <QuestionsComponentTest interactive={false} />
                </div>
             </div>
          </main>
