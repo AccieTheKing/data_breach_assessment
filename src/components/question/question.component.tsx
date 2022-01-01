@@ -156,7 +156,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                         })
                      }
                   />
-                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}`}>
+                  <label className="btn btn-outline-primary me-1" htmlFor={`btnradio${element.id}`}>
                      Yes
                   </label>
                   <input
@@ -280,7 +280,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                                  })
                               }
                            />
-                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}`}>
+                           <label className="btn btn-outline-primary me-1" htmlFor={`btnradio${question.id}`}>
                               Yes
                            </label>
                            <input

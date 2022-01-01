@@ -110,6 +110,61 @@ const AppProvider: React.FC = ({ children }) => {
       });
    };
 
+   const onFindQuestionType = (questionID: number): string => {
+      const typesArray = Object.values(ASSESSMENT_SCORE_TYPE);
+      for (let i = 0; i < questionTypesDictionary.length; i++) {
+         const type = typesArray[i];
+         const maxQuestionID = questionTypesDictionary[i][type];
+         if (questionID <= maxQuestionID) return type;
+      }
+      return '';
+   };
+
+   const onFindQuestionValue = (questionID: number, answer: boolean | string): number => {
+      const key = answer ? 'yes' : 'no'; // transform true to yes and false to no
+      let question = allQuestions.find((el) => el.id === questionID) as IQuestion;
+
+      if (!question) {
+         const allQuestions = ciaQuestions.flatMap((el) => el.questions);
+         question = allQuestions.find((el) => el?.id === questionID) as IQuestion;
+      }
+
+      if (!question.weight![key]) return 0;
+      return question.weight![key].value;
+   };
+
+   const onUpdateScores = () => {
+      const answers = assessmentAnswers;
+      let resetted_scores: { [key: string]: number } = {
+         [ASSESSMENT_SCORE_TYPE.simple]: 0,
+         [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
+         [ASSESSMENT_SCORE_TYPE.financial]: 0,
+         [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
+         [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,
+         [ASSESSMENT_SCORE_TYPE.aggreveting_circumstances]: 0,
+         [ASSESSMENT_SCORE_TYPE.mitigating_circumstances]: 0,
+      };
+
+      setCurrentAssessment({
+         ...currentAssessment,
+         score: resetted_scores,
+      });
+
+      answers.forEach((el) => {
+         const type = onFindQuestionType(el.id);
+         const value = onFindQuestionValue(el.id, el.answer);
+         const previousValue = resetted_scores[type];
+         resetted_scores = {
+            ...resetted_scores,
+            [type]: previousValue + value,
+         };
+      });
+      setCurrentAssessment({
+         ...currentAssessment,
+         score: resetted_scores,
+      });
+   };
+
    // Storing all the questions into the state
    useEffect(() => {
       // Current question type has to match the initialization of the first question
@@ -165,29 +220,27 @@ const AppProvider: React.FC = ({ children }) => {
          });
          found_cia_type = type_and_questions?.cia_type as string;
 
-         if (question.weight) {
-            const nextAction = question.weight[weightIndex].action;
-            switch (nextAction) {
-               case QUESTIONNAIR_STATE.CONTINUE:
-                  setCurrentQuestionID(question.id + 1);
-                  setCurrentCiaType(found_cia_type);
-                  return;
-               case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
-                  // Grab the first question of the next cia type
-                  const bucket = ciaQuestions.find((el) => el.cia_type === nextCiaType)
-                     ?.questions as IQuestion[];
-                  const nextCiaQuestion = bucket[0];
-                  setCurrentQuestionID(nextCiaQuestion.id);
-                  setCurrentCiaType(nextCiaType);
-                  return;
-               case QUESTIONNAIR_STATE.NEXT_TYPE:
-                  setCurrentQuestionType(nextCategory);
-                  // Grab the first question of the next type
-                  const nextQuestion = questionTypes.find((el) => el.type === nextCategory)
-                     ?.questions[0] as IQuestion;
-                  setCurrentQuestionID(nextQuestion.id);
-                  return;
-            }
+         const nextAction = question.weight![weightIndex].action;
+         switch (nextAction) {
+            case QUESTIONNAIR_STATE.CONTINUE:
+               setCurrentQuestionID(question.id + 1);
+               setCurrentCiaType(found_cia_type);
+               return;
+            case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
+               // Grab the first question of the next cia type
+               const bucket = ciaQuestions.find((el) => el.cia_type === nextCiaType)
+                  ?.questions as IQuestion[];
+               const nextCiaQuestion = bucket[0];
+               setCurrentQuestionID(nextCiaQuestion.id);
+               setCurrentCiaType(nextCiaType);
+               return;
+            case QUESTIONNAIR_STATE.NEXT_TYPE:
+               setCurrentQuestionType(nextCategory);
+               // Grab the first question of the next type
+               const nextQuestion = questionTypes.find((el) => el.type === nextCategory)
+                  ?.questions[0] as IQuestion;
+               setCurrentQuestionID(nextQuestion.id);
+               return;
          }
       };
 
@@ -197,17 +250,10 @@ const AppProvider: React.FC = ({ children }) => {
          const lastQuestionAnswered = assessmentAnswers[lastIndex]; // last given answer
          const lastQuestionID = lastQuestionAnswered.id;
          const weightIndex = lastQuestionAnswered.answer ? 'yes' : 'no';
+         const typesArray = Object.values(ASSESSMENT_SCORE_TYPE);
 
          // Find the question type of the last question answered (SIMPLE DATA, etc)
-         const typesArray = Object.values(ASSESSMENT_SCORE_TYPE);
-         for (let i = 0; i < questionTypesDictionary.length; i++) {
-            const type = typesArray[i];
-            const maxQuestion = questionTypesDictionary[i][type];
-            if (lastQuestionAnswered.id <= maxQuestion) {
-               foundQuestionType = type;
-               break;
-            }
-         }
+         foundQuestionType = onFindQuestionType(lastQuestionAnswered.id);
 
          // Get current question
          current_question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
@@ -218,25 +264,21 @@ const AppProvider: React.FC = ({ children }) => {
             onInitCiaQuestions(nextCategory);
 
             // Get the value for calulating score for Ease of identification
-            if (current_question.weight) {
-               const key = lastQuestionAnswered.answer.toString();
-               const newValue = current_question.weight[key].value;
-               onStoreScore(foundQuestionType, newValue);
-            }
+            const key = lastQuestionAnswered.answer.toString();
+            const newValue = current_question.weight![key].value;
+            onStoreScore(foundQuestionType, newValue);
          } else if (foundQuestionType === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
             onUpdateAgQuestions(nextCategory, foundQuestionType, lastQuestionID, weightIndex);
+            onUpdateScores();
          } else {
             const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
-            if (question.weight) {
-               const nextAction = question.weight[weightIndex].action;
-               // // const questionValue = question.weight[weightIndex].value;
-               // Get index of current question type in order to find next question type
-               const typeIndex = allCategories.findIndex((el) => el === foundQuestionType);
-               const nextCategory = allCategories[typeIndex + 1];
-
-               setCurrentQuestionType(foundQuestionType);
-               onDesicionMaking(question.id, nextAction, nextCategory);
-            }
+            const nextAction = question.weight![weightIndex].action;
+            // Get index of current question type in order to find next question type
+            const typeIndex = allCategories.findIndex((el) => el === foundQuestionType);
+            const nextCategory = allCategories[typeIndex + 1];
+            setCurrentQuestionType(foundQuestionType);
+            onDesicionMaking(question.id, nextAction, nextCategory);
+            onUpdateScores();
          }
       };
 
