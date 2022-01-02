@@ -74,11 +74,20 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    const radioButtonTexts = Object.keys(value.weight ?? {});
    const radioButtonValues = Object.values(value.weight ?? {});
 
+   const getQuestionValue = useMemo(() => {
+      return (id: number): { value: string } => {
+         const value = allAnswers.find((e) => e.id === id)?.answer as string;
+         return {
+            value,
+         };
+      };
+   }, [allAnswers]);
+
    return (
       <div
          className={`row disable_question_${showQuestion(questionId)} is_answered_${hasBeenAnswered(
             questionId
-         )}`}
+         )} ${interactive && hasBeenAnswered(questionId) && 'show_question'}`}
       >
          <div className="col-12">
             <div>
@@ -94,8 +103,10 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
                            name="ease_of_indentication"
                            id={`ease_of_indentication${index}`}
                            value={radioButtonValues[index].value}
+                           checked={getQuestionValue(questionId).value === radioButtonTexts[index]}
                            disabled={
-                              hasBeenAnswered(questionId) === false && showQuestion(questionId) === false
+                              interactive ||
+                              (hasBeenAnswered(questionId) === false && showQuestion(questionId) === false)
                            }
                            onChange={(e) =>
                               onAction({
@@ -128,6 +139,17 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
          return false;
       };
    }, [allAnswers]);
+
+   const getQuestionValue = useMemo(() => {
+      return (id: number): { yes: boolean; no: boolean } => {
+         const value = allAnswers.find((e) => e.id === id)?.answer as boolean;
+         return {
+            yes: value === true,
+            no: value === false,
+         };
+      };
+   }, [allAnswers]);
+
    return (
       <div className="mb-2 bottom_lined">
          {questionsCIA?.map((element, index) => (
@@ -135,7 +157,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                key={index}
                className={`row disable_question_${showQuestion(element.id)} is_answered_${hasBeenAnswered(
                   element.id
-               )}`}
+               )} ${interactive && hasBeenAnswered(element.id) && 'show_question'}`}
             >
                <div className="col-12 col-md-10">
                   <div className="question_wrap">
@@ -152,7 +174,11 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                      className="btn-check"
                      name={`btnradio${element.id}`}
                      id={`btnradio${element.id}`}
-                     disabled={hasBeenAnswered(element.id) === false && showQuestion(element.id) === false}
+                     checked={getQuestionValue(element.id).yes}
+                     disabled={
+                        interactive ||
+                        (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
+                     }
                      onChange={(e) =>
                         onAction({
                            id: element.id,
@@ -168,7 +194,11 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                      className="btn-check"
                      name={`btnradio${element.id}`}
                      id={`btnradio${element.id}no`}
-                     disabled={hasBeenAnswered(element.id) === false && showQuestion(element.id) === false}
+                     checked={getQuestionValue(element.id).no}
+                     disabled={
+                        interactive ||
+                        (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
+                     }
                      onChange={(e) =>
                         onAction({
                            id: element.id,
@@ -214,8 +244,20 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
       };
    }, [allAnswers]);
 
+   const getQuestionValue = useMemo(() => {
+      return (id: number): { yes: boolean; no: boolean } => {
+         const value = allAnswers.find((e) => e.id === id)?.answer as boolean;
+         return {
+            yes: value === true,
+            no: value === false,
+         };
+      };
+   }, [allAnswers]);
+
    return (
-      <div className={`accordion-item focus_dropdown_${type === currentQuestionType}`}>
+      <div
+         className={`accordion-item focus_dropdown_${type === currentQuestionType && interactive === false}`}
+      >
          <h2 className="accordion-header" id={`heading${id}`}>
             <button
                className="accordion-button collapsed"
@@ -261,7 +303,9 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         className={`row mb-2 bottom_lined is_answered_${hasBeenAnswered(
                            question.id
-                        )} disable_question_${showCurrentQuestion(question.id)}`}
+                        )} disable_question_${showCurrentQuestion(question.id)} ${
+                           interactive && hasBeenAnswered(question.id) && 'show_question'
+                        }`}
                      >
                         <div className="col-12 col-md-10">
                            <span className="question_number_wrap">{question.id}.</span>
@@ -276,10 +320,13 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                               className="btn-check"
                               name={`btnradio${question.id}`}
                               id={`btnradio${question.id}`}
+                              readOnly={interactive}
                               disabled={
-                                 hasBeenAnswered(question.id) === false &&
-                                 showCurrentQuestion(question.id) === false
+                                 interactive ||
+                                 (hasBeenAnswered(question.id) === false &&
+                                    showCurrentQuestion(question.id) === false)
                               }
+                              checked={getQuestionValue(question.id).yes}
                               onChange={(e) =>
                                  onAnswerQuestion({
                                     id: question.id,
@@ -295,9 +342,11 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                               className="btn-check"
                               name={`btnradio${question.id}`}
                               id={`btnradio${question.id}no`}
+                              checked={getQuestionValue(question.id).no}
                               disabled={
-                                 hasBeenAnswered(question.id) === false &&
-                                 showCurrentQuestion(question.id) === false
+                                 interactive ||
+                                 (hasBeenAnswered(question.id) === false &&
+                                    showCurrentQuestion(question.id) === false)
                               }
                               onChange={(e) =>
                                  onAnswerQuestion({
