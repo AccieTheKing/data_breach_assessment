@@ -97,6 +97,12 @@
    }
 }
 
+#breachassessmetcontainer .show_question .question_number_wrap,
+#breachassessmetcontainer .show_question .question_wrap p,
+#breachassessmetcontainer .show_question label {
+   opacity: 1 !important;
+}
+
 /* Ease of indentification */
 .eoi_container {
    display: flex;
