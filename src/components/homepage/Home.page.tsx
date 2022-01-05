@@ -1,6 +1,5 @@
 import './style.css';
 import Navbar from '../Navbar/Nav';
-import './About.page';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import assessorState, { IAssessor } from '../../recoil/assessor';

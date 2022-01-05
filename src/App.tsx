@@ -4,7 +4,7 @@ import { RecoilRoot } from 'recoil';
 import './App.css';
 import Draftpage from './components/draftpage/draftpage';
 import Historypage from './components/historypage/historypage';
-import Aboutpage from './components/homepage/About.page';
+import Aboutpage from './components/aboutpage/aboutpage';
 import Homepage from './components/homepage/Home.page';
 import Questionairpage from './components/questionairpage/Questionair.page';
 import Resultpage from './components/resultpage/Result.page';
