@@ -169,46 +169,48 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                   </div>
                </div>
                <div className="col-12 col-md-2">
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${element.id}`}
-                     id={`btnradio${element.id}`}
-                     checked={getQuestionValue(element.id).yes}
-                     disabled={
-                        interactive ||
-                        (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
-                     }
-                     onChange={(e) =>
-                        onAction({
-                           id: element.id,
-                           answer: true,
-                        })
-                     }
-                  />
-                  <label className="btn btn-outline-primary me-1" htmlFor={`btnradio${element.id}`}>
-                     Yes
-                  </label>
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${element.id}`}
-                     id={`btnradio${element.id}no`}
-                     checked={getQuestionValue(element.id).no}
-                     disabled={
-                        interactive ||
-                        (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
-                     }
-                     onChange={(e) =>
-                        onAction({
-                           id: element.id,
-                           answer: false,
-                        })
-                     }
-                  />
-                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}no`}>
-                     No
-                  </label>
+                  <div className="btn-group">
+                     <input
+                        type="radio"
+                        className="btn-check"
+                        name={`btnradio${element.id}`}
+                        id={`btnradio${element.id}`}
+                        checked={getQuestionValue(element.id).yes}
+                        disabled={
+                           interactive ||
+                           (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
+                        }
+                        onChange={(e) =>
+                           onAction({
+                              id: element.id,
+                              answer: true,
+                           })
+                        }
+                     />
+                     <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}`}>
+                        Yes
+                     </label>
+                     <input
+                        type="radio"
+                        className="btn-check"
+                        name={`btnradio${element.id}`}
+                        id={`btnradio${element.id}no`}
+                        checked={getQuestionValue(element.id).no}
+                        disabled={
+                           interactive ||
+                           (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
+                        }
+                        onChange={(e) =>
+                           onAction({
+                              id: element.id,
+                              answer: false,
+                           })
+                        }
+                     />
+                     <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}no`}>
+                        No
+                     </label>
+                  </div>
                </div>
             </div>
          ))}
@@ -315,49 +317,51 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                            </div>
                         </div>
                         <div className="col-12 col-md-2">
-                           <input
-                              type="radio"
-                              className="btn-check"
-                              name={`btnradio${question.id}`}
-                              id={`btnradio${question.id}`}
-                              readOnly={interactive}
-                              disabled={
-                                 interactive ||
-                                 (hasBeenAnswered(question.id) === false &&
-                                    showCurrentQuestion(question.id) === false)
-                              }
-                              checked={getQuestionValue(question.id).yes}
-                              onChange={(e) =>
-                                 onAnswerQuestion({
-                                    id: question.id,
-                                    answer: true,
-                                 })
-                              }
-                           />
-                           <label className="btn btn-outline-primary me-1" htmlFor={`btnradio${question.id}`}>
-                              Yes
-                           </label>
-                           <input
-                              type="radio"
-                              className="btn-check"
-                              name={`btnradio${question.id}`}
-                              id={`btnradio${question.id}no`}
-                              checked={getQuestionValue(question.id).no}
-                              disabled={
-                                 interactive ||
-                                 (hasBeenAnswered(question.id) === false &&
-                                    showCurrentQuestion(question.id) === false)
-                              }
-                              onChange={(e) =>
-                                 onAnswerQuestion({
-                                    id: question.id,
-                                    answer: false,
-                                 })
-                              }
-                           />
-                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}no`}>
-                              No
-                           </label>
+                           <div className="btn-group">
+                              <input
+                                 type="radio"
+                                 className="btn-check"
+                                 name={`btnradio${question.id}`}
+                                 id={`btnradio${question.id}`}
+                                 readOnly={interactive}
+                                 disabled={
+                                    interactive ||
+                                    (hasBeenAnswered(question.id) === false &&
+                                       showCurrentQuestion(question.id) === false)
+                                 }
+                                 checked={getQuestionValue(question.id).yes}
+                                 onChange={(e) =>
+                                    onAnswerQuestion({
+                                       id: question.id,
+                                       answer: true,
+                                    })
+                                 }
+                              />
+                              <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}`}>
+                                 Yes
+                              </label>
+                              <input
+                                 type="radio"
+                                 className="btn-check"
+                                 name={`btnradio${question.id}`}
+                                 id={`btnradio${question.id}no`}
+                                 checked={getQuestionValue(question.id).no}
+                                 disabled={
+                                    interactive ||
+                                    (hasBeenAnswered(question.id) === false &&
+                                       showCurrentQuestion(question.id) === false)
+                                 }
+                                 onChange={(e) =>
+                                    onAnswerQuestion({
+                                       id: question.id,
+                                       answer: false,
+                                    })
+                                 }
+                              />
+                              <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}no`}>
+                                 No
+                              </label>
+                           </div>
                         </div>
                      </div>
                   )
