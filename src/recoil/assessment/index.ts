@@ -20,6 +20,16 @@ export enum ASSESSMENT_SCORE_TYPE {
    mitigating_circumstances = 'Mitigating circumstances of breach',
 }
 
+export const default_score_data = {
+   [ASSESSMENT_SCORE_TYPE.simple]: 0,
+   [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
+   [ASSESSMENT_SCORE_TYPE.financial]: 0,
+   [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
+   [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,
+   [ASSESSMENT_SCORE_TYPE.aggreveting_circumstances]: 0,
+   [ASSESSMENT_SCORE_TYPE.mitigating_circumstances]: 0,
+};
+
 export const dataBreachDateState = selector<string>({
    key: 'dataBreachDate',
    get: ({ get }) => {
@@ -57,15 +67,7 @@ const currentAssessmentDetailState = atom<IAssessmentDetailState>({
       descriptiveTitle: '',
       incidentNumber: null,
       impactScore: 0,
-      score: {
-         [ASSESSMENT_SCORE_TYPE.simple]: 0,
-         [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
-         [ASSESSMENT_SCORE_TYPE.financial]: 0,
-         [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
-         [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,
-         [ASSESSMENT_SCORE_TYPE.aggreveting_circumstances]: 0,
-         [ASSESSMENT_SCORE_TYPE.mitigating_circumstances]: 0,
-      },
+      score: default_score_data,
    },
 });
 

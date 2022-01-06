@@ -146,8 +146,6 @@ const AppProvider: React.FC = ({ children }) => {
          [ASSESSMENT_SCORE_TYPE.aggreveting_circumstances]: 0,
          [ASSESSMENT_SCORE_TYPE.mitigating_circumstances]: 0,
       };
-      const keep_easeOfIdentification_value =
-         currentAssessment.score[ASSESSMENT_SCORE_TYPE.ease_of_identification];
 
       setCurrentAssessment({
          ...currentAssessment,
@@ -349,12 +347,15 @@ const AppProvider: React.FC = ({ children }) => {
          });
       };
 
-      // If the length of the answers is smaller than the length of the ref, it means that the user has changed
-      // a previous given answer and we need to update the current question type
-      if (ref.current && assessmentAnswers.length <= ref.current.length) {
-         onUpdateQuestions();
-      } else {
-         onHandleQuestions();
+      // If the lenght of the answers is greater than 0, then do something with the answers
+      if (assessmentAnswers.length > 0) {
+         // If the length of the answers is smaller than the length of the ref, it means that the user has changed
+         // a previous given answer and we need to update the current question type
+         if (ref.current && assessmentAnswers.length <= ref.current.length) {
+            onUpdateQuestions();
+         } else {
+            onHandleQuestions();
+         }
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
