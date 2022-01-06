@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
 import { assessmentNoteState, assessmentScore } from '../../recoil/assessment';
 import assessmentAnswersState from '../../recoil/question/answer';
-import { currentQuestionIdState } from '../../recoil/question/atom';
+import { currentQuestionIdState, currentQuestionTypeState } from '../../recoil/question/atom';
 import './style.css';
 
 export enum FOOTER_CONTENT {
@@ -35,6 +35,15 @@ const QuestionairePageFooterContent = () => {
    const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
    const onResetAssessmentScore = useResetRecoilState(assessmentScore);
    const onResetNotes = useResetRecoilState(assessmentNoteState);
+   const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
+
+   const onResetAllStates = () => {
+      onResetQuestionaireState();
+      onResetQuestionID();
+      onResetAssessmentScore();
+      onResetNotes();
+      onResetQuestionType();
+   };
 
    return (
       <div className="row">
@@ -42,10 +51,7 @@ const QuestionairePageFooterContent = () => {
             <button
                className="btn btn-light footer-button cancel-button"
                onClick={() => {
-                  onResetQuestionaireState();
-                  onResetAssessmentScore();
-                  onResetNotes();
-                  onResetQuestionID();
+                  onResetAllStates();
                   navigate('/');
                }}
             >

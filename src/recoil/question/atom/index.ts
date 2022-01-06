@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { IQuestion, QuestionTypes } from '../../../components/question/interactive.questionaire.component';
+import { ASSESSMENT_SCORE_TYPE } from '../../assessment';
 
 export enum QUESTIONNAIR_STATE {
    CONTINUE = 'continue',
@@ -35,7 +36,7 @@ export const currentQuestionActionState = atom<QUESTIONNAIR_STATE | null>({
 
 export const currentQuestionTypeState = atom<string>({
    key: 'currentQuestionType',
-   default: '',
+   default: ASSESSMENT_SCORE_TYPE.simple,
 });
 
 export const currentCiaTypeState = atom<string>({
