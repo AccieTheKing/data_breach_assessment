@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import currentAssessmentDetailState, { assessmentDateState } from '../../recoil/assessment';
+import getCurrentAssessment, {
+   assessmentDescriptiveTitleState,
+   assessmentNoteState,
+} from '../../recoil/assessment';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import QuestionsComponentTest from '../question/interactive.questionaire.component';
 import './style.css';
 
+const QuestionNoteField = () => {
+   const [state, setState] = useRecoilState<string>(assessmentNoteState);
+
+   return (
+      <div className="row mb-4">
+         <div className="col-12">
+            <div className="note-group">
+               <label htmlFor="note">Note</label>
+               <textarea
+                  className="form-control"
+                  id="note"
+                  rows={3}
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+               />
+            </div>
+         </div>
+      </div>
+   );
+};
+
 const Questionairpage: React.FC = () => {
-   const assessmentDate = useRecoilValue(assessmentDateState);
-   const [assessmentDetail, setAssessmentDetail] = useRecoilState(currentAssessmentDetailState);
+   const currentAssessment = useRecoilValue(getCurrentAssessment);
+   const [descriptiveTitle, setDescriptiveTitle] = useRecoilState<string>(assessmentDescriptiveTitleState);
+   const [showNote, setShowNote] = useState(false);
 
    return (
       <>
@@ -31,29 +56,23 @@ const Questionairpage: React.FC = () => {
                      name="descriptive_title"
                      className="form-control"
                      placeholder="Descriptive title"
-                     onChange={(e) => {
-                        setAssessmentDetail({
-                           ...assessmentDetail,
-                           descriptiveTitle: e.target.value,
-                        });
-                     }}
-                     value={assessmentDetail.descriptiveTitle}
+                     onChange={(e) => setDescriptiveTitle(e.target.value)}
+                     value={descriptiveTitle}
                   />
                </div>
                <div className="col-12 col-lg-3">
-                  <input
-                     type="date"
-                     className="form-control"
-                     value={assessmentDetail.dataBreachDate ?? ''}
-                     readOnly
-                  />
+                  <button className="btn btn-showNote" onClick={() => setShowNote(!showNote)}>
+                     {showNote ? 'Hide note' : 'Show note'}
+                  </button>
                </div>
                <div className="col-12 col-lg-4">
-                  <p>Assessment date: {assessmentDate}</p>
+                  <p className="m-0">Assessment date: {currentAssessment.assessmentDate}</p>
+                  <p className="m-0">Data breach date: {currentAssessment.dataBreachDate}</p>
                </div>
             </div>
          </header>
          <main className="container">
+            {showNote && <QuestionNoteField />}
             <div className="row">
                <div className="col-12">
                   <QuestionsComponentTest interactive={false} />
