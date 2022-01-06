@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
-import currentAssessmentDetailState, { default_score_data } from '../../recoil/assessment';
+import { useResetRecoilState } from 'recoil';
+import { assessmentScore } from '../../recoil/assessment';
 import assessmentAnswersState from '../../recoil/question/answer';
 import { currentQuestionIdState } from '../../recoil/question/atom';
 import './style.css';
@@ -31,9 +31,9 @@ const ResultPageFooterContent = () => {
 // Footer content for the assessment of the questionaire page
 const QuestionairePageFooterContent = () => {
    const navigate = useNavigate();
-   const setQuestionaireState = useResetRecoilState(assessmentAnswersState);
-   const setQuestionID = useSetRecoilState(currentQuestionIdState);
-   const [stateValue, setAssessmentState] = useRecoilState(currentAssessmentDetailState);
+   const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
+   const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
+   const onResetAssessmentScore = useResetRecoilState(assessmentScore);
 
    return (
       <div className="row">
@@ -41,13 +41,10 @@ const QuestionairePageFooterContent = () => {
             <button
                className="btn btn-light footer-button cancel-button"
                onClick={() => {
-                  setQuestionaireState(); // empty the state
-                  setAssessmentState({
-                     ...stateValue,
-                     score: default_score_data,
-                  }); // set the date back to null
-                  setQuestionID(1); // set the question id back to 1
-                  navigate('/'); // navigate to the home page
+                  onResetQuestionaireState();
+                  onResetAssessmentScore();
+                  onResetQuestionID();
+                  navigate('/');
                }}
             >
                Cancel

@@ -1,26 +1,21 @@
-import './style.css';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { assessmentIncidentNumberState, dataBreachDateState } from '../../recoil/assessment';
+import assessorState, { IAssessor } from '../../recoil/assessor';
 import Navbar from '../Navbar/Nav';
 import './About.page';
-import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import assessorState, { IAssessor } from '../../recoil/assessor';
-import currentAssessmentDetailState, {
-   dataBreachDateState,
-   IAssessmentDetailState,
-} from '../../recoil/assessment';
-import { useForm } from 'react-hook-form';
+import './style.css';
 
 const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
-   const dataBreachDate = useRecoilValue<string>(dataBreachDateState);
-   const [assessmentDetail, setAssessmentDetail] = useRecoilState<IAssessmentDetailState>(
-      currentAssessmentDetailState
-   );
+   const [incidentNumber, setIncidentNumber] = useRecoilState<string>(assessmentIncidentNumberState);
+   const [dataBreachDate, setDataBreachDate] = useRecoilState<string>(dataBreachDateState);
+
    const {
       register,
       handleSubmit,
-      watch,
       formState: { errors },
    } = useForm();
    const onSubmit = () => console.log();
@@ -75,14 +70,9 @@ const Homepage = () => {
                   <div>
                      <input
                         {...register('incidentNumber', { required: true })}
-                        onChange={(e) =>
-                           setAssessmentDetail({
-                              ...assessmentDetail,
-                              incidentNumber: e.target.value,
-                           })
-                        }
+                        onChange={(e) => setIncidentNumber(e.target.value)}
                         type="text"
-                        value={assessmentDetail.incidentNumber ?? ''}
+                        value={incidentNumber}
                         className="form-control"
                         placeholder="Enter incident number"
                         aria-label="Incident number"
@@ -101,12 +91,7 @@ const Homepage = () => {
                         className="form-control"
                         type="date"
                         id="formFile"
-                        onChange={(e) =>
-                           setAssessmentDetail({
-                              ...assessmentDetail,
-                              dataBreachDate: e.target.value,
-                           })
-                        }
+                        onChange={(e) => setDataBreachDate(e.target.value)}
                         value={dataBreachDate}
                      />
                      {errors.dataBreachDate?.type === 'required' && 'Data breach date is required'}
@@ -120,8 +105,8 @@ const Homepage = () => {
                      if (
                         assessor.firstName != null &&
                         assessor.lastName != null &&
-                        assessmentDetail.incidentNumber != null &&
-                        assessmentDetail.dataBreachDate != null
+                        incidentNumber != null &&
+                        dataBreachDate != null
                      )
                         navigate('/start');
                   }}

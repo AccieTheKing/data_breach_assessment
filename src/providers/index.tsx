@@ -3,10 +3,8 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IQuestion, QuestionTypes } from '../components/question/interactive.questionaire.component';
-import currentAssessmentDetailState, {
-   ASSESSMENT_SCORE_TYPE,
-   IAssessmentDetailState,
-} from '../recoil/assessment';
+import getCurrentAssessment, { assessmentImpactNumberState } from '../recoil/assessment';
+import { assessmentScore, ASSESSMENT_SCORE_TYPE, IAssessmentDetailState } from '../recoil/assessment';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../recoil/question/answer';
 import {
    ciaQuestionState,
@@ -36,14 +34,15 @@ const AppProvider: React.FC = ({ children }) => {
    const setUntypedQuestions = useSetRecoilState<IQuestion[]>(untypedQuestionState);
    const setAllCiaQuestions = useSetRecoilState<IQuestion[]>(ciaQuestionState);
    const setCurrentQuestionID = useSetRecoilState<number>(currentQuestionIdState);
+   const setCurrentImpactScore = useSetRecoilState<number>(assessmentImpactNumberState);
    const questionTypesDictionary = useRecoilValue(getCurrentQuestionTypeState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+   const currentAssessment = useRecoilValue<IAssessmentDetailState>(getCurrentAssessment);
+   const [currentAssessmentScore, setCurrentAssessmetScore] =
+      useRecoilState<{ [key: string]: number }>(assessmentScore);
    const [currentCiaType, setCurrentCiaType] = useRecoilState<string>(currentCiaTypeState);
    const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(currentQuestionTypeState);
-   const [currentAssessment, setCurrentAssessment] = useRecoilState<IAssessmentDetailState>(
-      currentAssessmentDetailState
-   );
    const ref = useRef<ICurrentAssessmentAnswers[]>();
 
    // Only the questions, without the type (SIMPLE DATA etc.)
@@ -103,12 +102,9 @@ const AppProvider: React.FC = ({ children }) => {
    };
 
    const onStoreScore = (type: string, value: number) => {
-      setCurrentAssessment({
-         ...currentAssessment,
-         score: {
-            ...currentAssessment.score,
-            [type]: value,
-         },
+      setCurrentAssessmetScore({
+         ...currentAssessmentScore,
+         [type]: value,
       });
    };
 
@@ -147,10 +143,7 @@ const AppProvider: React.FC = ({ children }) => {
          [ASSESSMENT_SCORE_TYPE.mitigating_circumstances]: 0,
       };
 
-      setCurrentAssessment({
-         ...currentAssessment,
-         score: resetted_scores,
-      });
+      setCurrentAssessmetScore(resetted_scores);
 
       answers.forEach((el) => {
          const type = onFindQuestionType(el.id);
@@ -161,10 +154,7 @@ const AppProvider: React.FC = ({ children }) => {
             [type]: previousValue + value,
          };
       });
-      setCurrentAssessment({
-         ...currentAssessment,
-         score: resetted_scores,
-      });
+      setCurrentAssessmetScore(resetted_scores);
    };
 
    const onCalcuateAssessment = () => {
@@ -188,11 +178,8 @@ const AppProvider: React.FC = ({ children }) => {
       const [___, mitigating_c_value] = all_score_objects[6];
       const score = highest_score * ease_oi_value + ag_cir_breach + mitigating_c_value;
 
-      console.log(highest_score, ease_oi_value, ag_cir_breach, mitigating_c_value);
-      setCurrentAssessment({
-         ...currentAssessment,
-         impactScore: score,
-      });
+      // console.log(highest_score, ease_oi_value, ag_cir_breach, mitigating_c_value);
+      setCurrentImpactScore(score);
    };
 
    // Storing all the questions into the state

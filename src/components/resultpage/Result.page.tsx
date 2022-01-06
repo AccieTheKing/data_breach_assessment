@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import currentAssessmentDetailState, { dataBreachDateState } from '../../recoil/assessment';
+import getCurrentAssessment from '../../recoil/assessment';
+import { dataBreachDateState } from '../../recoil/assessment';
 import assessorState from '../../recoil/assessor';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
@@ -49,7 +50,7 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
 };
 
 const Resultpage: React.FC = () => {
-   const currentAssessment = useRecoilValue(currentAssessmentDetailState);
+   const currentAssessment = useRecoilValue(getCurrentAssessment);
    const currentAssessmentDatabreachData = useRecoilValue(dataBreachDateState);
    const assessor = useRecoilValue(assessorState);
 
