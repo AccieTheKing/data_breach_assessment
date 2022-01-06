@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
-import { assessmentScore } from '../../recoil/assessment';
+import { assessmentNoteState, assessmentScore } from '../../recoil/assessment';
 import assessmentAnswersState from '../../recoil/question/answer';
 import { currentQuestionIdState } from '../../recoil/question/atom';
 import './style.css';
@@ -34,6 +34,7 @@ const QuestionairePageFooterContent = () => {
    const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
    const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
    const onResetAssessmentScore = useResetRecoilState(assessmentScore);
+   const onResetNotes = useResetRecoilState(assessmentNoteState);
 
    return (
       <div className="row">
@@ -43,6 +44,7 @@ const QuestionairePageFooterContent = () => {
                onClick={() => {
                   onResetQuestionaireState();
                   onResetAssessmentScore();
+                  onResetNotes();
                   onResetQuestionID();
                   navigate('/');
                }}
