@@ -1,0 +1,49 @@
+footer#app-footer {
+   background: #f1edeb;
+   padding: 5px;
+}
+
+footer#app-footer .button-container {
+   display: inline-flex;
+   width: 100%;
+   justify-content: flex-end;
+}
+
+footer#app-footer button {
+   width: 100%;
+   max-width: 150px;
+   height: 45px;
+   color: var(--nnOrange);
+   border: solid 1px var(--nnOrange);
+   background: #fff;
+}
+
+footer#app-footer button:hover {
+   color: var(--nnOrange);
+   border: solid 1px var(--nnOrange);
+   background: var(--nnOrange);
+   color: #fff;
+}
+
+footer#app-footer .button-container button:first-child {
+   margin-right: 10px;
+}
+
+footer#app-footer .button-container button:last-child {
+   color: #fff;
+   background: var(--nnOrange);
+}
+
+footer#app-footer .button-container button:last-child:hover {
+   color: var(--nnOrange);
+   background: #fff;
+}
+
+@media (max-width: 767px) {
+   footer#app-footer .button-container {
+      justify-content: center;
+   }
+   button.btn.btn-light.footer-button.cancel-button {
+      display: none;
+   }
+}
