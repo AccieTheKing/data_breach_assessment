@@ -3,7 +3,10 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IQuestion, QuestionTypes } from '../components/question/interactive.questionaire.component';
-import getCurrentAssessment, { assessmentImpactNumberState } from '../recoil/assessment';
+import getCurrentAssessment, {
+   assessmentImpactNumberState,
+   enableCalculationButtonState,
+} from '../recoil/assessment';
 import { assessmentScore, ASSESSMENT_SCORE_TYPE, IAssessmentDetailState } from '../recoil/assessment';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../recoil/question/answer';
 import {
@@ -41,6 +44,7 @@ const AppProvider: React.FC = ({ children }) => {
    const currentAssessment = useRecoilValue<IAssessmentDetailState>(getCurrentAssessment);
    const [currentAssessmentScore, setCurrentAssessmetScore] =
       useRecoilState<{ [key: string]: number }>(assessmentScore);
+   const [enableCalcButton, setEnableCalcButton] = useRecoilState<boolean>(enableCalculationButtonState);
    const [currentCiaType, setCurrentCiaType] = useRecoilState<string>(currentCiaTypeState);
    const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(currentQuestionTypeState);
    const ref = useRef<ICurrentAssessmentAnswers[]>();
@@ -66,6 +70,7 @@ const AppProvider: React.FC = ({ children }) => {
 
    // Actions for answering not nested questions
    const onDesicionMaking = (currentQuestionId: number, nextAction: string, nextType: string) => {
+      if (enableCalcButton) setEnableCalcButton(false); // is only true when the user has answered all questions
       switch (nextAction) {
          case QUESTIONNAIR_STATE.CONTINUE:
             // console.log(currentQuestionId, nextType, currentQuestionType);
@@ -95,7 +100,8 @@ const AppProvider: React.FC = ({ children }) => {
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
          case QUESTIONNAIR_STATE.CALCULATE:
-            console.log('End of the questionaire');
+            // console.log('End of the questionaire');
+            setEnableCalcButton(true);
             onCalcuateAssessment();
             break;
       }
@@ -170,7 +176,6 @@ const AppProvider: React.FC = ({ children }) => {
             highest_score = value;
          }
       }
-      console.log(all_score_objects);
 
       // Trying to apply formula, but not sure about the mitigating circumstances part
       const [_, ease_oi_value] = all_score_objects[4];

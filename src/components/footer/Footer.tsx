@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useResetRecoilState } from 'recoil';
-import { assessmentNoteState, assessmentScore } from '../../recoil/assessment';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { assessmentNoteState, assessmentScore, enableCalculationButtonState } from '../../recoil/assessment';
 import assessmentAnswersState from '../../recoil/question/answer';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../recoil/question/atom';
 import './style.css';
@@ -12,7 +12,6 @@ export enum FOOTER_CONTENT {
 
 interface FooterProps {
    forPage: FOOTER_CONTENT;
-   onCancel?: () => void;
 }
 
 // Footer content for the result page
@@ -36,6 +35,7 @@ const QuestionairePageFooterContent = () => {
    const onResetAssessmentScore = useResetRecoilState(assessmentScore);
    const onResetNotes = useResetRecoilState(assessmentNoteState);
    const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
+   const [enableCalcButton, setEnableCalcButton] = useRecoilState<boolean>(enableCalculationButtonState);
 
    const onResetAllStates = () => {
       onResetQuestionaireState();
@@ -43,6 +43,7 @@ const QuestionairePageFooterContent = () => {
       onResetAssessmentScore();
       onResetNotes();
       onResetQuestionType();
+      setEnableCalcButton(false);
    };
 
    return (
@@ -63,8 +64,9 @@ const QuestionairePageFooterContent = () => {
                <button className="btn btn-light footer-button display-xs">Save Draft</button>
                <button
                   className="btn btn-light footer-button"
+                  disabled={!enableCalcButton}
                   onClick={() => {
-                     navigate('/result');
+                     if (enableCalcButton) navigate('/result');
                   }}
                >
                   Calculate Score
@@ -76,7 +78,7 @@ const QuestionairePageFooterContent = () => {
 };
 
 // Footer content for the assessment page
-const Footer: React.FC<FooterProps> = ({ forPage, onCancel }) => {
+const Footer: React.FC<FooterProps> = ({ forPage }) => {
    return (
       <footer className="container-fluid fixed-bottom" id="app-footer">
          {forPage === FOOTER_CONTENT.RESULT ? <ResultPageFooterContent /> : <QuestionairePageFooterContent />}

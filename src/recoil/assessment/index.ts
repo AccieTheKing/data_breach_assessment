@@ -75,6 +75,11 @@ export const assessmentScore = atom<{ [key: string]: number }>({
    default: default_score_data,
 });
 
+export const enableCalculationButtonState = atom<boolean>({
+   key: 'enableCalculationButton',
+   default: false,
+});
+
 const getCurrentAssessment = selector<IAssessmentDetailState>({
    key: 'currentAssessment',
    get: ({ get }) => {
