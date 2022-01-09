@@ -70,7 +70,6 @@ const AppProvider: React.FC = ({ children }) => {
 
    // Actions for answering not nested questions
    const onDesicionMaking = (currentQuestionId: number, nextAction: string, nextType: string) => {
-      if (enableCalcButton) setEnableCalcButton(false); // is only true when the user has answered all questions
       switch (nextAction) {
          case QUESTIONNAIR_STATE.CONTINUE:
             // console.log(currentQuestionId, nextType, currentQuestionType);
@@ -124,9 +123,15 @@ const AppProvider: React.FC = ({ children }) => {
       return '';
    };
 
-   const onFindQuestionValue = (questionID: number, answer: boolean | string): number => {
+   const onFindQuestionValue = (questionID: number, answer: boolean | string, eoi?: boolean): number => {
       const key = answer ? 'yes' : 'no'; // transform true to yes and false to no
       let question = allQuestions.find((el) => el.id === questionID) as IQuestion;
+
+      if (eoi) {
+         const key = answer.toString();
+         const newValue = question.weight![key].value;
+         return newValue;
+      }
 
       if (!question) {
          const allQuestions = ciaQuestions.flatMap((el) => el.questions);
@@ -153,11 +158,11 @@ const AppProvider: React.FC = ({ children }) => {
 
       answers.forEach((el) => {
          const type = onFindQuestionType(el.id);
-         const value = onFindQuestionValue(el.id, el.answer);
-         const previousValue = resetted_scores[type];
+         const newValue = onFindQuestionValue(el.id, el.answer, typeof el.answer === 'string');
+         const oldValue = resetted_scores[type];
          resetted_scores = {
             ...resetted_scores,
-            [type]: previousValue + value,
+            [type]: oldValue + newValue,
          };
       });
       setCurrentAssessmetScore(resetted_scores);
@@ -201,7 +206,7 @@ const AppProvider: React.FC = ({ children }) => {
    useEffect(() => {
       // Get current question
       let current_question = currentQuestion;
-
+      if (enableCalcButton) setEnableCalcButton(false); // is only true when the user has answered all questions
       const onInitCiaQuestions = (nextCategory: string) => {
          const firstCiaQuestion = ciaQuestions[0];
          if (
