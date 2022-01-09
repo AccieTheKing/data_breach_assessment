@@ -9,7 +9,7 @@ import InteractiveQuestionary from '../question/interactive.questionaire.compone
 import './styles.css';
 
 enum ASSESSMENT_IMPACT_TITLE {
-   NONE = 'NONE',
+   NONE = 'Not a data breach',
    LOW = 'LOW',
    MEDIUM = 'MEDIUM',
    HIGH = 'HIGH',
@@ -19,7 +19,7 @@ enum ASSESSMENT_IMPACT_TITLE {
 const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
    // based on the score decide what value to show
    let title = '';
-   const SL = Math.round(score);
+   const SL = score;
 
    switch (true) {
       case SL <= 0:
