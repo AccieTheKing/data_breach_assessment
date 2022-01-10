@@ -1,4 +1,5 @@
 import { atom, selector } from 'recoil';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../question/answer';
 
 export interface IAssessmentDetailState {
    dataBreachDate: string | null;
@@ -8,6 +9,7 @@ export interface IAssessmentDetailState {
    score: { [key: string]: number };
    impactScore: number;
    notes: string;
+   answers: ICurrentAssessmentAnswers[];
 }
 
 // Titles have to match the keys in json file
@@ -93,6 +95,7 @@ const getCurrentAssessment = selector<IAssessmentDetailState>({
       const impactScore = get(assessmentImpactNumberState);
       const score = get(assessmentScore);
       const notes = get(assessmentNoteState);
+      const answers = get(assessmentAnswersState);
 
       return {
          dataBreachDate,
@@ -102,6 +105,7 @@ const getCurrentAssessment = selector<IAssessmentDetailState>({
          impactScore,
          score,
          notes,
+         answers,
       };
    },
 });
