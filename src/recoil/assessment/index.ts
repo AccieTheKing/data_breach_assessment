@@ -82,6 +82,11 @@ export const enableCalculationButtonState = atom<boolean>({
    default: false,
 });
 
+export const showAnimationState = atom<boolean>({
+   key: 'showAnimation',
+   default: false,
+});
+
 const getCurrentAssessment = selector<IAssessmentDetailState>({
    key: 'currentAssessment',
    get: ({ get }) => {
