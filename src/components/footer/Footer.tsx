@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { assessmentNoteState, assessmentScore, enableCalculationButtonState } from '../../recoil/assessment';
 import assessmentAnswersState from '../../recoil/question/answer';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../recoil/question/atom';
@@ -16,11 +16,36 @@ interface FooterProps {
 
 // Footer content for the result page
 const ResultPageFooterContent = () => {
+   const navigate = useNavigate();
+   const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
+   const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
+   const onResetAssessmentScore = useResetRecoilState(assessmentScore);
+   const onResetNotes = useResetRecoilState(assessmentNoteState);
+   const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
+   const setEnableCalcButton = useSetRecoilState<boolean>(enableCalculationButtonState);
+
+   const onResetAllStates = () => {
+      onResetQuestionaireState();
+      onResetQuestionID();
+      onResetAssessmentScore();
+      onResetNotes();
+      onResetQuestionType();
+      setEnableCalcButton(false);
+   };
+
+   const onFinishAssessment = () => {
+      // TODO: send assessment to server
+      onResetAllStates();
+      navigate('/history');
+   };
    return (
-      <div className="row">
+      <div className="row" id="result-page-footer">
          <div className="col-6 offset-6 col-lg-2 offset-lg-9">
             <div className="button-container">
                <button className="btn btn-light footer-button">Export</button>
+               <button className="btn btn-light footer-button" onClick={onFinishAssessment}>
+                  Finish
+               </button>
             </div>
          </div>
       </div>
@@ -47,7 +72,7 @@ const QuestionairePageFooterContent = () => {
    };
 
    return (
-      <div className="row">
+      <div className="row" id="assessment-page-footer">
          <div className="col-12 col-md-4 offset-md-1 col-lg-2 offset-lg-1 col-xl-2 offset-xl-1">
             <button
                className="btn btn-light footer-button cancel-button"
