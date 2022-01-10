@@ -1,6 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { assessmentNoteState, assessmentScore, enableCalculationButtonState } from '../../recoil/assessment';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import getCurrentAssessment, {
+   assessmentNoteState,
+   assessmentScore,
+   enableCalculationButtonState,
+   showAnimationState,
+} from '../../recoil/assessment';
 import assessmentAnswersState from '../../recoil/question/answer';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../recoil/question/atom';
 import './style.css';
@@ -23,6 +28,7 @@ const ResultPageFooterContent = () => {
    const onResetNotes = useResetRecoilState(assessmentNoteState);
    const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
    const setEnableCalcButton = useSetRecoilState<boolean>(enableCalculationButtonState);
+   const currentAssessment = useRecoilValue(getCurrentAssessment); // has all the assessment data
 
    const onResetAllStates = () => {
       onResetQuestionaireState();
@@ -34,7 +40,7 @@ const ResultPageFooterContent = () => {
    };
 
    const onFinishAssessment = () => {
-      // TODO: send assessment to server
+      // TODO: send assessment to server, use currentAssessment for all values
       onResetAllStates();
       navigate('/history');
    };
@@ -60,6 +66,7 @@ const QuestionairePageFooterContent = () => {
    const onResetAssessmentScore = useResetRecoilState(assessmentScore);
    const onResetNotes = useResetRecoilState(assessmentNoteState);
    const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
+   const setCalculationAnimation = useSetRecoilState<boolean>(showAnimationState);
    const [enableCalcButton, setEnableCalcButton] = useRecoilState<boolean>(enableCalculationButtonState);
 
    const onResetAllStates = () => {
@@ -91,7 +98,13 @@ const QuestionairePageFooterContent = () => {
                   className="btn btn-light footer-button"
                   disabled={!enableCalcButton}
                   onClick={() => {
-                     if (enableCalcButton) navigate('/result');
+                     if (enableCalcButton) {
+                        setCalculationAnimation(true);
+                        setTimeout(() => {
+                           setCalculationAnimation(false);
+                           navigate('/result');
+                        }, 1500);
+                     }
                   }}
                >
                   Calculate Score
