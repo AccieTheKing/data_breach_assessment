@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { storeAssessmentInDB } from '../../api';
 import getCurrentAssessment, {
    assessmentNoteState,
    assessmentScore,
@@ -39,8 +40,8 @@ const ResultPageFooterContent = () => {
       setEnableCalcButton(false);
    };
 
-   const onFinishAssessment = () => {
-      // TODO: send assessment to server, use currentAssessment for all values
+   const onFinishAssessment = async () => {
+      const result = await storeAssessmentInDB(currentAssessment);
       onResetAllStates();
       navigate('/history');
    };
