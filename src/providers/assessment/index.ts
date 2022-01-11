@@ -1,7 +1,9 @@
 import { atom, selector } from 'recoil';
+import assessorState, { IAssessor } from '../assessor';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../question/answer';
 
 export interface IDatabreachAssessment {
+   assessor: IAssessor;
    dataBreachDate: string | null;
    assessmentDate: string;
    descriptiveTitle: string;
@@ -95,6 +97,7 @@ const getCurrentAssessment = selector<IDatabreachAssessment>({
 
       const dataBreachDate = new Date(dataBreachValue).toLocaleDateString('nl');
       const assessmentDate = new Date(assessmentDataValue).toLocaleDateString('nl');
+      const assessor = get(assessorState);
       const descriptiveTitle = get(assessmentDescriptiveTitleState);
       const incidentNumber = get(assessmentImpactNumberState);
       const impactScore = get(assessmentImpactNumberState);
@@ -103,6 +106,7 @@ const getCurrentAssessment = selector<IDatabreachAssessment>({
       const answers = get(assessmentAnswersState);
 
       return {
+         assessor,
          dataBreachDate,
          assessmentDate,
          descriptiveTitle,
