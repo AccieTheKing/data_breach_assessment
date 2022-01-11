@@ -25,10 +25,7 @@ const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
    );
 };
 
-
-
 const Historypage = () => {
-
    return (
       <div>
          <Navbar></Navbar>
@@ -38,10 +35,12 @@ const Historypage = () => {
             </div>
          </div>
          {historyData.map((el, id: number) => (
-            <div className="ms-3 ms-sm-0 me-3 me-sm-0 ">
-              
-               <div className={`card offset-lg-2 col-lg-8 offset-lg-2 assessmentCard card border_${Object.values(ASSESSMENT_IMPACT_TITLE)[el.result - 1]}`} >
-             
+            <div className="ms-3 ms-sm-0 me-3 me-sm-0 " key={id}>
+               <div
+                  className={`card offset-lg-2 col-lg-8 offset-lg-2 assessmentCard card border_${
+                     Object.values(ASSESSMENT_IMPACT_TITLE)[el.result - 1]
+                  }`}
+               >
                   <div className="row">
                      <div className="col-12 col-lg-3">
                         <span className="card-text">
