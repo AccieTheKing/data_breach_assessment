@@ -5,7 +5,7 @@ import getCurrentAssessment, {
    assessmentDescriptiveTitleState,
    assessmentNoteState,
    showAnimationState,
-} from '../../recoil/assessment';
+} from '../../providers/assessment';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import QuestionsComponentTest from '../question/interactive.questionaire.component';

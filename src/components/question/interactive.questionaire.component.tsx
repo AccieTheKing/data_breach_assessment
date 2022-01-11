@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { assessmentTypeScoreState } from '../../recoil/assessment';
-import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../recoil/question/answer';
-import { currentQuestionTypeState, typedQuestionState } from '../../recoil/question/atom';
-import { currentQuestionState } from '../../recoil/question/selector';
+import { assessmentTypeScoreState } from '../../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
+import { currentQuestionTypeState, typedQuestionState } from '../../providers/question/atom';
+import { currentQuestionState } from '../../providers/question/selector';
 import './style.css';
 
 export interface QuestionTypes {

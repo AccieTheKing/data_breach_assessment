@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import getCurrentAssessment from '../../recoil/assessment';
-import assessorState from '../../recoil/assessor';
+import getCurrentAssessment from '../../providers/assessment';
+import assessorState from '../../providers/assessor';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import InteractiveQuestionary from '../question/interactive.questionaire.component';

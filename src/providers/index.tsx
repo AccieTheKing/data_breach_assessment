@@ -6,9 +6,9 @@ import { IQuestion, QuestionTypes } from '../components/question/interactive.que
 import getCurrentAssessment, {
    assessmentImpactNumberState,
    enableCalculationButtonState,
-} from '../recoil/assessment';
-import { assessmentScore, ASSESSMENT_SCORE_TYPE, IAssessmentDetailState } from '../recoil/assessment';
-import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../recoil/question/answer';
+} from '../providers/assessment';
+import { assessmentScore, ASSESSMENT_SCORE_TYPE, IDatabreachAssessment } from '../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../providers/question/answer';
 import {
    ciaQuestionState,
    currentCiaTypeState,
@@ -17,8 +17,8 @@ import {
    QUESTIONNAIR_STATE,
    typedQuestionState,
    untypedQuestionState,
-} from '../recoil/question/atom';
-import { currentQuestionState, getCurrentQuestionTypeState } from '../recoil/question/selector';
+} from '../providers/question/atom';
+import { currentQuestionState, getCurrentQuestionTypeState } from '../providers/question/selector';
 
 /**
  * This component will be wrapped around the whole app in order to make the functions inside it
@@ -41,7 +41,7 @@ const AppProvider: React.FC = ({ children }) => {
    const questionTypesDictionary = useRecoilValue(getCurrentQuestionTypeState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
-   const currentAssessment = useRecoilValue<IAssessmentDetailState>(getCurrentAssessment);
+   const currentAssessment = useRecoilValue<IDatabreachAssessment>(getCurrentAssessment);
    const [currentAssessmentScore, setCurrentAssessmetScore] =
       useRecoilState<{ [key: string]: number }>(assessmentScore);
    const [enableCalcButton, setEnableCalcButton] = useRecoilState<boolean>(enableCalculationButtonState);

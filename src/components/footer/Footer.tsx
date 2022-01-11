@@ -5,9 +5,9 @@ import getCurrentAssessment, {
    assessmentScore,
    enableCalculationButtonState,
    showAnimationState,
-} from '../../recoil/assessment';
-import assessmentAnswersState from '../../recoil/question/answer';
-import { currentQuestionIdState, currentQuestionTypeState } from '../../recoil/question/atom';
+} from '../../providers/assessment';
+import assessmentAnswersState from '../../providers/question/answer';
+import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 import './style.css';
 
 export enum FOOTER_CONTENT {

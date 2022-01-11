@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { assessmentIncidentNumberState, dataBreachDateState } from '../../recoil/assessment';
-import assessorState, { IAssessor } from '../../recoil/assessor';
+import { assessmentIncidentNumberState, dataBreachDateState } from '../../providers/assessment';
+import assessorState, { IAssessor } from '../../providers/assessor';
 import Navbar from '../Navbar/Nav';
 import './About.page';
 import './style.css';

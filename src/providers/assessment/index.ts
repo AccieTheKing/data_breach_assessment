@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../question/answer';
 
-export interface IAssessmentDetailState {
+export interface IDatabreachAssessment {
    dataBreachDate: string | null;
    assessmentDate: string;
    descriptiveTitle: string;
@@ -87,7 +87,7 @@ export const showAnimationState = atom<boolean>({
    default: false,
 });
 
-const getCurrentAssessment = selector<IAssessmentDetailState>({
+const getCurrentAssessment = selector<IDatabreachAssessment>({
    key: 'currentAssessment',
    get: ({ get }) => {
       const dataBreachValue = get(dataBreachDateState) ? get(dataBreachDateState) : new Date();
