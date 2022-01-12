@@ -4,12 +4,13 @@ import { RecoilRoot } from 'recoil';
 import './App.css';
 import Draftpage from './components/draftpage/draftpage';
 import Historypage from './components/historypage/historypage';
-import Aboutpage from './components/homepage/About.page';
+import Aboutpage from './components/aboutpage/aboutpage';
 import Homepage from './components/homepage/Home.page';
 import Questionairpage from './components/questionairpage/Questionair.page';
 import Resultpage from './components/resultpage/Result.page';
 import GridLoader from 'react-spinners/GridLoader';
 import AppWrapper from './providers';
+import Trainpage from './components/historypage/trainpage';
 
 function App() {
    const [loading, setLoading] = useState(false);
@@ -34,9 +35,11 @@ function App() {
                         <Route path="/" element={<Homepage />} />
                         <Route path="/about" element={<Aboutpage />} />
                         <Route path="/history" element={<Historypage />} />
+                        <Route path="/train" element={<Trainpage />} />
                         <Route path="/start" element={<Questionairpage />} />
                         <Route path="/draft" element={<Draftpage />} />
                         <Route path="/result" element={<Resultpage />} />
+                      
                      </Routes>
                   )}
                </div>
