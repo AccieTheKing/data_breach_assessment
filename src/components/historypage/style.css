@@ -14,19 +14,19 @@
 }
 
 .card.border_LOW {
-   border-color: #4A9C09;
+   border-color: #4a9c09;
 }
 
 .border_MEDIUM {
-   border-color:#E9D418;
+   border-color: #e9d418;
 }
 
 .border_HIGH {
-   border-color:#FD9800
+   border-color: #fd9800;
 }
 
 .border_CRITICAL {
-   border-color:#FE0000
+   border-color: #fe0000;
 }
 
 .card-text {
@@ -57,29 +57,29 @@
 }
 
 .score_LOW {
-	background-color: #4A9C09;
+   background-color: #4a9c09;
    height: 2em;
 }
 
 .score_MEDIUM {
-	background-color: #E9D418;
+   background-color: #e9d418;
    height: 2em;
 }
 .score_HIGH {
-	background-color: #FD9800;
+   background-color: #fd9800;
    height: 2em;
 }
 .score_CRITICAL {
-	background-color: #FE0000;
+   background-color: #fe0000;
    height: 2em;
 }
 
 #dropdownMenuButton1 {
-   background-color:#f1edeb;
+   background-color: #f1edeb;
 }
 
 .dropdown-toggle {
-   color: black
+   color: black;
 }
 
 .btn-wrapper {
@@ -87,9 +87,13 @@
 }
 
 .btn-filter {
-   background-color:#f1edeb;
+   background-color: #f1edeb;
    outline: 1px solid;
-   width: 90%; 
+   width: 90%;
    padding: 3px;
-  
- }
+}
+
+.dropdown-item label {
+   cursor: pointer;
+   display: block;
+}
