@@ -79,6 +79,7 @@ const Aboutpage = () => {
             <li>Familiy life (children, marriage, partner, siblings, parents .. )</li>
             <li>Professional experience</li>
             <br></br>
+            
             <h2 id="behavorialData">Behavioral data</h2>
             <li>Location (IP-address, travel history)</li>
             <li>
@@ -95,6 +96,7 @@ const Aboutpage = () => {
             <li>Credit card information</li>
             <li>Invoices</li>
             <li>Social welfare data </li>
+            <br></br>
             <h2 id="sensitiveData">Sensitive data</h2>
             <li>Health data</li>
             <li>Political affiliation/opinion</li>

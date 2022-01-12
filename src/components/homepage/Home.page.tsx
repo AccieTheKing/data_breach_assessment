@@ -46,7 +46,7 @@ const Homepage = () => {
                         placeholder="Enter first name"
                         aria-label="First name"
                      />
-                     {errors.firstName?.type === 'required' && 'First name is required'}
+                     {errors.firstName?.type === 'required' &&  <p className="required">First name is required</p>}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
@@ -66,7 +66,7 @@ const Homepage = () => {
                         placeholder="Enter last name"
                         aria-label="Last name"
                      />
-                     {errors.lastName?.type === 'required' && 'Last name is required'}
+                     {errors.lastName?.type === 'required' && <p className="required">Last name is required</p>}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
@@ -86,7 +86,7 @@ const Homepage = () => {
                         placeholder="Enter incident number"
                         aria-label="Incident number"
                      />
-                     {errors.incidentNumber?.type === 'required' && 'Incident number is required'}
+                     {errors.incidentNumber?.type === 'required' && <p className="required">Incident number is required</p>}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
@@ -108,7 +108,7 @@ const Homepage = () => {
                         }
                         value={dataBreachDate}
                      />
-                     {errors.dataBreachDate?.type === 'required' && 'Data breach date is required'}
+                     {errors.dataBreachDate?.type === 'required' && <p className="required">Data breach date is required</p>}
                   </div>
                </div>
 

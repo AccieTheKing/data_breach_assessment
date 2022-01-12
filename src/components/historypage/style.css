@@ -73,3 +73,23 @@
 	background-color: #FE0000;
    height: 2em;
 }
+
+#dropdownMenuButton1 {
+   background-color:#f1edeb;
+}
+
+.dropdown-toggle {
+   color: black
+}
+
+.btn-wrapper {
+   text-align: center;
+}
+
+.btn-filter {
+   background-color:#f1edeb;
+   outline: 1px solid;
+   width: 90%; 
+   padding: 3px;
+  
+ }

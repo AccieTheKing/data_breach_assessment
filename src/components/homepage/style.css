@@ -79,3 +79,10 @@
 #loading-image {
   z-index: 100;
 }
+
+.required {
+  color: #ea650d;
+  margin: 0;
+  padding: 0;
+}
+
