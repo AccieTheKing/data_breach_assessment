@@ -1,11 +1,3 @@
-.h1Style {
-  font-size: var(--h1fontSize);
-	background: var(--titleBackground);
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-}
-
 .bPos{
   display: flex;
   justify-content: left;
@@ -87,3 +79,10 @@
 #loading-image {
   z-index: 100;
 }
+
+.required {
+  color: #ea650d;
+  margin: 0;
+  padding: 0;
+}
+

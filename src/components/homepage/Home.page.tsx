@@ -1,15 +1,16 @@
-import { useForm } from 'react-hook-form';
+import './style.css';
+import Navbar from '../Navbar/Nav';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { assessmentIncidentNumberState, dataBreachDateState } from '../../providers/assessment';
 import assessorState, { IAssessor } from '../../providers/assessor';
-import Navbar from '../Navbar/Nav';
-import './About.page';
 import './style.css';
 
 const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
+   const dataBreachDate = useRecoilValue<string>(dataBreachDateState);
+   const [assessmentDetail, setAssessmentDetail] = useRecoilState<IAssessmentDetailState>(currentAssessmentDetailState);
    const [incidentNumber, setIncidentNumber] = useRecoilState<string>(assessmentIncidentNumberState);
    const [dataBreachDate, setDataBreachDate] = useRecoilState<string>(dataBreachDateState);
 
@@ -42,7 +43,7 @@ const Homepage = () => {
                         placeholder="Enter first name"
                         aria-label="First name"
                      />
-                     {errors.firstName?.type === 'required' && 'First name is required'}
+                     {errors.firstName?.type === 'required' &&  <p className="required">First name is required</p>}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
@@ -62,7 +63,7 @@ const Homepage = () => {
                         placeholder="Enter last name"
                         aria-label="Last name"
                      />
-                     {errors.lastName?.type === 'required' && 'Last name is required'}
+                     {errors.lastName?.type === 'required' && <p className="required">Last name is required</p>}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
@@ -77,7 +78,7 @@ const Homepage = () => {
                         placeholder="Enter incident number"
                         aria-label="Incident number"
                      />
-                     {errors.incidentNumber?.type === 'required' && 'Incident number is required'}
+                     {errors.incidentNumber?.type === 'required' && <p className="required">Incident number is required</p>}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
@@ -91,10 +92,10 @@ const Homepage = () => {
                         className="form-control"
                         type="date"
                         id="formFile"
-                        onChange={(e) => setDataBreachDate(e.target.value)}
+                onChange={(e) => setDataBreachDate(e.target.value)}
                         value={dataBreachDate}
                      />
-                     {errors.dataBreachDate?.type === 'required' && 'Data breach date is required'}
+                     {errors.dataBreachDate?.type === 'required' && <p className="required">Data breach date is required</p>}
                   </div>
                </div>
 
