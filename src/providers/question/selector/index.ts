@@ -35,10 +35,11 @@ export const getCurrentQuestionTypeState = selector<{ [x: string]: number }[]>({
    key: 'getCurrentQuestionType',
    get: ({ get }) => {
       let counter = 0;
+      const easeOfIdentficationQ_ID = 20;
       const typedQuestions = get(typedQuestionState);
       const rangesPerQuestion = typedQuestions
          .map((el) => {
-            if (counter === 20) {
+            if (counter === easeOfIdentficationQ_ID) {
                el.questions.forEach((elt) => {
                   counter += (elt.questions as IQuestion[]).length;
                });

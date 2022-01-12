@@ -1,6 +1,9 @@
 import { atom, selector } from 'recoil';
+import assessorState, { IAssessor } from '../assessor';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../question/answer';
 
-export interface IAssessmentDetailState {
+export interface IDatabreachAssessment {
+   assessor: IAssessor;
    dataBreachDate: string | null;
    assessmentDate: string;
    descriptiveTitle: string;
@@ -8,6 +11,7 @@ export interface IAssessmentDetailState {
    score: { [key: string]: number };
    impactScore: number;
    notes: string;
+   answers: ICurrentAssessmentAnswers[];
 }
 
 // Titles have to match the keys in json file
@@ -75,7 +79,17 @@ export const assessmentScore = atom<{ [key: string]: number }>({
    default: default_score_data,
 });
 
-const getCurrentAssessment = selector<IAssessmentDetailState>({
+export const enableCalculationButtonState = atom<boolean>({
+   key: 'enableCalculationButton',
+   default: false,
+});
+
+export const showAnimationState = atom<boolean>({
+   key: 'showAnimation',
+   default: false,
+});
+
+const getCurrentAssessment = selector<IDatabreachAssessment>({
    key: 'currentAssessment',
    get: ({ get }) => {
       const dataBreachValue = get(dataBreachDateState) ? get(dataBreachDateState) : new Date();
@@ -83,13 +97,16 @@ const getCurrentAssessment = selector<IAssessmentDetailState>({
 
       const dataBreachDate = new Date(dataBreachValue).toLocaleDateString('nl');
       const assessmentDate = new Date(assessmentDataValue).toLocaleDateString('nl');
+      const assessor = get(assessorState);
       const descriptiveTitle = get(assessmentDescriptiveTitleState);
       const incidentNumber = get(assessmentImpactNumberState);
       const impactScore = get(assessmentImpactNumberState);
       const score = get(assessmentScore);
       const notes = get(assessmentNoteState);
+      const answers = get(assessmentAnswersState);
 
       return {
+         assessor,
          dataBreachDate,
          assessmentDate,
          descriptiveTitle,
@@ -97,6 +114,7 @@ const getCurrentAssessment = selector<IAssessmentDetailState>({
          impactScore,
          score,
          notes,
+         answers,
       };
    },
 });
