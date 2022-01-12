@@ -153,25 +153,23 @@ const Historypage = () => {
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                      <li>
                         <div className="dropdown-item">
-                           <div>
-                              <label htmlFor="low">
-                                 <input
-                                    ref={lowCheck}
-                                    name="low"
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id="checkbox_low"
-                                    onChange={filtLow}
-                                    value="low"
-                                 />
-                                 &nbsp; Low
-                              </label>
-                           </div>
+                           <label htmlFor="checkbox_low">
+                              <input
+                                 ref={lowCheck}
+                                 name="low"
+                                 className="form-check-input"
+                                 type="checkbox"
+                                 id="checkbox_low"
+                                 onChange={filtLow}
+                                 value="low"
+                              />
+                              &nbsp; Low
+                           </label>
                         </div>
                      </li>
                      <li>
                         <div className="dropdown-item">
-                           <div>
+                           <label htmlFor="checkbox_med">
                               <input
                                  ref={medCheck}
                                  className="form-check-input"
@@ -181,37 +179,37 @@ const Historypage = () => {
                                  value="mid"
                               />
                               &nbsp; Medium
-                           </div>
+                           </label>
                         </div>
                      </li>
                      <li>
                         <div className="dropdown-item">
-                           <div>
+                           <label htmlFor="checkbox_high">
                               <input
                                  ref={highCheck}
                                  className="form-check-input"
                                  type="checkbox"
-                                 id="checkboxHigh"
+                                 id="checkbox_high"
                                  onChange={filtHigh}
                                  value="high"
-                              ></input>
+                              />
                               &nbsp; High
-                           </div>
+                           </label>
                         </div>
                      </li>
                      <li>
                         <div className="dropdown-item">
-                           <div>
+                           <label htmlFor="checkbox_crit">
                               <input
                                  ref={critCheck}
                                  className="form-check-input"
                                  type="checkbox"
-                                 id="checkboxCrit"
+                                 id="checkbox_crit"
                                  onChange={filtCrit}
                                  value="crit"
-                              ></input>
+                              />
                               &nbsp; Critical
-                           </div>
+                           </label>
                         </div>
                      </li>
                      <div className="btn-wrapper">
