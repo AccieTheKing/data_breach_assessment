@@ -1,6 +1,6 @@
+import './style.css';
 import React from 'react';
 import Navbar from '../Navbar/Nav';
-import './style.css';
 import { useState, useRef } from 'react';
 
 enum ASSESSMENT_IMPACT_TITLE {
@@ -9,7 +9,16 @@ enum ASSESSMENT_IMPACT_TITLE {
    HIGH = 'HIGH',
    CRITICAL = 'CRITICAL',
 }
-const historyData = [
+
+interface IHistory {
+   assessmentNumber: string;
+   date: string;
+   result: number;
+   assessor: string;
+   score: ASSESSMENT_IMPACT_TITLE;
+}
+
+const historyData: Array<IHistory> = [
    {
       assessmentNumber: '1',
       date: '12.05.2021',
@@ -58,20 +67,17 @@ const Historypage = () => {
    const critCheck = useRef<HTMLInputElement>(null);
 
    function test() {
-      const map1 = new Map<any, any>();
-
-
-
+      const map1 = new Map<HTMLInputElement | null, Array<IHistory>>();
       map1.set(lowCheck.current, filtLow());
       map1.set(medCheck.current, filtMed());
       map1.set(highCheck.current, filtHigh());
       map1.set(critCheck.current, filtCrit());
 
       if (
-         lowCheck.current?.checked == false &&
-         medCheck.current?.checked == false &&
-         highCheck.current?.checked == false &&
-         critCheck.current?.checked == false
+         lowCheck.current?.checked === false &&
+         medCheck.current?.checked === false &&
+         highCheck.current?.checked === false &&
+         critCheck.current?.checked === false
       ) {
          clearState();
       } else {
@@ -90,25 +96,27 @@ const Historypage = () => {
    };
 
    function filtLow() {
-      const low = historyData.filter((historyData: any) => historyData.score == ASSESSMENT_IMPACT_TITLE.LOW);
+      const low = historyData.filter(
+         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.LOW
+      );
       return low;
    }
 
    function filtMed() {
       const med = historyData.filter(
-         (historyData: any) => historyData.score == ASSESSMENT_IMPACT_TITLE.MEDIUM
+         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.MEDIUM
       );
       return med;
    }
    function filtHigh() {
       const high = historyData.filter(
-         (historyData: any) => historyData.score == ASSESSMENT_IMPACT_TITLE.HIGH
+         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.HIGH
       );
       return high;
    }
    function filtCrit() {
       const crit = historyData.filter(
-         (historyData: any) => historyData.score == ASSESSMENT_IMPACT_TITLE.CRITICAL
+         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.CRITICAL
       );
       return crit;
    }
@@ -144,7 +152,7 @@ const Historypage = () => {
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                      <li>
-                        <a className="dropdown-item">
+                        <div className="dropdown-item">
                            <div>
                               <label htmlFor="low">
                                  <input
@@ -155,14 +163,14 @@ const Historypage = () => {
                                     id="checkbox_low"
                                     onChange={filtLow}
                                     value="low"
-                                 ></input>
+                                 />
                                  &nbsp; Low
                               </label>
                            </div>
-                        </a>
+                        </div>
                      </li>
                      <li>
-                        <a className="dropdown-item">
+                        <div className="dropdown-item">
                            <div>
                               <input
                                  ref={medCheck}
@@ -171,13 +179,13 @@ const Historypage = () => {
                                  id="checkbox_med"
                                  onChange={filtMed}
                                  value="mid"
-                              ></input>
+                              />
                               &nbsp; Medium
                            </div>
-                        </a>
+                        </div>
                      </li>
                      <li>
-                        <a className="dropdown-item">
+                        <div className="dropdown-item">
                            <div>
                               <input
                                  ref={highCheck}
@@ -189,10 +197,10 @@ const Historypage = () => {
                               ></input>
                               &nbsp; High
                            </div>
-                        </a>
+                        </div>
                      </li>
                      <li>
-                        <a className="dropdown-item">
+                        <div className="dropdown-item">
                            <div>
                               <input
                                  ref={critCheck}
@@ -204,12 +212,12 @@ const Historypage = () => {
                               ></input>
                               &nbsp; Critical
                            </div>
-                        </a>
+                        </div>
                      </li>
                      <div className="btn-wrapper">
-                     <button type="button" className="btn btn-filter" id="filterBtn" onClick={test}>
-                        Filter
-                     </button>
+                        <button type="button" className="btn btn-filter" id="filterBtn" onClick={test}>
+                           Filter
+                        </button>
                      </div>
                   </ul>
                </div>
