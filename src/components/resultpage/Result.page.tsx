@@ -1,24 +1,30 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import getCurrentAssessment from '../../providers/assessment';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import getCurrentAssessment, { ASSESSMENT_IMPACT_TITLE, resultTextState } from '../../providers/assessment';
 import assessorState from '../../providers/assessor';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import InteractiveQuestionary from '../question/interactive.questionaire.component';
 import './styles.css';
 
-enum ASSESSMENT_IMPACT_TITLE {
-   NONE = 'Not a data breach',
-   LOW = 'LOW',
-   MEDIUM = 'MEDIUM',
-   HIGH = 'HIGH',
-   CRITICAL = 'CRITICAL',
-}
+const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, score }) => {
+   return (
+      <div className="impact_card card">
+         <div className="impact_score_container">
+            <div className={`impact_score score_${title}`}>{score}</div>
+         </div>
+         <h2 className="impact_title">{title}</h2>
+      </div>
+   );
+};
 
-const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
+const Resultpage: React.FC = () => {
+   const currentAssessment = useRecoilValue(getCurrentAssessment);
+   const assessor = useRecoilValue(assessorState);
+
    // based on the score decide what value to show
    let title = '';
-   const SL = score;
+   const SL = currentAssessment.impactScore;
 
    switch (true) {
       case SL <= 0:
@@ -37,21 +43,9 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
          title = ASSESSMENT_IMPACT_TITLE.CRITICAL;
          break;
    }
+   const setResultText = useSetRecoilState(resultTextState);
 
-   return (
-      <div className="impact_card card">
-         <div className="impact_score_container">
-            <div className={`impact_score score_${title}`}>{score}</div>
-         </div>
-         <h2 className="impact_title">{title}</h2>
-      </div>
-   );
-};
-
-const Resultpage: React.FC = () => {
-   const currentAssessment = useRecoilValue(getCurrentAssessment);
-   const assessor = useRecoilValue(assessorState);
-
+   setResultText(title);
    return (
       <>
          <Navbar />
@@ -63,14 +57,18 @@ const Resultpage: React.FC = () => {
             </div>
             <div className="row">
                <div className="col-12 col-lg-8 offset-lg-2">
-                  <ImpactScoreVisual score={currentAssessment.impactScore} />
+                  <ImpactScoreVisual score={SL} title={title} />
                </div>
             </div>
             <div className="row">
                <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
                      <p>Assessment number: {currentAssessment.incidentNumber}</p>
-                     <p>Assessment date: {currentAssessment.dataBreachDate}</p>
+                     <p>
+                        Assessment date:{' '}
+                        {currentAssessment.dataBreachDate &&
+                           new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
+                     </p>
                      <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
                      <p>Result: {`${currentAssessment.impactScore}`}</p>
                   </div>

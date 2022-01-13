@@ -4,12 +4,13 @@ import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../question/a
 
 export interface IDatabreachAssessment {
    assessor: IAssessor;
-   dataBreachDate: string | null;
-   assessmentDate: string;
+   dataBreachDate: Date | null;
+   assessmentDate: Date;
    descriptiveTitle: string;
-   incidentNumber: number;
+   incidentNumber: number | undefined;
    score: { [key: string]: number };
    impactScore: number;
+   resultText: string;
    notes: string;
    answers: ICurrentAssessmentAnswers[];
 }
@@ -23,6 +24,14 @@ export enum ASSESSMENT_SCORE_TYPE {
    ease_of_identification = 'Ease of identification',
    aggreveting_circumstances = 'Aggravating circumstances of breach',
    mitigating_circumstances = 'Mitigating circumstances of breach',
+}
+
+export enum ASSESSMENT_IMPACT_TITLE {
+   NONE = 'Not a data breach',
+   LOW = 'LOW',
+   MEDIUM = 'MEDIUM',
+   HIGH = 'HIGH',
+   CRITICAL = 'CRITICAL',
 }
 
 export const default_score_data: { [key: string]: number } = {
@@ -44,9 +53,9 @@ export const assessmentTypeScoreState = selector<number[]>({
    },
 });
 
-export const dataBreachDateState = atom<string>({
+export const dataBreachDateState = atom<string | null>({
    key: 'dataBreachDate',
-   default: '',
+   default: null,
 });
 
 export const assessmentDateState = atom<string>({
@@ -64,9 +73,9 @@ export const assessmentDescriptiveTitleState = atom<string>({
    default: '',
 });
 
-export const assessmentIncidentNumberState = atom<string>({
+export const assessmentIncidentNumberState = atom<number | undefined>({
    key: 'assessmentIncidentNumber',
-   default: '',
+   default: undefined,
 });
 
 export const assessmentImpactNumberState = atom<number>({
@@ -84,6 +93,11 @@ export const enableCalculationButtonState = atom<boolean>({
    default: false,
 });
 
+export const resultTextState = atom<string>({
+   key: 'resultText',
+   default: ASSESSMENT_IMPACT_TITLE.NONE,
+});
+
 export const showAnimationState = atom<boolean>({
    key: 'showAnimation',
    default: false,
@@ -95,15 +109,16 @@ const getCurrentAssessment = selector<IDatabreachAssessment>({
       const dataBreachValue = get(dataBreachDateState) ? get(dataBreachDateState) : new Date();
       const assessmentDataValue = get(assessmentDateState) ? get(assessmentDateState) : new Date();
 
-      const dataBreachDate = new Date(dataBreachValue).toLocaleDateString('nl');
-      const assessmentDate = new Date(assessmentDataValue).toLocaleDateString('nl');
+      const dataBreachDate = dataBreachValue ? new Date(dataBreachValue) : null;
+      const assessmentDate = new Date(assessmentDataValue);
       const assessor = get(assessorState);
       const descriptiveTitle = get(assessmentDescriptiveTitleState);
-      const incidentNumber = get(assessmentImpactNumberState);
+      const incidentNumber = get(assessmentIncidentNumberState);
       const impactScore = get(assessmentImpactNumberState);
       const score = get(assessmentScore);
       const notes = get(assessmentNoteState);
       const answers = get(assessmentAnswersState);
+      const resultText = get(resultTextState);
 
       return {
          assessor,
@@ -115,6 +130,7 @@ const getCurrentAssessment = selector<IDatabreachAssessment>({
          score,
          notes,
          answers,
+         resultText,
       };
    },
 });

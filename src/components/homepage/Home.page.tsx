@@ -9,8 +9,10 @@ import './style.css';
 const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
-   const [dataBreachDate, setDataBreachDate] = useRecoilState<string>(dataBreachDateState);
-   const [incidentNumber, setIncidentNumber] = useRecoilState<string>(assessmentIncidentNumberState);
+   const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
+   const [incidentNumber, setIncidentNumber] = useRecoilState<number | undefined>(
+      assessmentIncidentNumberState
+   );
 
    const {
       register,
@@ -73,9 +75,9 @@ const Homepage = () => {
                   <div>
                      <input
                         {...register('incidentNumber', { required: true })}
-                        onChange={(e) => setIncidentNumber(e.target.value)}
+                        onChange={(e) => setIncidentNumber(Number(e.target.value))}
                         type="text"
-                        value={incidentNumber}
+                        value={incidentNumber ? incidentNumber : ''}
                         className="form-control"
                         placeholder="Enter incident number"
                         aria-label="Incident number"
@@ -97,7 +99,7 @@ const Homepage = () => {
                         type="date"
                         id="formFile"
                         onChange={(e) => setDataBreachDate(e.target.value)}
-                        value={dataBreachDate}
+                        value={dataBreachDate ?? ''}
                      />
                      {errors.dataBreachDate?.type === 'required' && (
                         <p className="required">Data breach date is required</p>

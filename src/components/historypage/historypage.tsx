@@ -83,7 +83,7 @@ const Historypage = () => {
       } else {
          const emptyArr: any = [];
          for (const [key, value] of map1.entries()) {
-            if (key?.checked == true) {
+            if (key?.checked === true) {
                emptyArr.push(...value);
             }
          }
@@ -222,7 +222,7 @@ const Historypage = () => {
             </div>
 
             {usedData.map((el: any, id: number) => (
-               <div className="ms-3 ms-sm-0 me-3 me-sm-0 ">
+               <div className="ms-3 ms-sm-0 me-3 me-sm-0 " key={id}>
                   <div
                      className={`card offset-lg-2 col-lg-8 offset-lg-2 assessmentCard card border_${
                         Object.values(ASSESSMENT_IMPACT_TITLE)[el.result - 1]
