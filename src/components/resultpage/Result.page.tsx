@@ -1,20 +1,13 @@
-import React, { useContext } from 'react';
-import { AppContext, IAppState } from '../../providers';
+import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import getCurrentAssessment, { ASSESSMENT_IMPACT_TITLE, resultTextState } from '../../providers/assessment';
+import assessorState from '../../providers/assessor';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
-import { QuestionsComponentTest } from '../question/question.component';
+import InteractiveQuestionary from '../question/interactive.questionaire.component';
 import './styles.css';
 
-enum ASSESSMENT_IMPACT_TITLE {
-   LOW = 'LOW',
-   MEDIUM = 'MEDIUM',
-   HIGH = 'HIGH',
-   CRITICAL = 'CRITICAL',
-}
-
-const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
-   // based on the score decide what value to show
-   const title = Object.values(ASSESSMENT_IMPACT_TITLE)[score - 1];
+const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, score }) => {
    return (
       <div className="impact_card card">
          <div className="impact_score_container">
@@ -26,10 +19,33 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
 };
 
 const Resultpage: React.FC = () => {
-   const { assessor, assessment } = useContext<IAppState>(AppContext);
-   const assessorData = assessor?.state;
-   const assessmentData = assessment?.state;
+   const currentAssessment = useRecoilValue(getCurrentAssessment);
+   const assessor = useRecoilValue(assessorState);
 
+   // based on the score decide what value to show
+   let title = '';
+   const SL = currentAssessment.impactScore;
+
+   switch (true) {
+      case SL <= 0:
+         title = ASSESSMENT_IMPACT_TITLE.NONE;
+         break;
+      case SL > 0 && SL < 2:
+         title = ASSESSMENT_IMPACT_TITLE.LOW;
+         break;
+      case SL >= 2 && SL < 3:
+         title = ASSESSMENT_IMPACT_TITLE.MEDIUM;
+         break;
+      case SL >= 3 && SL < 4:
+         title = ASSESSMENT_IMPACT_TITLE.HIGH;
+         break;
+      case SL >= 4:
+         title = ASSESSMENT_IMPACT_TITLE.CRITICAL;
+         break;
+   }
+   const setResultText = useSetRecoilState(resultTextState);
+
+   setResultText(title);
    return (
       <>
          <Navbar />
@@ -41,27 +57,20 @@ const Resultpage: React.FC = () => {
             </div>
             <div className="row">
                <div className="col-12 col-lg-8 offset-lg-2">
-                  <ImpactScoreVisual
-                     score={assessmentData?.current.impactScore ?? 0}
-                  />
+                  <ImpactScoreVisual score={SL} title={title} />
                </div>
             </div>
             <div className="row">
-               <div className="col-12">
+               <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
-                     <p>
-                        Assessment number:{' '}
-                        {assessmentData?.current.incidentNumber}
-                     </p>
+                     <p>Assessment number: {currentAssessment.incidentNumber}</p>
                      <p>
                         Assessment date:{' '}
-                        {assessmentData?.current.assessmentDate?.toDateString()}
+                        {currentAssessment.dataBreachDate &&
+                           new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
                      </p>
-                     <p>
-                        Performed by:{' '}
-                        {`${assessorData?.firstName} ${assessorData?.lastName}`}
-                     </p>
-                     <p>Result: {assessmentData?.current.result}</p>
+                     <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
+                     <p>Result: {`${currentAssessment.impactScore}`}</p>
                   </div>
                </div>
             </div>
@@ -69,7 +78,7 @@ const Resultpage: React.FC = () => {
          <main className="container">
             <div className="row">
                <div className="col-12">
-                  <QuestionsComponentTest />
+                  <InteractiveQuestionary interactive={true} />
                </div>
             </div>
 
@@ -79,19 +88,16 @@ const Resultpage: React.FC = () => {
                      <h2>Action list</h2>
                      <ol className="action_list">
                         <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing
-                           elit. Beatae optio ducimus consequatur ullam
-                           aspernatur illum quia
+                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
+                           consequatur ullam aspernatur illum quia
                         </li>
                         <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing
-                           elit. Beatae optio ducimus consequatur ullam
-                           aspernatur illum quia
+                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
+                           consequatur ullam aspernatur illum quia
                         </li>
                         <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing
-                           elit. Beatae optio ducimus consequatur ullam
-                           aspernatur illum quia
+                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
+                           consequatur ullam aspernatur illum quia
                         </li>
                      </ol>
                   </div>
