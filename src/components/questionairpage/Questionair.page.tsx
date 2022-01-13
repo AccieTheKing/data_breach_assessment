@@ -76,8 +76,15 @@ const Questionairpage: React.FC = () => {
                         </button>
                      </div>
                      <div className="col-12 col-lg-4">
-                        <p className="m-0">Assessment date: {currentAssessment.assessmentDate}</p>
-                        <p className="m-0">Data breach date: {currentAssessment.dataBreachDate}</p>
+                        <p className="m-0">
+                           Assessment date:{' '}
+                           {new Date(currentAssessment.assessmentDate).toLocaleDateString('nl')}
+                        </p>
+                        <p className="m-0">
+                           Data breach date:{' '}
+                           {currentAssessment.dataBreachDate &&
+                              new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
+                        </p>
                      </div>
                   </div>
                </header>

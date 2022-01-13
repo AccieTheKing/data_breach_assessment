@@ -5,7 +5,7 @@ const database_url: string = 'http://localhost:8080';
 
 export const storeAssessmentInDB = async (assessment: IDatabreachAssessment) => {
    try {
-      axios.post(`${database_url}/assessment`, assessment);
+      return axios.post<{ assessment_status: string }>(`${database_url}/assessment`, assessment);
    } catch (error) {
       console.error(error);
    }
