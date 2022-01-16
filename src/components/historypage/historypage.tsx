@@ -34,7 +34,19 @@ const Historypage = () => {
       onGetAllAssessments();
    }, []);
 
-   function test() {
+   // search meachinism could also be implemented as a function
+   /*    function search () {
+      const emptyArr: any = [];
+      usedData.filter((val) => {
+         if (searchTerm == ""){clearState()
+      }
+      else if (val.assessor.toLocaleLowerCase().includes(searchTerm.toLowerCase()) || val.date.toLocaleLowerCase().includes(searchTerm.toLowerCase())) {
+         emptyArr.push(val);
+         setUsedData(emptyArr)
+      }
+   })} */
+
+   function filterResult() {
       const map1 = new Map<HTMLInputElement | null, Array<DB_Assessment>>();
       map1.set(lowCheck.current, filtLow());
       map1.set(medCheck.current, filtMed());
@@ -182,7 +194,12 @@ const Historypage = () => {
                         </div>
                      </li>
                      <div className="btn-wrapper">
-                        <button type="button" className="btn btn-filter" id="filterBtn" onClick={filterResult}>
+                        <button
+                           type="button"
+                           className="btn btn-filter"
+                           id="filterBtn"
+                           onClick={filterResult}
+                        >
                            Filter
                         </button>
                      </div>
@@ -218,73 +235,51 @@ const Historypage = () => {
 
             {usedData
                .filter((val) => {
-                  if (searchTerm == '') {
+                  if (searchTerm === '') {
                      return val;
-                  } else if (
-                     val.assessor.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     val.date.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     val.assessmentNumber.toLocaleLowerCase().includes(searchTerm.toLowerCase())
+                  }
+                  if (
+                     val.assessor.firstName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     val.assessor.lastName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     new Date(val.assessmentDate)
+                        .toLocaleDateString('nl')
+                        .includes(searchTerm.toLowerCase()) ||
+                     val.incidentNr.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     val.resultNumber.toString().toLocaleLowerCase().includes(searchTerm.toLowerCase())
                   ) {
                      return val;
                   }
                })
-               .map((el: any, id: number) => (
+               .map((el: DB_Assessment, id: number) => (
                   <div key={id}>
-                     <div
-                        className={`card assessmentCard card border_${
-                           Object.values(ASSESSMENT_IMPACT_TITLE)[el.result - 1]
-                        }`}
-                     >
+                     <div className={`card assessmentCard card border_${el.resultText}`}>
                         <div className="row">
                            <div className="col-12 col-lg-3">
                               <span className="card-text">
-                                 Ass. number: {el.assessmentNumber}
+                                 Ass. number: {el.incidentNr}
                                  <br></br>
-                                 Assessor: {el.assessor}
+                                 Assessor: {el.assessor.firstName} {el.assessor.lastName}
                               </span>
                            </div>
                            <div className="col-12 col-lg-3">
                               <span className="card-text">
-                                 Date: {el.date}
+                                 Date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
                                  <br></br>
-                                 Result: {el.result}{' '}
+                                 Result: {el.resultNumber}
                               </span>
                            </div>
                            <div className="col-12 col-lg-3 mb-2 mb-sm-0">
                               <span>
-                                 <ImpactScoreVisual score={el.result} />
+                                 <ImpactScoreVisual title={el.resultText} />
                               </span>
                            </div>
                            <div className="col-12 col-lg-3">
                               <span>
-                              <button
-                                 type="submit"
-                                 className="btn w-100"
-                                 onClick={() => navigate(`/history/${el.assessmentId}`)}
-                              >
-                                 Details
-                              </button>
+                                 <button type="submit" className="btn w-100">
+                                    Details
+                                 </button>
                               </span>
                            </div>
-                        </div>
-                        <div className="col-12 col-lg-3">
-                           <span className="card-text">
-                              Date: {el.date}
-                              <br></br>
-                              Result: {el.result}{' '}
-                           </span>
-                        </div>
-                        <div className="col-12 col-lg-3 mb-2 mb-sm-0">
-                           <span>
-                              <ImpactScoreVisual score={el.result} />
-                           </span>
-                        </div>
-                        <div className="col-12 col-lg-3">
-                           <span>
-                              <button type="submit" className="btn w-100">
-                                 Details
-                              </button>
-                           </span>
                         </div>
                      </div>
                   </div>
