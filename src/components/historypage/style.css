@@ -11,6 +11,7 @@
    padding: 25px;
    filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
    margin-bottom: 1em;
+   border: solid 2px;
 }
 
 .card.border_LOW {
@@ -80,6 +81,7 @@
 
 .dropdown-toggle {
    color: black;
+   border-color: #ced4da;
 }
 
 .btn-wrapper {
@@ -88,7 +90,7 @@
 
 .btn-filter {
    background-color: #f1edeb;
-   outline: 1px solid;
+   outline: 1px solid ; 
    width: 90%;
    padding: 3px;
 }
@@ -97,3 +99,22 @@
    cursor: pointer;
    display: block;
 }
+
+.input-group {
+   margin-bottom: 2em;
+}
+
+.input-group-text {
+   background-color:#f1edeb
+}
+
+.btn-search {
+   color:white;
+   background-color: gray;
+}
+
+.form-control {
+   border-radius: 0px 4px 4px 0px
+}
+
+

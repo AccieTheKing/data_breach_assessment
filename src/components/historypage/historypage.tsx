@@ -15,8 +15,8 @@ const ImpactScoreVisual: React.FC<{ title: string }> = ({ title }) => {
 };
 
 const Historypage = () => {
+   const [searchTerm, setSearchTerm] = useState('');
    const [usedData, setUsedData] = useState<Array<DB_Assessment>>([]);
-   const navigate = useNavigate();
    const lowCheck = useRef<HTMLInputElement>(null);
    const medCheck = useRef<HTMLInputElement>(null);
    const highCheck = useRef<HTMLInputElement>(null);
@@ -92,14 +92,15 @@ const Historypage = () => {
    return (
       <div>
          <Navbar></Navbar>
-         <div className="row">
-            <div className="col-12 col-lg-12">
-               <h1 className="h1Hist">Assessment history</h1>
+         <div className="container">
+            <div className="row">
+               <div className="col-12 col-lg-12">
+                  <h1 className="h1Hist">Assessment history</h1>
+               </div>
             </div>
-         </div>
-         <div>
-            <div className="offset-lg-2 col-lg-8 offset-lg-2 mb-2">
-               <div className="dropdown">
+
+            <div className="row">
+               <div className="col-lg-4 dropdown mb-2">
                   <button
                      className="btn btn-secondary dropdown-toggle"
                      type="button"
@@ -181,41 +182,81 @@ const Historypage = () => {
                         </div>
                      </li>
                      <div className="btn-wrapper">
-                        <button type="button" className="btn btn-filter" id="filterBtn" onClick={test}>
+                        <button type="button" className="btn btn-filter" id="filterBtn" onClick={filterResult}>
                            Filter
                         </button>
                      </div>
                   </ul>
                </div>
+
+               <div className="offset-lg-2 col-lg-6">
+                  <div className="input-group">
+                     <span className="input-group-text" id="basic-addon1">
+                        <svg
+                           xmlns="http://www.w3.org/2000/svg"
+                           width="16"
+                           height="16"
+                           fill="currentColor"
+                           className="bi bi-search"
+                           viewBox="0 0 16 16"
+                        >
+                           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                        </svg>
+                     </span>
+                     <input
+                        type="search"
+                        className="form-control searchfield"
+                        placeholder="Enter assessment id, assessor name or assessment date"
+                        aria-label="Search"
+                        onChange={(event) => {
+                           setSearchTerm(event.target.value);
+                        }}
+                     />
+                  </div>
+               </div>
             </div>
 
-            {usedData.map((el: DB_Assessment, id: number) => (
-               <div className="ms-3 ms-sm-0 me-3 me-sm-0 " key={id}>
-                  <div
-                     className={`card offset-lg-2 col-lg-8 offset-lg-2 assessmentCard card border_${el.resultText}`}
-                  >
-                     <div className="row">
-                        <div className="col-12 col-lg-3">
-                           <span className="card-text">
-                              Ass. number: {el.incidentNr}
-                              <br></br>
-                              Assessor: {el.assessor.firstName} {el.assessor.lastName}
-                           </span>
-                        </div>
-                        <div className="col-12 col-lg-3">
-                           <span className="card-text">
-                              Date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
-                              <br></br>
-                              Result: {el.resultNumber}
-                           </span>
-                        </div>
-                        <div className="col-12 col-lg-3 mb-2 mb-sm-0">
-                           <span>
-                              <ImpactScoreVisual title={el.resultText} />
-                           </span>
-                        </div>
-                        <div className="col-12 col-lg-3">
-                           <span>
+            {usedData
+               .filter((val) => {
+                  if (searchTerm == '') {
+                     return val;
+                  } else if (
+                     val.assessor.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     val.date.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     val.assessmentNumber.toLocaleLowerCase().includes(searchTerm.toLowerCase())
+                  ) {
+                     return val;
+                  }
+               })
+               .map((el: any, id: number) => (
+                  <div key={id}>
+                     <div
+                        className={`card assessmentCard card border_${
+                           Object.values(ASSESSMENT_IMPACT_TITLE)[el.result - 1]
+                        }`}
+                     >
+                        <div className="row">
+                           <div className="col-12 col-lg-3">
+                              <span className="card-text">
+                                 Ass. number: {el.assessmentNumber}
+                                 <br></br>
+                                 Assessor: {el.assessor}
+                              </span>
+                           </div>
+                           <div className="col-12 col-lg-3">
+                              <span className="card-text">
+                                 Date: {el.date}
+                                 <br></br>
+                                 Result: {el.result}{' '}
+                              </span>
+                           </div>
+                           <div className="col-12 col-lg-3 mb-2 mb-sm-0">
+                              <span>
+                                 <ImpactScoreVisual score={el.result} />
+                              </span>
+                           </div>
+                           <div className="col-12 col-lg-3">
+                              <span>
                               <button
                                  type="submit"
                                  className="btn w-100"
@@ -223,12 +264,31 @@ const Historypage = () => {
                               >
                                  Details
                               </button>
+                              </span>
+                           </div>
+                        </div>
+                        <div className="col-12 col-lg-3">
+                           <span className="card-text">
+                              Date: {el.date}
+                              <br></br>
+                              Result: {el.result}{' '}
+                           </span>
+                        </div>
+                        <div className="col-12 col-lg-3 mb-2 mb-sm-0">
+                           <span>
+                              <ImpactScoreVisual score={el.result} />
+                           </span>
+                        </div>
+                        <div className="col-12 col-lg-3">
+                           <span>
+                              <button type="submit" className="btn w-100">
+                                 Details
+                              </button>
                            </span>
                         </div>
                      </div>
                   </div>
-               </div>
-            ))}
+               ))}
          </div>
       </div>
    );
