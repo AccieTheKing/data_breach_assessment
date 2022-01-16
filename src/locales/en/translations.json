@@ -48,7 +48,7 @@
                 },
                 {
                     "id": 4,
-                    "text": " Are any of the data subjects considered within vulnerable groups such as minors, political refugees, (political leaders, celebrities) etc.?",
+                    "text": "Is the individual considered within vulnerable groups (e.g. minors, political refugees, political leaders, celebrities), where information in the breach is critical to their personal safety or psychological conditions?",
                     "weight": {
                         "yes": {
                             "value": 1,

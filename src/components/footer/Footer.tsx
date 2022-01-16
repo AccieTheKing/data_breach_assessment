@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { storeAssessmentInDB } from '../../api';
 import getCurrentAssessment, {
@@ -23,6 +23,7 @@ interface FooterProps {
 // Footer content for the result page
 const ResultPageFooterContent = () => {
    const navigate = useNavigate();
+   const params = useParams<{ id: string }>();
    const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
    const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
    const onResetAssessmentScore = useResetRecoilState(assessmentScore);
@@ -41,11 +42,18 @@ const ResultPageFooterContent = () => {
    };
 
    const onFinishAssessment = async () => {
-      const result = await storeAssessmentInDB(currentAssessment);
-
-      if (result?.data && result?.data.assessment_status === 'SUCCESSFUL_STORED') {
+      const onResetAndNavigate = () => {
          onResetAllStates();
-         navigate('/history');
+         if (navigate) navigate('/history');
+      };
+
+      if (params && params.id) {
+         onResetAndNavigate();
+      } else {
+         const result = await storeAssessmentInDB(currentAssessment);
+         if (result?.data && result?.data.assessment_status === 'SUCCESSFUL_STORED') {
+            onResetAndNavigate();
+         }
       }
    };
    return (
@@ -97,7 +105,6 @@ const QuestionairePageFooterContent = () => {
          </div>
          <div className="col-12 col-md-6 col-lg-4 offset-lg-4 offset-xl-5 col-xl-3 offset-xl-5">
             <div className="button-container">
-               <button className="btn btn-light footer-button display-xs">Save Draft</button>
                <button
                   className="btn btn-light footer-button"
                   disabled={!enableCalcButton}

@@ -1,10 +1,10 @@
-import './style.css';
-import React, { useEffect } from 'react';
-import Navbar from '../Navbar/Nav';
-import { useState, useRef } from 'react';
+/* eslint-disable array-callback-return */
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DB_Assessment, getAllAssessments } from '../../api';
 import { ASSESSMENT_IMPACT_TITLE } from '../../providers/assessment';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../Navbar/Nav';
+import './style.css';
 
 const ImpactScoreVisual: React.FC<{ title: string }> = ({ title }) => {
    return (
@@ -15,6 +15,7 @@ const ImpactScoreVisual: React.FC<{ title: string }> = ({ title }) => {
 };
 
 const Historypage = () => {
+   const navigate = useNavigate();
    const [searchTerm, setSearchTerm] = useState('');
    const [usedData, setUsedData] = useState<Array<DB_Assessment>>([]);
    const lowCheck = useRef<HTMLInputElement>(null);
@@ -33,6 +34,10 @@ const Historypage = () => {
       };
       onGetAllAssessments();
    }, []);
+
+   const onSelectAssessment = (assessment: DB_Assessment) => {
+      navigate(`/history/${assessment.assessmentId}`);
+   };
 
    // search meachinism could also be implemented as a function
    /*    function search () {
@@ -245,6 +250,7 @@ const Historypage = () => {
                         .toLocaleDateString('nl')
                         .includes(searchTerm.toLowerCase()) ||
                      val.incidentNr.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     val.resultText.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
                      val.resultNumber.toString().toLocaleLowerCase().includes(searchTerm.toLowerCase())
                   ) {
                      return val;
@@ -269,13 +275,15 @@ const Historypage = () => {
                               </span>
                            </div>
                            <div className="col-12 col-lg-3 mb-2 mb-sm-0">
-                              <span>
-                                 <ImpactScoreVisual title={el.resultText} />
-                              </span>
+                              <ImpactScoreVisual title={el.resultText} />
                            </div>
                            <div className="col-12 col-lg-3">
                               <span>
-                                 <button type="submit" className="btn w-100">
+                                 <button
+                                    type="submit"
+                                    className="btn w-100"
+                                    onClick={() => onSelectAssessment(el)}
+                                 >
                                     Details
                                  </button>
                               </span>

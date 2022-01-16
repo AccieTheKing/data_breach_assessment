@@ -12,6 +12,8 @@ export interface DB_Assessment {
    resultNumber: number;
    status: string;
    assessor_Id: number;
+   note?: Array<{ noteId: number; notesText: string; assessment_Id: number }>;
+   answers?: Array<{ AnswerId: number; answer_text: string; question_number: string; assessment_Id: number }>;
    assessor: {
       assessorId?: number;
       firstName: string;
@@ -37,7 +39,7 @@ export const getAllAssessments = async () => {
 
 export const getAssessmentById = async (id: number) => {
    try {
-      return axios.get<DB_Assessment>(`${database_url}/assessment?id=${id}`);
+      return axios.get<DB_Assessment>(`${database_url}/assessment/${id}`);
    } catch (error) {
       console.error(error);
    }

@@ -10,7 +10,7 @@ const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
    const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
-   const [incidentNumber, setIncidentNumber] = useRecoilState<number | undefined>(
+   const [incidentNumber, setIncidentNumber] = useRecoilState<string | undefined>(
       assessmentIncidentNumberState
    );
 
@@ -74,8 +74,14 @@ const Homepage = () => {
                   <b className="bPos">Incident number</b>
                   <div>
                      <input
-                        {...register('incidentNumber', { required: true })}
-                        onChange={(e) => setIncidentNumber(Number(e.target.value))}
+                        {...register('incidentNumber', {
+                           required: true,
+                           pattern: {
+                              value: /^(?:([A-Z]{2})_([0-9]{6}))$/g,
+                              message: '⚠ Wrong format used for incident number!',
+                           },
+                        })}
+                        onChange={(e) => setIncidentNumber(e.target.value)}
                         type="text"
                         value={incidentNumber ? incidentNumber : ''}
                         className="form-control"
@@ -84,6 +90,9 @@ const Homepage = () => {
                      />
                      {errors.incidentNumber?.type === 'required' && (
                         <p className="required">Incident number is required</p>
+                     )}
+                     {errors.incidentNumber?.message && (
+                        <p className="required">{errors.incidentNumber?.message}</p>
                      )}
                   </div>
                </div>
