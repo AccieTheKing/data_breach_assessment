@@ -27,7 +27,7 @@ export enum ASSESSMENT_SCORE_TYPE {
 }
 
 export enum ASSESSMENT_IMPACT_TITLE {
-   NONE = 'Not a data breach',
+   NONE = 'INSIGNIFICANT',
    LOW = 'LOW',
    MEDIUM = 'MEDIUM',
    HIGH = 'HIGH',

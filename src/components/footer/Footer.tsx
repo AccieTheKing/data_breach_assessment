@@ -42,8 +42,11 @@ const ResultPageFooterContent = () => {
 
    const onFinishAssessment = async () => {
       const result = await storeAssessmentInDB(currentAssessment);
-      onResetAllStates();
-      navigate('/history');
+
+      if (result?.data && result?.data.assessment_status === 'SUCCESSFUL_STORED') {
+         onResetAllStates();
+         navigate('/history');
+      }
    };
    return (
       <div className="row" id="result-page-footer">

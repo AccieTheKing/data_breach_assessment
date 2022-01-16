@@ -1,57 +1,12 @@
 import './style.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../Navbar/Nav';
 import { useState, useRef } from 'react';
+import { DB_Assessment, getAllAssessments } from '../../api';
+import { ASSESSMENT_IMPACT_TITLE } from '../../providers/assessment';
+import { useNavigate } from 'react-router-dom';
 
-enum ASSESSMENT_IMPACT_TITLE {
-   LOW = 'LOW',
-   MEDIUM = 'MEDIUM',
-   HIGH = 'HIGH',
-   CRITICAL = 'CRITICAL',
-}
-
-interface IHistory {
-   assessmentNumber: string;
-   date: string;
-   result: number;
-   assessor: string;
-   score: ASSESSMENT_IMPACT_TITLE;
-}
-
-const historyData: Array<IHistory> = [
-   {
-      assessmentNumber: '1',
-      date: '12.05.2021',
-      result: 1,
-      assessor: 'Chris',
-      score: ASSESSMENT_IMPACT_TITLE.LOW,
-   },
-   {
-      assessmentNumber: '2',
-      date: '10.07.2021',
-      result: 2,
-      assessor: 'Moe',
-      score: ASSESSMENT_IMPACT_TITLE.MEDIUM,
-   },
-   {
-      assessmentNumber: '3',
-      date: '04.10.2021',
-      result: 3,
-      assessor: 'Katha',
-      score: ASSESSMENT_IMPACT_TITLE.HIGH,
-   },
-   {
-      assessmentNumber: '4',
-      date: '03.03.2021',
-      result: 4,
-      assessor: 'Lenny',
-      score: ASSESSMENT_IMPACT_TITLE.CRITICAL,
-   },
-];
-
-const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
-   // based on the score decide what value to show
-   const title = Object.values(ASSESSMENT_IMPACT_TITLE)[props.score - 1];
+const ImpactScoreVisual: React.FC<{ title: string }> = ({ title }) => {
    return (
       <div>
          <div className={`square score_${title}`}>{title}</div>
@@ -60,14 +15,27 @@ const ImpactScoreVisual: React.FC<{ score: number }> = (props) => {
 };
 
 const Historypage = () => {
-   const [usedData, setUsedData] = useState(historyData);
+   const [usedData, setUsedData] = useState<Array<DB_Assessment>>([]);
+   const navigate = useNavigate();
    const lowCheck = useRef<HTMLInputElement>(null);
    const medCheck = useRef<HTMLInputElement>(null);
    const highCheck = useRef<HTMLInputElement>(null);
    const critCheck = useRef<HTMLInputElement>(null);
+   const data = useRef<Array<DB_Assessment>>([]);
+
+   useEffect(() => {
+      const onGetAllAssessments = async () => {
+         const result = await getAllAssessments();
+         if (result?.data) {
+            data.current = result.data;
+            setUsedData(data.current);
+         }
+      };
+      onGetAllAssessments();
+   }, []);
 
    function test() {
-      const map1 = new Map<HTMLInputElement | null, Array<IHistory>>();
+      const map1 = new Map<HTMLInputElement | null, Array<DB_Assessment>>();
       map1.set(lowCheck.current, filtLow());
       map1.set(medCheck.current, filtMed());
       map1.set(highCheck.current, filtHigh());
@@ -92,31 +60,31 @@ const Historypage = () => {
    }
 
    const clearState = () => {
-      setUsedData(historyData);
+      setUsedData(data.current);
    };
 
    function filtLow() {
-      const low = historyData.filter(
-         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.LOW
+      const low = data.current.filter(
+         (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.LOW
       );
       return low;
    }
 
    function filtMed() {
-      const med = historyData.filter(
-         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.MEDIUM
+      const med = data.current.filter(
+         (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.MEDIUM
       );
       return med;
    }
    function filtHigh() {
-      const high = historyData.filter(
-         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.HIGH
+      const high = data.current.filter(
+         (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.HIGH
       );
       return high;
    }
    function filtCrit() {
-      const crit = historyData.filter(
-         (historyData: IHistory) => historyData.score === ASSESSMENT_IMPACT_TITLE.CRITICAL
+      const crit = data.current.filter(
+         (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.CRITICAL
       );
       return crit;
    }
@@ -221,36 +189,38 @@ const Historypage = () => {
                </div>
             </div>
 
-            {usedData.map((el: any, id: number) => (
+            {usedData.map((el: DB_Assessment, id: number) => (
                <div className="ms-3 ms-sm-0 me-3 me-sm-0 " key={id}>
                   <div
-                     className={`card offset-lg-2 col-lg-8 offset-lg-2 assessmentCard card border_${
-                        Object.values(ASSESSMENT_IMPACT_TITLE)[el.result - 1]
-                     }`}
+                     className={`card offset-lg-2 col-lg-8 offset-lg-2 assessmentCard card border_${el.resultText}`}
                   >
                      <div className="row">
                         <div className="col-12 col-lg-3">
                            <span className="card-text">
-                              Ass. number: {el.assessmentNumber}
+                              Ass. number: {el.incidentNr}
                               <br></br>
-                              Assessor: {el.assessor}
+                              Assessor: {el.assessor.firstName} {el.assessor.lastName}
                            </span>
                         </div>
                         <div className="col-12 col-lg-3">
                            <span className="card-text">
-                              Date: {el.date}
+                              Date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
                               <br></br>
-                              Result: {el.result}{' '}
+                              Result: {el.resultNumber}
                            </span>
                         </div>
                         <div className="col-12 col-lg-3 mb-2 mb-sm-0">
                            <span>
-                              <ImpactScoreVisual score={el.result} />
+                              <ImpactScoreVisual title={el.resultText} />
                            </span>
                         </div>
                         <div className="col-12 col-lg-3">
                            <span>
-                              <button type="submit" className="btn w-100">
+                              <button
+                                 type="submit"
+                                 className="btn w-100"
+                                 onClick={() => navigate(`/history/${el.assessmentId}`)}
+                              >
                                  Details
                               </button>
                            </span>
