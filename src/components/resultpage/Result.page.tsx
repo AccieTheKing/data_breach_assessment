@@ -1,7 +1,17 @@
-import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import getCurrentAssessment, { ASSESSMENT_IMPACT_TITLE, resultTextState } from '../../providers/assessment';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { getAssessmentById } from '../../api';
+import getCurrentAssessment, {
+   assessmentDateState,
+   assessmentImpactNumberState,
+   assessmentIncidentNumberState,
+   assessmentNoteState,
+   ASSESSMENT_IMPACT_TITLE,
+   resultTextState,
+} from '../../providers/assessment';
 import assessorState from '../../providers/assessor';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import InteractiveQuestionary from '../question/interactive.questionaire.component';
@@ -9,7 +19,7 @@ import './styles.css';
 
 const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, score }) => {
    return (
-      <div className="impact_card card">
+      <div className={`impact_card card border_${title}`}>
          <div className="impact_score_container">
             <div className={`impact_score score_${title}`}>{score}</div>
          </div>
@@ -19,15 +29,23 @@ const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, 
 };
 
 const Resultpage: React.FC = () => {
+   // Set the values of the selected assessment
+   const params = useParams<{ id: string }>();
+   const setAnswers = useSetRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+   const setAssessmentDate = useSetRecoilState<string>(assessmentDateState);
+   const setAssessmentNote = useSetRecoilState<string>(assessmentNoteState);
+   const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
+   const setImpactNumber = useSetRecoilState<number>(assessmentImpactNumberState);
    const currentAssessment = useRecoilValue(getCurrentAssessment);
-   const assessor = useRecoilValue(assessorState);
-
+   const [assessor, setAssessorData] = useRecoilState(assessorState);
+   const setResultText = useSetRecoilState(resultTextState);
    // based on the score decide what value to show
    let title = '';
-   const SL = currentAssessment.impactScore;
+   let SL = currentAssessment.impactScore;
 
    switch (true) {
       case SL <= 0:
+         // eslint-disable-next-line react-hooks/exhaustive-deps
          title = ASSESSMENT_IMPACT_TITLE.NONE;
          break;
       case SL > 0 && SL < 2:
@@ -43,9 +61,51 @@ const Resultpage: React.FC = () => {
          title = ASSESSMENT_IMPACT_TITLE.CRITICAL;
          break;
    }
-   const setResultText = useSetRecoilState(resultTextState);
 
-   setResultText(title);
+   useEffect(() => {
+      setResultText(title);
+
+      const onGetAssessment = async (id: number) => {
+         const result = await getAssessmentById(id);
+
+         if (result?.data) {
+            const assessment = result.data;
+
+            const answers: Array<ICurrentAssessmentAnswers> = assessment.answers!.map((el) => {
+               const transfer_answer =
+                  el.answer_text === 'true' ? true : el.answer_text === 'false' ? false : el.answer_text;
+               return { id: parseInt(el.question_number), answer: transfer_answer };
+            });
+
+            setAnswers(answers);
+            setAssessmentDate(assessment.assessmentDate);
+            setIncidentNumber(assessment.incidentNr);
+            setImpactNumber(assessment.resultNumber);
+            setAssessorData({
+               firstName: assessment.assessor.firstName,
+               lastName: assessment.assessor.lastName,
+            });
+            // console.log(assessment);
+            if (assessment.note && assessment.note.length > 0) {
+               setAssessmentNote(assessment.note[0].notesText);
+            }
+         }
+      };
+      if (params && params.id) {
+         onGetAssessment(parseInt(params.id));
+      }
+   }, [
+      params,
+      setAnswers,
+      setAssessmentDate,
+      setAssessmentNote,
+      setAssessorData,
+      setImpactNumber,
+      setIncidentNumber,
+      setResultText,
+      title,
+   ]);
+
    return (
       <>
          <Navbar />

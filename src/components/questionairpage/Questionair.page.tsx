@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import getCurrentAssessment, {
-   assessmentDescriptiveTitleState,
-   assessmentNoteState,
-   showAnimationState,
-} from '../../providers/assessment';
+import getCurrentAssessment, { assessmentNoteState, showAnimationState } from '../../providers/assessment';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import QuestionsComponentTest from '../question/interactive.questionaire.component';
@@ -35,7 +31,6 @@ const QuestionNoteField = () => {
 const Questionairpage: React.FC = () => {
    const calculationAnimation = useRecoilValue<boolean>(showAnimationState);
    const currentAssessment = useRecoilValue(getCurrentAssessment);
-   const [descriptiveTitle, setDescriptiveTitle] = useRecoilState<string>(assessmentDescriptiveTitleState);
    const [showNote, setShowNote] = useState(false);
 
    return (
@@ -60,28 +55,18 @@ const Questionairpage: React.FC = () => {
                      </div>
                   </div>
                   <div className="row">
-                     <div className="col-12 col-lg-4">
-                        <input
-                           type="text"
-                           name="descriptive_title"
-                           className="form-control"
-                           placeholder="Descriptive title"
-                           onChange={(e) => setDescriptiveTitle(e.target.value)}
-                           value={descriptiveTitle}
-                        />
-                     </div>
                      <div className="col-12 col-lg-3">
                         <button className="btn btn-showNote" onClick={() => setShowNote(!showNote)}>
                            {showNote ? 'Hide note' : 'Show note'}
                         </button>
                      </div>
-                     <div className="col-12 col-lg-4">
+                     <div className="col-12 offset-lg-4 col-lg-4">
                         <p className="m-0">
                            Assessment date:{' '}
                            {new Date(currentAssessment.assessmentDate).toLocaleDateString('nl')}
                         </p>
                         <p className="m-0">
-                           Data breach date:{' '}
+                           Date of Data breach:{' '}
                            {currentAssessment.dataBreachDate &&
                               new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
                         </p>

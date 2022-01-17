@@ -6,8 +6,7 @@ export interface IDatabreachAssessment {
    assessor: IAssessor;
    dataBreachDate: Date | null;
    assessmentDate: Date;
-   descriptiveTitle: string;
-   incidentNumber: number | undefined;
+   incidentNumber: string | undefined;
    score: { [key: string]: number };
    impactScore: number;
    resultText: string;
@@ -27,7 +26,7 @@ export enum ASSESSMENT_SCORE_TYPE {
 }
 
 export enum ASSESSMENT_IMPACT_TITLE {
-   NONE = 'Not a data breach',
+   NONE = 'INSIGNIFICANT',
    LOW = 'LOW',
    MEDIUM = 'MEDIUM',
    HIGH = 'HIGH',
@@ -68,12 +67,7 @@ export const assessmentNoteState = atom<string>({
    default: '',
 });
 
-export const assessmentDescriptiveTitleState = atom<string>({
-   key: 'descriptiveTitle',
-   default: '',
-});
-
-export const assessmentIncidentNumberState = atom<number | undefined>({
+export const assessmentIncidentNumberState = atom<string | undefined>({
    key: 'assessmentIncidentNumber',
    default: undefined,
 });
@@ -112,7 +106,6 @@ const getCurrentAssessment = selector<IDatabreachAssessment>({
       const dataBreachDate = dataBreachValue ? new Date(dataBreachValue) : null;
       const assessmentDate = new Date(assessmentDataValue);
       const assessor = get(assessorState);
-      const descriptiveTitle = get(assessmentDescriptiveTitleState);
       const incidentNumber = get(assessmentIncidentNumberState);
       const impactScore = get(assessmentImpactNumberState);
       const score = get(assessmentScore);
@@ -124,7 +117,6 @@ const getCurrentAssessment = selector<IDatabreachAssessment>({
          assessor,
          dataBreachDate,
          assessmentDate,
-         descriptiveTitle,
          incidentNumber,
          impactScore,
          score,
