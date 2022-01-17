@@ -4,11 +4,14 @@ import { assessmentTypeScoreState } from '../../providers/assessment';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
 import { currentQuestionTypeState, typedQuestionState } from '../../providers/question/atom';
 import { currentQuestionState } from '../../providers/question/selector';
+import { InfoIcon } from '@primer/octicons-react';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import './style.css';
 
 export interface QuestionTypes {
    type: string;
    questions: Array<IQuestion>;
+   description?: string;
 }
 
 export interface IQuestion {
@@ -35,6 +38,7 @@ interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
    score: number;
+   description: string | undefined;
    currentQuestionType: string;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
@@ -53,6 +57,10 @@ interface ISpecialQuestions {
    interactive: boolean;
    showQuestion: (value: number) => boolean;
    onAction: (value: IQuestionAnswer) => void;
+}
+
+function formatDesciption(description: string) {
+   return <div></div>;
 }
 
 const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
@@ -227,6 +235,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
+   description,
    score,
    interactive,
    currentQuestion,
@@ -269,6 +278,21 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                aria-expanded="false"
                aria-controls={`collapse${id}`}
             >
+               <OverlayTrigger
+                  key={id}
+                  placement={'top'}
+                  trigger={'click'}
+                  overlay={
+                     <Popover id={`popover-positioned-top`}>
+                        <Popover.Header as="h3">{`${type}`}</Popover.Header>
+                        <Popover.Body>{description && formatDesciption(description)}</Popover.Body>
+                     </Popover>
+                  }
+               >
+                  <span>
+                     <InfoIcon size={24} />
+                  </span>
+               </OverlayTrigger>
                {id + 1}. {type} | {score}
             </button>
          </h2>
@@ -423,6 +447,7 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
                key={id}
                id={id}
                score={assessmentTypeScores[id]}
+               description={el.description}
                type={el.type}
                questions={el.questions}
                interactive={interactive}

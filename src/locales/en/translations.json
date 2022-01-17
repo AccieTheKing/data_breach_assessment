@@ -3,6 +3,7 @@
     "dataBreachAssessmentQuestions": [
         {
             "type": "Simple data",
+            "description": "Types of sumple data (the list is not exhaustive): -Biographical data (date of birth, gender, age ..) -Contact details (telephone number, social media, e-mail address ..) -Full name -Data on education -Family life (children, marriage, partner, siblings, parents..) -Professional experience For more information regarding the questions go to the {variable} page",
             "questions": [
                 {
                     "id": 1,
