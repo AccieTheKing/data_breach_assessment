@@ -39,18 +39,6 @@ const Historypage = () => {
       navigate(`/history/${assessment.assessmentId}`);
    };
 
-   // search meachinism could also be implemented as a function
-   /*    function search () {
-      const emptyArr: any = [];
-      usedData.filter((val) => {
-         if (searchTerm == ""){clearState()
-      }
-      else if (val.assessor.toLocaleLowerCase().includes(searchTerm.toLowerCase()) || val.date.toLocaleLowerCase().includes(searchTerm.toLowerCase())) {
-         emptyArr.push(val);
-         setUsedData(emptyArr)
-      }
-   })} */
-
    function filterResult() {
       const map1 = new Map<HTMLInputElement | null, Array<DB_Assessment>>();
       map1.set(lowCheck.current, filtLow());
@@ -246,6 +234,11 @@ const Historypage = () => {
                   if (
                      val.assessor.firstName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
                      val.assessor.lastName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     searchTerm
+                        .toLowerCase()
+                        .includes(
+                           `${val.assessor.firstName.toLocaleLowerCase()} ${val.assessor.lastName.toLocaleLowerCase()}`
+                        ) ||
                      new Date(val.assessmentDate)
                         .toLocaleDateString('nl')
                         .includes(searchTerm.toLowerCase()) ||
