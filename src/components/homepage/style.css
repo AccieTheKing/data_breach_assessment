@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .h1Style {
   font-size: var(--h1fontSize);
 	background: var(--titleBackground);
@@ -6,6 +7,8 @@
 	-webkit-text-fill-color: transparent;
 }
 
+=======
+>>>>>>> development
 .bPos{
   display: flex;
   justify-content: left;
@@ -86,4 +89,15 @@
 
 #loading-image {
   z-index: 100;
+<<<<<<< HEAD
 }
+=======
+}
+
+.required {
+  color: #ea650d;
+  margin: 0;
+  padding: 0;
+}
+
+>>>>>>> development

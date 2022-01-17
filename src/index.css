@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 
+<<<<<<< HEAD
 * {
 	font-family: var(--appFontFamily);
 }
@@ -35,4 +36,47 @@ body {
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 		monospace;
+=======
+:root {
+   --titleBackground: linear-gradient(to right, #ee7f00 25%, #ea650d 50%, #e64415 75%);
+   --h1fontSize: 2.5rem;
+   --h2fontSize: 1.5rem;
+   --appFontSize: 1rem;
+   --appFontFamily: 'Secular One';
+   --impactScoreColorLow: #4a9c09;
+   --impactScoreColorMedium: #e9d418;
+   --impactScoreColorHigh: #fd9800;
+   --impactScoreColorCritical: #fe0000;
+   --nnOrange: #ea650d;
+}
+
+body {
+   margin: 0;
+   font-family: var(--appFontFamily);
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+   width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+   background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+   background: rgba(234, 101, 13, 0.25);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+   background: var(--titleBackground);
+}
+
+code {
+   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+>>>>>>> development
 }

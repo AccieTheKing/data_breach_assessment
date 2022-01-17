@@ -39,6 +39,20 @@ footer#app-footer .button-container button:last-child:hover {
    background: #fff;
 }
 
+<<<<<<< HEAD
+=======
+footer#app-footer #result-page-footer button:first-child {
+   background: #fff;
+   color: var(--nnOrange);
+   border: solid 1px var(--nnOrange);
+}
+
+footer#app-footer #result-page-footer button:first-child:hover {
+   background: var(--nnOrange);
+   color: #fff;
+}
+
+>>>>>>> development
 @media (max-width: 767px) {
    footer#app-footer .button-container {
       justify-content: center;

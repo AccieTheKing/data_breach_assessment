@@ -4,7 +4,11 @@ import { RecoilRoot } from 'recoil';
 import './App.css';
 import Draftpage from './components/draftpage/draftpage';
 import Historypage from './components/historypage/historypage';
+<<<<<<< HEAD
 import Aboutpage from './components/homepage/About.page';
+=======
+import Aboutpage from './components/aboutpage/aboutpage';
+>>>>>>> development
 import Homepage from './components/homepage/Home.page';
 import Questionairpage from './components/questionairpage/Questionair.page';
 import Resultpage from './components/resultpage/Result.page';
@@ -34,6 +38,10 @@ function App() {
                         <Route path="/" element={<Homepage />} />
                         <Route path="/about" element={<Aboutpage />} />
                         <Route path="/history" element={<Historypage />} />
+<<<<<<< HEAD
+=======
+                        <Route path="/history/:id" element={<Resultpage />} />
+>>>>>>> development
                         <Route path="/start" element={<Questionairpage />} />
                         <Route path="/draft" element={<Draftpage />} />
                         <Route path="/result" element={<Resultpage />} />

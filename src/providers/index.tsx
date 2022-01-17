@@ -3,9 +3,18 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IQuestion, QuestionTypes } from '../components/question/interactive.questionaire.component';
+<<<<<<< HEAD
 import getCurrentAssessment, { assessmentImpactNumberState } from '../recoil/assessment';
 import { assessmentScore, ASSESSMENT_SCORE_TYPE, IAssessmentDetailState } from '../recoil/assessment';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../recoil/question/answer';
+=======
+import getCurrentAssessment, {
+   assessmentImpactNumberState,
+   enableCalculationButtonState,
+} from '../providers/assessment';
+import { assessmentScore, ASSESSMENT_SCORE_TYPE, IDatabreachAssessment } from '../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../providers/question/answer';
+>>>>>>> development
 import {
    ciaQuestionState,
    currentCiaTypeState,
@@ -14,8 +23,13 @@ import {
    QUESTIONNAIR_STATE,
    typedQuestionState,
    untypedQuestionState,
+<<<<<<< HEAD
 } from '../recoil/question/atom';
 import { currentQuestionState, getCurrentQuestionTypeState } from '../recoil/question/selector';
+=======
+} from '../providers/question/atom';
+import { currentQuestionState, getCurrentQuestionTypeState } from '../providers/question/selector';
+>>>>>>> development
 
 /**
  * This component will be wrapped around the whole app in order to make the functions inside it
@@ -38,9 +52,16 @@ const AppProvider: React.FC = ({ children }) => {
    const questionTypesDictionary = useRecoilValue(getCurrentQuestionTypeState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+<<<<<<< HEAD
    const currentAssessment = useRecoilValue<IAssessmentDetailState>(getCurrentAssessment);
    const [currentAssessmentScore, setCurrentAssessmetScore] =
       useRecoilState<{ [key: string]: number }>(assessmentScore);
+=======
+   const currentAssessment = useRecoilValue<IDatabreachAssessment>(getCurrentAssessment);
+   const [currentAssessmentScore, setCurrentAssessmetScore] =
+      useRecoilState<{ [key: string]: number }>(assessmentScore);
+   const [enableCalcButton, setEnableCalcButton] = useRecoilState<boolean>(enableCalculationButtonState);
+>>>>>>> development
    const [currentCiaType, setCurrentCiaType] = useRecoilState<string>(currentCiaTypeState);
    const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(currentQuestionTypeState);
    const ref = useRef<ICurrentAssessmentAnswers[]>();
@@ -95,7 +116,12 @@ const AppProvider: React.FC = ({ children }) => {
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
          case QUESTIONNAIR_STATE.CALCULATE:
+<<<<<<< HEAD
             console.log('End of the questionaire');
+=======
+            // console.log('End of the questionaire');
+            setEnableCalcButton(true);
+>>>>>>> development
             onCalcuateAssessment();
             break;
       }
@@ -118,10 +144,23 @@ const AppProvider: React.FC = ({ children }) => {
       return '';
    };
 
+<<<<<<< HEAD
    const onFindQuestionValue = (questionID: number, answer: boolean | string): number => {
       const key = answer ? 'yes' : 'no'; // transform true to yes and false to no
       let question = allQuestions.find((el) => el.id === questionID) as IQuestion;
 
+=======
+   const onFindQuestionValue = (questionID: number, answer: boolean | string, eoi?: boolean): number => {
+      const key = answer ? 'yes' : 'no'; // transform true to yes and false to no
+      let question = allQuestions.find((el) => el.id === questionID) as IQuestion;
+
+      if (eoi) {
+         const key = answer.toString();
+         const newValue = question.weight![key].value;
+         return newValue;
+      }
+
+>>>>>>> development
       if (!question) {
          const allQuestions = ciaQuestions.flatMap((el) => el.questions);
          question = allQuestions.find((el) => el?.id === questionID) as IQuestion;
@@ -135,7 +174,11 @@ const AppProvider: React.FC = ({ children }) => {
       const answers = assessmentAnswers;
       let resetted_scores: { [key: string]: number } = {
          [ASSESSMENT_SCORE_TYPE.simple]: 0,
+<<<<<<< HEAD
          [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
+=======
+         [ASSESSMENT_SCORE_TYPE.behavioural]: 0,
+>>>>>>> development
          [ASSESSMENT_SCORE_TYPE.financial]: 0,
          [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
          [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,
@@ -147,11 +190,19 @@ const AppProvider: React.FC = ({ children }) => {
 
       answers.forEach((el) => {
          const type = onFindQuestionType(el.id);
+<<<<<<< HEAD
          const value = onFindQuestionValue(el.id, el.answer);
          const previousValue = resetted_scores[type];
          resetted_scores = {
             ...resetted_scores,
             [type]: previousValue + value,
+=======
+         const newValue = onFindQuestionValue(el.id, el.answer, typeof el.answer === 'string');
+         const oldValue = resetted_scores[type];
+         resetted_scores = {
+            ...resetted_scores,
+            [type]: oldValue + newValue,
+>>>>>>> development
          };
       });
       setCurrentAssessmetScore(resetted_scores);
@@ -170,7 +221,10 @@ const AppProvider: React.FC = ({ children }) => {
             highest_score = value;
          }
       }
+<<<<<<< HEAD
       console.log(all_score_objects);
+=======
+>>>>>>> development
 
       // Trying to apply formula, but not sure about the mitigating circumstances part
       const [_, ease_oi_value] = all_score_objects[4];
@@ -196,7 +250,11 @@ const AppProvider: React.FC = ({ children }) => {
    useEffect(() => {
       // Get current question
       let current_question = currentQuestion;
+<<<<<<< HEAD
 
+=======
+      if (enableCalcButton) setEnableCalcButton(false); // is only true when the user has answered all questions
+>>>>>>> development
       const onInitCiaQuestions = (nextCategory: string) => {
          const firstCiaQuestion = ciaQuestions[0];
          if (
