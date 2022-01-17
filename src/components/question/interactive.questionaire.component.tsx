@@ -1,14 +1,28 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+<<<<<<< HEAD
 import { assessmentTypeScoreState } from '../../recoil/assessment';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../recoil/question/answer';
 import { currentQuestionTypeState, typedQuestionState } from '../../recoil/question/atom';
 import { currentQuestionState } from '../../recoil/question/selector';
+=======
+import { assessmentTypeScoreState } from '../../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
+import { currentQuestionTypeState, typedQuestionState } from '../../providers/question/atom';
+import { currentQuestionState } from '../../providers/question/selector';
+import { InfoIcon } from '@primer/octicons-react';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+>>>>>>> development
 import './style.css';
 
 export interface QuestionTypes {
    type: string;
    questions: Array<IQuestion>;
+<<<<<<< HEAD
+=======
+   description?: string;
+>>>>>>> development
 }
 
 export interface IQuestion {
@@ -35,6 +49,10 @@ interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
    score: number;
+<<<<<<< HEAD
+=======
+   description: string | undefined;
+>>>>>>> development
    currentQuestionType: string;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
@@ -55,6 +73,33 @@ interface ISpecialQuestions {
    onAction: (value: IQuestionAnswer) => void;
 }
 
+<<<<<<< HEAD
+=======
+function formatDesciption(type: string, description: string) {
+   const list = description.split('*');
+   const aboutPageLink = type.split(' ').join('_').toLowerCase();
+
+   return (
+      <div className="question_detail_body">
+         {list.length > 1 ? (
+            <ul>
+               {list.map((el, i) => {
+                  if (i === 0 || i === el.length - 1) return '';
+                  return <li key={i}>{el}</li>;
+               })}
+            </ul>
+         ) : (
+            <p>{description}</p>
+         )}
+         <p>
+            For more information regarding the questions go to the{' '}
+            <Link to={`/about#${aboutPageLink}`}>About</Link> page
+         </p>
+      </div>
+   );
+}
+
+>>>>>>> development
 const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    value,
    interactive,
@@ -91,7 +136,12 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
       >
          <div className="col-12">
             <div>
+<<<<<<< HEAD
                <div className="question_wrap">
+=======
+               <div className="question_wrap wrap">
+                  <span className="question_number_wrap ">{questionId}. </span>
+>>>>>>> development
                   <p className="m-0">{questionTitle}</p>
                </div>
                <div className="eoi_container">
@@ -227,6 +277,10 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
+<<<<<<< HEAD
+=======
+   description,
+>>>>>>> development
    score,
    interactive,
    currentQuestion,
@@ -269,6 +323,24 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                aria-expanded="false"
                aria-controls={`collapse${id}`}
             >
+<<<<<<< HEAD
+=======
+               <OverlayTrigger
+                  key={id}
+                  placement={'top'}
+                  trigger={'click'}
+                  overlay={
+                     <Popover id={`popover-positioned-top`}>
+                        <Popover.Header as="h3">{`${type}`}</Popover.Header>
+                        <Popover.Body>{description && formatDesciption(type, description)}</Popover.Body>
+                     </Popover>
+                  }
+               >
+                  <span>
+                     <InfoIcon size={24} />
+                  </span>
+               </OverlayTrigger>
+>>>>>>> development
                {id + 1}. {type} | {score}
             </button>
          </h2>
@@ -418,6 +490,7 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
+<<<<<<< HEAD
          {/* This is just for demonstration purposes */}
          {/* {assessmentAnswers.map((question, index) => (
             <div key={index}>
@@ -425,11 +498,17 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
                <span>{JSON.stringify(question.answer)}</span>
             </div>
          ))} */}
+=======
+>>>>>>> development
          {typedQuestions.map((el, id) => (
             <QuestionItemContainer
                key={id}
                id={id}
                score={assessmentTypeScores[id]}
+<<<<<<< HEAD
+=======
+               description={el.description}
+>>>>>>> development
                type={el.type}
                questions={el.questions}
                interactive={interactive}

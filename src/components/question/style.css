@@ -15,6 +15,23 @@
    overflow: hidden;
 }
 
+<<<<<<< HEAD
+=======
+#breachassessmetcontainer .accordion-button {
+   font-size: 0.8em;
+   background: #f1edeb;
+}
+
+#breachassessmetcontainer .accordion-button span {
+   display: flex;
+   margin-right: 1em;
+}
+
+#breachassessmetcontainer .accordion-button span svg {
+   fill: var(--nnOrange);
+}
+
+>>>>>>> development
 #breachassessmetcontainer .accordion-item.focus_dropdown_true {
    border: solid 2px var(--nnOrange);
 }
@@ -74,6 +91,13 @@
    margin-right: 5px;
 }
 
+<<<<<<< HEAD
+=======
+#breachassessmetcontainer .accordion-item .question_wrap.wrap {
+   display: flex;
+}
+
+>>>>>>> development
 #breachassessmetcontainer .accordion-item .question_wrap strong {
    display: block;
    font-size: calc(var(--appFontSize) + 0.3em);
@@ -103,6 +127,14 @@
    opacity: 1 !important;
 }
 
+<<<<<<< HEAD
+=======
+.question_detail_body {
+   max-height: 200px;
+   overflow-y: scroll;
+}
+
+>>>>>>> development
 /* Ease of indentification */
 .eoi_container {
    display: flex;

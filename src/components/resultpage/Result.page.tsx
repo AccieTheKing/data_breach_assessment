@@ -1,13 +1,31 @@
+<<<<<<< HEAD
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import getCurrentAssessment from '../../recoil/assessment';
 import { dataBreachDateState } from '../../recoil/assessment';
 import assessorState from '../../recoil/assessor';
+=======
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { getAssessmentById } from '../../api';
+import getCurrentAssessment, {
+   assessmentDateState,
+   assessmentImpactNumberState,
+   assessmentIncidentNumberState,
+   assessmentNoteState,
+   ASSESSMENT_IMPACT_TITLE,
+   resultTextState,
+} from '../../providers/assessment';
+import assessorState from '../../providers/assessor';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
+>>>>>>> development
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
 import InteractiveQuestionary from '../question/interactive.questionaire.component';
 import './styles.css';
 
+<<<<<<< HEAD
 enum ASSESSMENT_IMPACT_TITLE {
    NONE = 'NONE',
    LOW = 'LOW',
@@ -23,6 +41,37 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
 
    switch (true) {
       case SL <= 0:
+=======
+const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, score }) => {
+   return (
+      <div className={`impact_card card border_${title}`}>
+         <div className="impact_score_container">
+            <div className={`impact_score score_${title}`}>{score}</div>
+         </div>
+         <h2 className="impact_title">{title}</h2>
+      </div>
+   );
+};
+
+const Resultpage: React.FC = () => {
+   // Set the values of the selected assessment
+   const params = useParams<{ id: string }>();
+   const setAnswers = useSetRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+   const setAssessmentDate = useSetRecoilState<string>(assessmentDateState);
+   const setAssessmentNote = useSetRecoilState<string>(assessmentNoteState);
+   const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
+   const setImpactNumber = useSetRecoilState<number>(assessmentImpactNumberState);
+   const currentAssessment = useRecoilValue(getCurrentAssessment);
+   const [assessor, setAssessorData] = useRecoilState(assessorState);
+   const setResultText = useSetRecoilState(resultTextState);
+   // based on the score decide what value to show
+   let title = '';
+   let SL = currentAssessment.impactScore;
+
+   switch (true) {
+      case SL <= 0:
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+>>>>>>> development
          title = ASSESSMENT_IMPACT_TITLE.NONE;
          break;
       case SL > 0 && SL < 2:
@@ -39,6 +88,7 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
          break;
    }
 
+<<<<<<< HEAD
    return (
       <div className="impact_card card">
          <div className="impact_score_container">
@@ -53,6 +103,51 @@ const Resultpage: React.FC = () => {
    const currentAssessment = useRecoilValue(getCurrentAssessment);
    const currentAssessmentDatabreachData = useRecoilValue(dataBreachDateState);
    const assessor = useRecoilValue(assessorState);
+=======
+   useEffect(() => {
+      setResultText(title);
+
+      const onGetAssessment = async (id: number) => {
+         const result = await getAssessmentById(id);
+
+         if (result?.data) {
+            const assessment = result.data;
+
+            const answers: Array<ICurrentAssessmentAnswers> = assessment.answers!.map((el) => {
+               const transfer_answer =
+                  el.answer_text === 'true' ? true : el.answer_text === 'false' ? false : el.answer_text;
+               return { id: parseInt(el.question_number), answer: transfer_answer };
+            });
+
+            setAnswers(answers);
+            setAssessmentDate(assessment.assessmentDate);
+            setIncidentNumber(assessment.incidentNr);
+            setImpactNumber(assessment.resultNumber);
+            setAssessorData({
+               firstName: assessment.assessor.firstName,
+               lastName: assessment.assessor.lastName,
+            });
+            // console.log(assessment);
+            if (assessment.note && assessment.note.length > 0) {
+               setAssessmentNote(assessment.note[0].notesText);
+            }
+         }
+      };
+      if (params && params.id) {
+         onGetAssessment(parseInt(params.id));
+      }
+   }, [
+      params,
+      setAnswers,
+      setAssessmentDate,
+      setAssessmentNote,
+      setAssessorData,
+      setImpactNumber,
+      setIncidentNumber,
+      setResultText,
+      title,
+   ]);
+>>>>>>> development
 
    return (
       <>
@@ -65,14 +160,26 @@ const Resultpage: React.FC = () => {
             </div>
             <div className="row">
                <div className="col-12 col-lg-8 offset-lg-2">
+<<<<<<< HEAD
                   <ImpactScoreVisual score={currentAssessment.impactScore} />
+=======
+                  <ImpactScoreVisual score={SL} title={title} />
+>>>>>>> development
                </div>
             </div>
             <div className="row">
                <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
                      <p>Assessment number: {currentAssessment.incidentNumber}</p>
+<<<<<<< HEAD
                      <p>Assessment date: {currentAssessmentDatabreachData}</p>
+=======
+                     <p>
+                        Assessment date:{' '}
+                        {currentAssessment.dataBreachDate &&
+                           new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
+                     </p>
+>>>>>>> development
                      <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
                      <p>Result: {`${currentAssessment.impactScore}`}</p>
                   </div>
@@ -80,6 +187,25 @@ const Resultpage: React.FC = () => {
             </div>
          </header>
          <main className="container">
+<<<<<<< HEAD
+=======
+            {currentAssessment.notes.length > 0 && (
+               <div className="row mb-2">
+                  <div className="col-12">
+                     <div className="note-group">
+                        <label htmlFor="note">Note</label>
+                        <textarea
+                           className="form-control"
+                           id="note"
+                           rows={3}
+                           value={currentAssessment.notes}
+                           readOnly
+                        />
+                     </div>
+                  </div>
+               </div>
+            )}
+>>>>>>> development
             <div className="row">
                <div className="col-12">
                   <InteractiveQuestionary interactive={true} />
