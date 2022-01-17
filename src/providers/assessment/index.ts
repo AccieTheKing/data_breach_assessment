@@ -17,7 +17,7 @@ export interface IDatabreachAssessment {
 // Titles have to match the keys in json file
 export enum ASSESSMENT_SCORE_TYPE {
    simple = 'Simple data',
-   behavioral = 'Behavioral data',
+   behavioural = 'Behavioural data',
    financial = 'Financial data',
    sensitive = 'Sensitive data',
    ease_of_identification = 'Ease of identification',
@@ -35,7 +35,7 @@ export enum ASSESSMENT_IMPACT_TITLE {
 
 export const default_score_data: { [key: string]: number } = {
    [ASSESSMENT_SCORE_TYPE.simple]: 0,
-   [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
+   [ASSESSMENT_SCORE_TYPE.behavioural]: 0,
    [ASSESSMENT_SCORE_TYPE.financial]: 0,
    [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
    [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,

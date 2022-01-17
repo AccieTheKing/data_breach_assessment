@@ -146,7 +146,7 @@ const AppProvider: React.FC = ({ children }) => {
       const answers = assessmentAnswers;
       let resetted_scores: { [key: string]: number } = {
          [ASSESSMENT_SCORE_TYPE.simple]: 0,
-         [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
+         [ASSESSMENT_SCORE_TYPE.behavioural]: 0,
          [ASSESSMENT_SCORE_TYPE.financial]: 0,
          [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
          [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,

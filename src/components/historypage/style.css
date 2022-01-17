@@ -30,6 +30,10 @@
    border-color: #fe0000;
 }
 
+.border_INSIGNIFICANT {
+   border-color: #6966663b;
+}
+
 .card-text {
    font-weight: bold;
 }
@@ -75,6 +79,11 @@
    height: 2em;
 }
 
+.score_INSIGNIFICANT {
+   background-color: #6966663b;
+   height: 2em;
+}
+
 #dropdownMenuButton1 {
    background-color: #f1edeb;
 }
@@ -90,7 +99,7 @@
 
 .btn-filter {
    background-color: #f1edeb;
-   outline: 1px solid ; 
+   outline: 1px solid;
    width: 90%;
    padding: 3px;
 }
@@ -105,16 +114,14 @@
 }
 
 .input-group-text {
-   background-color:#f1edeb
+   background-color: #f1edeb;
 }
 
 .btn-search {
-   color:white;
+   color: white;
    background-color: gray;
 }
 
 .form-control {
-   border-radius: 0px 4px 4px 0px
+   border-radius: 0px 4px 4px 0px;
 }
-
-
