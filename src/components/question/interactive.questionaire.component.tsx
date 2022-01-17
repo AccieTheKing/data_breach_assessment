@@ -1,14 +1,18 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { assessmentTypeScoreState } from '../../recoil/assessment';
-import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../recoil/question/answer';
-import { currentQuestionTypeState, typedQuestionState } from '../../recoil/question/atom';
-import { currentQuestionState } from '../../recoil/question/selector';
+import { assessmentTypeScoreState } from '../../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
+import { currentQuestionTypeState, typedQuestionState } from '../../providers/question/atom';
+import { currentQuestionState } from '../../providers/question/selector';
+import { InfoIcon } from '@primer/octicons-react';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 export interface QuestionTypes {
    type: string;
    questions: Array<IQuestion>;
+   description?: string;
 }
 
 export interface IQuestion {
@@ -35,6 +39,7 @@ interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
    score: number;
+   description: string | undefined;
    currentQuestionType: string;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
@@ -53,6 +58,30 @@ interface ISpecialQuestions {
    interactive: boolean;
    showQuestion: (value: number) => boolean;
    onAction: (value: IQuestionAnswer) => void;
+}
+
+function formatDesciption(type: string, description: string) {
+   const list = description.split('*');
+   const aboutPageLink = type.split(' ').join('_').toLowerCase();
+
+   return (
+      <div className="question_detail_body">
+         {list.length > 1 ? (
+            <ul>
+               {list.map((el, i) => {
+                  if (i === 0 || i === el.length - 1) return '';
+                  return <li key={i}>{el}</li>;
+               })}
+            </ul>
+         ) : (
+            <p>{description}</p>
+         )}
+         <p>
+            For more information regarding the questions go to the{' '}
+            <Link to={`/about#${aboutPageLink}`}>About</Link> page
+         </p>
+      </div>
+   );
 }
 
 const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
@@ -91,7 +120,8 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
       >
          <div className="col-12">
             <div>
-               <div className="question_wrap">
+               <div className="question_wrap wrap">
+                  <span className="question_number_wrap ">{questionId}. </span>
                   <p className="m-0">{questionTitle}</p>
                </div>
                <div className="eoi_container">
@@ -227,6 +257,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
+   description,
    score,
    interactive,
    currentQuestion,
@@ -269,6 +300,21 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                aria-expanded="false"
                aria-controls={`collapse${id}`}
             >
+               <OverlayTrigger
+                  key={id}
+                  placement={'top'}
+                  trigger={'click'}
+                  overlay={
+                     <Popover id={`popover-positioned-top`}>
+                        <Popover.Header as="h3">{`${type}`}</Popover.Header>
+                        <Popover.Body>{description && formatDesciption(type, description)}</Popover.Body>
+                     </Popover>
+                  }
+               >
+                  <span>
+                     <InfoIcon size={24} />
+                  </span>
+               </OverlayTrigger>
                {id + 1}. {type} | {score}
             </button>
          </h2>
@@ -418,18 +464,12 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {/* This is just for demonstration purposes */}
-         {/* {assessmentAnswers.map((question, index) => (
-            <div key={index}>
-               <span>{question.id}</span>
-               <span>{JSON.stringify(question.answer)}</span>
-            </div>
-         ))} */}
          {typedQuestions.map((el, id) => (
             <QuestionItemContainer
                key={id}
                id={id}
                score={assessmentTypeScores[id]}
+               description={el.description}
                type={el.type}
                questions={el.questions}
                interactive={interactive}

@@ -3,9 +3,12 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IQuestion, QuestionTypes } from '../components/question/interactive.questionaire.component';
-import getCurrentAssessment, { assessmentImpactNumberState } from '../recoil/assessment';
-import { assessmentScore, ASSESSMENT_SCORE_TYPE, IAssessmentDetailState } from '../recoil/assessment';
-import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../recoil/question/answer';
+import getCurrentAssessment, {
+   assessmentImpactNumberState,
+   enableCalculationButtonState,
+} from '../providers/assessment';
+import { assessmentScore, ASSESSMENT_SCORE_TYPE, IDatabreachAssessment } from '../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../providers/question/answer';
 import {
    ciaQuestionState,
    currentCiaTypeState,
@@ -14,8 +17,8 @@ import {
    QUESTIONNAIR_STATE,
    typedQuestionState,
    untypedQuestionState,
-} from '../recoil/question/atom';
-import { currentQuestionState, getCurrentQuestionTypeState } from '../recoil/question/selector';
+} from '../providers/question/atom';
+import { currentQuestionState, getCurrentQuestionTypeState } from '../providers/question/selector';
 
 /**
  * This component will be wrapped around the whole app in order to make the functions inside it
@@ -38,9 +41,10 @@ const AppProvider: React.FC = ({ children }) => {
    const questionTypesDictionary = useRecoilValue(getCurrentQuestionTypeState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const assessmentAnswers = useRecoilValue<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
-   const currentAssessment = useRecoilValue<IAssessmentDetailState>(getCurrentAssessment);
+   const currentAssessment = useRecoilValue<IDatabreachAssessment>(getCurrentAssessment);
    const [currentAssessmentScore, setCurrentAssessmetScore] =
       useRecoilState<{ [key: string]: number }>(assessmentScore);
+   const [enableCalcButton, setEnableCalcButton] = useRecoilState<boolean>(enableCalculationButtonState);
    const [currentCiaType, setCurrentCiaType] = useRecoilState<string>(currentCiaTypeState);
    const [currentQuestionType, setCurrentQuestionType] = useRecoilState<string>(currentQuestionTypeState);
    const ref = useRef<ICurrentAssessmentAnswers[]>();
@@ -95,7 +99,8 @@ const AppProvider: React.FC = ({ children }) => {
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
          case QUESTIONNAIR_STATE.CALCULATE:
-            console.log('End of the questionaire');
+            // console.log('End of the questionaire');
+            setEnableCalcButton(true);
             onCalcuateAssessment();
             break;
       }
@@ -118,9 +123,15 @@ const AppProvider: React.FC = ({ children }) => {
       return '';
    };
 
-   const onFindQuestionValue = (questionID: number, answer: boolean | string): number => {
+   const onFindQuestionValue = (questionID: number, answer: boolean | string, eoi?: boolean): number => {
       const key = answer ? 'yes' : 'no'; // transform true to yes and false to no
       let question = allQuestions.find((el) => el.id === questionID) as IQuestion;
+
+      if (eoi) {
+         const key = answer.toString();
+         const newValue = question.weight![key].value;
+         return newValue;
+      }
 
       if (!question) {
          const allQuestions = ciaQuestions.flatMap((el) => el.questions);
@@ -135,7 +146,7 @@ const AppProvider: React.FC = ({ children }) => {
       const answers = assessmentAnswers;
       let resetted_scores: { [key: string]: number } = {
          [ASSESSMENT_SCORE_TYPE.simple]: 0,
-         [ASSESSMENT_SCORE_TYPE.behavioral]: 0,
+         [ASSESSMENT_SCORE_TYPE.behavioural]: 0,
          [ASSESSMENT_SCORE_TYPE.financial]: 0,
          [ASSESSMENT_SCORE_TYPE.sensitive]: 0,
          [ASSESSMENT_SCORE_TYPE.ease_of_identification]: 0,
@@ -147,11 +158,11 @@ const AppProvider: React.FC = ({ children }) => {
 
       answers.forEach((el) => {
          const type = onFindQuestionType(el.id);
-         const value = onFindQuestionValue(el.id, el.answer);
-         const previousValue = resetted_scores[type];
+         const newValue = onFindQuestionValue(el.id, el.answer, typeof el.answer === 'string');
+         const oldValue = resetted_scores[type];
          resetted_scores = {
             ...resetted_scores,
-            [type]: previousValue + value,
+            [type]: oldValue + newValue,
          };
       });
       setCurrentAssessmetScore(resetted_scores);
@@ -170,7 +181,6 @@ const AppProvider: React.FC = ({ children }) => {
             highest_score = value;
          }
       }
-      console.log(all_score_objects);
 
       // Trying to apply formula, but not sure about the mitigating circumstances part
       const [_, ease_oi_value] = all_score_objects[4];
@@ -196,7 +206,7 @@ const AppProvider: React.FC = ({ children }) => {
    useEffect(() => {
       // Get current question
       let current_question = currentQuestion;
-
+      if (enableCalcButton) setEnableCalcButton(false); // is only true when the user has answered all questions
       const onInitCiaQuestions = (nextCategory: string) => {
          const firstCiaQuestion = ciaQuestions[0];
          if (

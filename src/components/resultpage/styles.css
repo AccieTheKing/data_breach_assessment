@@ -15,6 +15,13 @@ header h1 {
    margin-bottom: 25px;
 }
 
+<<<<<<< HEAD
+=======
+header h2 {
+   color: #000;
+}
+
+>>>>>>> development
 .impact_card.card {
    display: flex;
    flex-direction: row;

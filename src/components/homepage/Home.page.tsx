@@ -1,17 +1,18 @@
-import { useForm } from 'react-hook-form';
+import Navbar from '../Navbar/Nav';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { assessmentIncidentNumberState, dataBreachDateState } from '../../recoil/assessment';
-import assessorState, { IAssessor } from '../../recoil/assessor';
-import Navbar from '../Navbar/Nav';
-import './About.page';
+import { assessmentIncidentNumberState, dataBreachDateState } from '../../providers/assessment';
+import assessorState, { IAssessor } from '../../providers/assessor';
+import { useForm } from 'react-hook-form';
 import './style.css';
 
 const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
-   const [incidentNumber, setIncidentNumber] = useRecoilState<string>(assessmentIncidentNumberState);
-   const [dataBreachDate, setDataBreachDate] = useRecoilState<string>(dataBreachDateState);
+   const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
+   const [incidentNumber, setIncidentNumber] = useRecoilState<string | undefined>(
+      assessmentIncidentNumberState
+   );
 
    const {
       register,
@@ -42,7 +43,9 @@ const Homepage = () => {
                         placeholder="Enter first name"
                         aria-label="First name"
                      />
-                     {errors.firstName?.type === 'required' && 'First name is required'}
+                     {errors.firstName?.type === 'required' && (
+                        <p className="required">First name is required</p>
+                     )}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
@@ -62,22 +65,35 @@ const Homepage = () => {
                         placeholder="Enter last name"
                         aria-label="Last name"
                      />
-                     {errors.lastName?.type === 'required' && 'Last name is required'}
+                     {errors.lastName?.type === 'required' && (
+                        <p className="required">Last name is required</p>
+                     )}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
                   <b className="bPos">Incident number</b>
                   <div>
                      <input
-                        {...register('incidentNumber', { required: true })}
+                        {...register('incidentNumber', {
+                           required: true,
+                           pattern: {
+                              value: /^(?:([A-Z]{2})_([0-9]{6}))$/g,
+                              message: '⚠ Wrong format used for incident number!',
+                           },
+                        })}
                         onChange={(e) => setIncidentNumber(e.target.value)}
                         type="text"
-                        value={incidentNumber}
+                        value={incidentNumber ? incidentNumber : ''}
                         className="form-control"
                         placeholder="Enter incident number"
                         aria-label="Incident number"
                      />
-                     {errors.incidentNumber?.type === 'required' && 'Incident number is required'}
+                     {errors.incidentNumber?.type === 'required' && (
+                        <p className="required">Incident number is required</p>
+                     )}
+                     {errors.incidentNumber?.message && (
+                        <p className="required">{errors.incidentNumber?.message}</p>
+                     )}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
@@ -92,9 +108,11 @@ const Homepage = () => {
                         type="date"
                         id="formFile"
                         onChange={(e) => setDataBreachDate(e.target.value)}
-                        value={dataBreachDate}
+                        value={dataBreachDate ?? ''}
                      />
-                     {errors.dataBreachDate?.type === 'required' && 'Data breach date is required'}
+                     {errors.dataBreachDate?.type === 'required' && (
+                        <p className="required">Data breach date is required</p>
+                     )}
                   </div>
                </div>
 
