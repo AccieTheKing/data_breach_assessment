@@ -136,6 +136,22 @@ const Resultpage: React.FC = () => {
             </div>
          </header>
          <main className="container">
+            {currentAssessment.notes.length > 0 && (
+               <div className="row mb-2">
+                  <div className="col-12">
+                     <div className="note-group">
+                        <label htmlFor="note">Note</label>
+                        <textarea
+                           className="form-control"
+                           id="note"
+                           rows={3}
+                           value={currentAssessment.notes}
+                           readOnly
+                        />
+                     </div>
+                  </div>
+               </div>
+            )}
             <div className="row">
                <div className="col-12">
                   <InteractiveQuestionary interactive={true} />

@@ -88,6 +88,10 @@
    margin-right: 5px;
 }
 
+#breachassessmetcontainer .accordion-item .question_wrap.wrap {
+   display: flex;
+}
+
 #breachassessmetcontainer .accordion-item .question_wrap strong {
    display: block;
    font-size: calc(var(--appFontSize) + 0.3em);
@@ -115,6 +119,11 @@
 #breachassessmetcontainer .show_question .question_wrap p,
 #breachassessmetcontainer .show_question label {
    opacity: 1 !important;
+}
+
+.question_detail_body {
+   max-height: 200px;
+   overflow-y: scroll;
 }
 
 /* Ease of indentification */

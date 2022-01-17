@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../Navbar/Nav';
 import './style.css';
 
 const Aboutpage = () => {
+   const location = useLocation();
+
    function activeClass(e: any) {
       const active = document.querySelector('#side a.active')!;
       if (active !== null) {
@@ -10,6 +13,15 @@ const Aboutpage = () => {
       }
       e.target.className = 'active';
    }
+
+   function scrollFunction(id: string) {
+      const el = document.querySelector(id);
+      el && el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+   }
+
+   useEffect(() => {
+      if (location.hash) scrollFunction(location.hash);
+   }, [location]);
 
    return (
       <div>
@@ -22,16 +34,16 @@ const Aboutpage = () => {
             <a href="#assessor">&nbsp; • Assessor and date</a>
             <a href="#step2">Step 2</a>
             <a href="#data">&nbsp; • Data processing context</a>
-            <a href="#simpleData">&nbsp; • Simple data</a>
-            <a href="#behavorialData">&nbsp; • Behavioral data</a>
-            <a href="#financialData">&nbsp; • Financial data</a>
-            <a href="#sensitiveData">&nbsp; • Sensitive data</a>
+            <a href="#simple_data">&nbsp; • Simple data</a>
+            <a href="#behavioural_data">&nbsp; • Behavioural data</a>
+            <a href="#financial_data">&nbsp; • Financial data</a>
+            <a href="#sensitive_data">&nbsp; • Sensitive data</a>
             <a href="#step3">Step 3</a>
-            <a href="#eoi">&nbsp; • Ease of identification</a>
+            <a href="#ease_of_identification">&nbsp; • Ease of identification</a>
             <a href="#step4">Step 4</a>
-            <a href="#ac">&nbsp; • Aggravating circumstances</a>
+            <a href="#aggravating_circumstances_of_breach">&nbsp; • Aggravating circumstances</a>
             <a href="#step5">Step 5</a>
-            <a href="#mc"> Mitigating circumstances</a>
+            <a href="#mitigating_circumstances_of_breach">Mitigating circumstances</a>
          </div>
 
          <div className="content">
@@ -71,7 +83,7 @@ const Aboutpage = () => {
             calculations.
             <br></br>
             <br></br>
-            <h2 id="simpleData">Simple data</h2>
+            <h2 id="simple_data">Simple data</h2>
             <li>Biographical data (date of birth, gender, age ..)</li>
             <li>Contact details (telephone number, social media, e-mail address ..) </li>
             <li>Full name</li>
@@ -79,8 +91,7 @@ const Aboutpage = () => {
             <li>Familiy life (children, marriage, partner, siblings, parents .. )</li>
             <li>Professional experience</li>
             <br></br>
-            
-            <h2 id="behavorialData">Behavioral data</h2>
+            <h2 id="behavorial_data">Behavioral data</h2>
             <li>Location (IP-address, travel history)</li>
             <li>
                Traffic data (browsing activity, cookies, e-mail correspondence, telephone history, chat logs)
@@ -88,7 +99,7 @@ const Aboutpage = () => {
             <li>Data on personal preferences</li>
             <li>Data on habits (search behaviour, app usage and activity, purchase, complaints) </li>
             <br></br>
-            <h2 id="financialData">Financial data</h2>
+            <h2 id="financial_data">Financial data</h2>
             <li>Income</li>
             <li>Financial transactions </li>
             <li>Bank statements </li>
@@ -97,7 +108,7 @@ const Aboutpage = () => {
             <li>Invoices</li>
             <li>Social welfare data </li>
             <br></br>
-            <h2 id="sensitiveData">Sensitive data</h2>
+            <h2 id="sensitive_data">Sensitive data</h2>
             <li>Health data</li>
             <li>Political affiliation/opinion</li>
             <li>Racial or ethnic origin</li>
@@ -109,7 +120,7 @@ const Aboutpage = () => {
             <h1 id="step3" className="h1Style">
                Step 3
             </h1>
-            <h2 id="eoi">Ease of identification</h2>
+            <h2 id="ease_of_identification">Ease of identification</h2>
             This part of the assessment is to evaluate how easy it is to identify an individual based on the
             data in the breach. <br></br>
             Neglible is chosen if it is extremely difficult to match the data to a particular person, but

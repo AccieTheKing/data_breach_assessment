@@ -6,6 +6,7 @@ import { currentQuestionTypeState, typedQuestionState } from '../../providers/qu
 import { currentQuestionState } from '../../providers/question/selector';
 import { InfoIcon } from '@primer/octicons-react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 export interface QuestionTypes {
@@ -59,8 +60,28 @@ interface ISpecialQuestions {
    onAction: (value: IQuestionAnswer) => void;
 }
 
-function formatDesciption(description: string) {
-   return <div></div>;
+function formatDesciption(type: string, description: string) {
+   const list = description.split('*');
+   const aboutPageLink = type.split(' ').join('_').toLowerCase();
+
+   return (
+      <div className="question_detail_body">
+         {list.length > 1 ? (
+            <ul>
+               {list.map((el, i) => {
+                  if (i === 0 || i === el.length - 1) return '';
+                  return <li key={i}>{el}</li>;
+               })}
+            </ul>
+         ) : (
+            <p>{description}</p>
+         )}
+         <p>
+            For more information regarding the questions go to the{' '}
+            <Link to={`/about#${aboutPageLink}`}>About</Link> page
+         </p>
+      </div>
+   );
 }
 
 const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
@@ -99,7 +120,8 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
       >
          <div className="col-12">
             <div>
-               <div className="question_wrap">
+               <div className="question_wrap wrap">
+                  <span className="question_number_wrap ">{questionId}. </span>
                   <p className="m-0">{questionTitle}</p>
                </div>
                <div className="eoi_container">
@@ -285,7 +307,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                   overlay={
                      <Popover id={`popover-positioned-top`}>
                         <Popover.Header as="h3">{`${type}`}</Popover.Header>
-                        <Popover.Body>{description && formatDesciption(description)}</Popover.Body>
+                        <Popover.Body>{description && formatDesciption(type, description)}</Popover.Body>
                      </Popover>
                   }
                >
