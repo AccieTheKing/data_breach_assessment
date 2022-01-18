@@ -110,7 +110,7 @@ const Homepage = () => {
                         {...register('incidentNumber', {
                            required: true,
                            pattern: {
-                              value: /(LE)_[0-9]{6}/i,
+                              value: /^(?:(LE)_([0-9]{6}))$/i,
                               message: '⚠ Wrong format used for incident number!',
                            },
                         })}
