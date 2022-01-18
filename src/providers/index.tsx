@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IQuestion, QuestionTypes } from '../components/question/interactive.questionaire.component';
 import getCurrentAssessment, {
@@ -28,6 +29,8 @@ import { currentQuestionState, getCurrentQuestionTypeState } from '../providers/
  * @returns
  */
 const AppProvider: React.FC = ({ children }) => {
+   const location = useLocation();
+   const navigate = useNavigate();
    const { t } = useTranslation(); // for accessing the json files
    // Fetch the questions from the json file
    const questionTypes: Array<QuestionTypes> = t('dataBreachAssessmentQuestions', {
@@ -199,6 +202,12 @@ const AppProvider: React.FC = ({ children }) => {
       setTypedQuestions(questionTypes);
       setUntypedQuestions(allQuestions);
       setAllCiaQuestions(ciaQuestions);
+
+      // some route checking
+      if (!currentAssessment.assessor.firstName && location.pathname.includes('/start')) {
+         navigate('/');
+      }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
