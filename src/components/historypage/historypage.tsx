@@ -14,10 +14,12 @@ const ImpactScoreVisual: React.FC<{ title: string }> = ({ title }) => {
    );
 };
 
+//Historypage: Used to view all completed assessments.
 const Historypage = () => {
    const navigate = useNavigate();
    const [searchTerm, setSearchTerm] = useState('');
    const [usedData, setUsedData] = useState<Array<DB_Assessment>>([]);
+   const nullCheck = useRef<HTMLInputElement>(null);
    const lowCheck = useRef<HTMLInputElement>(null);
    const medCheck = useRef<HTMLInputElement>(null);
    const highCheck = useRef<HTMLInputElement>(null);
@@ -39,7 +41,7 @@ const Historypage = () => {
       navigate(`/history/${assessment.assessmentId}`);
    };
 
-   // search meachinism could also be implemented as a function
+   //search: For searching for different assessment attributes (search meachinism could also be implemented as a function)
    /*    function search () {
       const emptyArr: any = [];
       usedData.filter((val) => {
@@ -51,14 +53,17 @@ const Historypage = () => {
       }
    })} */
 
+   //filterResult: This function filters the previous ratings by their result (low, medium, high, critical).  This is done by looking at which checkbox was clicked in the drop-down menu. On this basis, the appropriate assessments are then output. Used as onClick function in the dropdown menu.
    function filterResult() {
       const map1 = new Map<HTMLInputElement | null, Array<DB_Assessment>>();
+      map1.set(nullCheck.current, filtInsignificant());
       map1.set(lowCheck.current, filtLow());
       map1.set(medCheck.current, filtMed());
       map1.set(highCheck.current, filtHigh());
       map1.set(critCheck.current, filtCrit());
 
       if (
+         nullCheck.current?.checked === false &&
          lowCheck.current?.checked === false &&
          medCheck.current?.checked === false &&
          highCheck.current?.checked === false &&
@@ -76,10 +81,21 @@ const Historypage = () => {
       }
    }
 
+   //clearState: This function clears the current state. This is used to restore all assessments after previously filtering. Is used in the course of the filter function.
    const clearState = () => {
       setUsedData(data.current);
    };
 
+
+   //filtInsignificant: Filters all assessments to get the assessments with the result "insignificant". Used in the filterResult function.
+   function filtInsignificant() {
+      const insignificant = data.current.filter(
+         (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.NONE
+      );
+      return insignificant
+   }
+
+   //filtLow: Filters all assessments to get the assessments with the result "low". Used in the filterResult function.
    function filtLow() {
       const low = data.current.filter(
          (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.LOW
@@ -87,18 +103,23 @@ const Historypage = () => {
       return low;
    }
 
+   //filtMed: Filters all assessments to get the assessments with the result "medium". Used in the filterResult function.
    function filtMed() {
       const med = data.current.filter(
          (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.MEDIUM
       );
       return med;
    }
+
+   //filtHigh: Filters all assessments to get the assessments with the result "high". Used in the filterResult function.
    function filtHigh() {
       const high = data.current.filter(
          (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.HIGH
       );
       return high;
    }
+
+   //filtCrit: Filters all assessments to get the assessments with the result "critical". Used in the filterResult function.
    function filtCrit() {
       const crit = data.current.filter(
          (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.CRITICAL
@@ -137,6 +158,22 @@ const Historypage = () => {
                      </svg>
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li>
+                        <div className="dropdown-item">
+                           <label htmlFor="checkbox_insignificant">
+                              <input
+                                 ref={nullCheck}
+                                 name="low"
+                                 className="form-check-input"
+                                 type="checkbox"
+                                 id="checkbox_low"
+                                 onChange={filtInsignificant}
+                                 value="insignificant"
+                              />
+                              &nbsp; Insignificant
+                           </label>
+                        </div>
+                     </li>
                      <li>
                         <div className="dropdown-item">
                            <label htmlFor="checkbox_low">

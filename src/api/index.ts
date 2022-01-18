@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ASSESSMENT_IMPACT_TITLE, IDatabreachAssessment } from '../providers/assessment';
 
-const database_url: string = 'http://localhost:8080';
+const database_url: string = 'https://7c43-62-194-76-72.ngrok.io';
 
 export interface DB_Assessment {
    assessmentId: number;
