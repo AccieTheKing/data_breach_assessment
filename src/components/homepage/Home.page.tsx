@@ -6,6 +6,8 @@ import assessorState, { IAssessor } from '../../providers/assessor';
 import { useForm } from 'react-hook-form';
 import './style.css';
 
+
+//Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);

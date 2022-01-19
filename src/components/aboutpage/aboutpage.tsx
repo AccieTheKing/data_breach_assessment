@@ -3,9 +3,10 @@ import { useLocation } from 'react-router-dom';
 import Navbar from '../Navbar/Nav';
 import './style.css';
 
+//Aboutpage: Serves for giving information and tips about the tool.
 const Aboutpage = () => {
-   const location = useLocation();
-
+    const location = useLocation();
+//activeClass: This function marks the selected step in the sidebar in orange. This is executed as an onClick function within the sidebar.
    function activeClass(e: any) {
       const active = document.querySelector('#side a.active')!;
       if (active !== null) {
