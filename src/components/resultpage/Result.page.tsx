@@ -8,6 +8,7 @@ import getCurrentAssessment, {
    assessmentIncidentNumberState,
    assessmentNoteState,
    ASSESSMENT_IMPACT_TITLE,
+   dataBreachDateState,
    resultTextState,
 } from '../../providers/assessment';
 import assessorState from '../../providers/assessor';
@@ -64,6 +65,7 @@ const Resultpage: React.FC = () => {
    const params = useParams<{ id: string }>();
    const setAnswers = useSetRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
    const setAssessmentDate = useSetRecoilState<string>(assessmentDateState);
+   const setDatabreachDate = useSetRecoilState<string | null>(dataBreachDateState);
    const setAssessmentNote = useSetRecoilState<string>(assessmentNoteState);
    const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
    const setImpactNumber = useSetRecoilState<number>(assessmentImpactNumberState);
@@ -76,7 +78,6 @@ const Resultpage: React.FC = () => {
 
    switch (true) {
       case SL <= 0:
-         // eslint-disable-next-line react-hooks/exhaustive-deps
          title = ASSESSMENT_IMPACT_TITLE.NONE;
          break;
       case SL > 0 && SL < 2:
@@ -114,13 +115,14 @@ const Resultpage: React.FC = () => {
 
             setAnswers(answers);
             setAssessmentDate(assessment.assessmentDate);
+            setDatabreachDate(assessment.databreachDate);
             setIncidentNumber(assessment.incidentNr);
             setImpactNumber(assessment.resultNumber);
             setAssessorData({
                firstName: assessment.assessor.firstName,
                lastName: assessment.assessor.lastName,
             });
-            // console.log(assessment);
+
             if (assessment.note && assessment.note.length > 0) {
                setAssessmentNote(assessment.note[0].notesText);
             }
@@ -151,11 +153,16 @@ const Resultpage: React.FC = () => {
                   <div className="assessor_info_container">
                      <p>Assessment number: {currentAssessment.incidentNumber}</p>
                      <p>
-                        Assessment date:{' '}
+                        Date of data breach:{' '}
                         {currentAssessment.dataBreachDate &&
                            new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
                      </p>
                      <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
+                     <p>
+                        Date of assessment:{' '}
+                        {currentAssessment.assessmentDate &&
+                           new Date(currentAssessment.assessmentDate).toLocaleDateString('nl')}
+                     </p>
                      <p>Result: {`${currentAssessment.impactScore}`}</p>
                   </div>
                </div>

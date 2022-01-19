@@ -34,6 +34,12 @@ footer#app-footer .button-container button:last-child {
    background: var(--nnOrange);
 }
 
+@media (max-width: 605px) {
+   footer#app-footer .button-container button:last-child {
+      font-size: 14px;
+   }
+}
+
 footer#app-footer .button-container button:last-child:hover {
    color: var(--nnOrange);
    background: #fff;
