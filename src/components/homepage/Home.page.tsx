@@ -14,6 +14,8 @@ import { useEffect } from 'react';
 import assessmentAnswersState from '../../providers/question/answer';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 
+
+//Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
    const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
