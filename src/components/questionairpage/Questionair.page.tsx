@@ -48,15 +48,12 @@ const Questionnairpage: React.FC = () => {
                         <h1>Data breach assessment</h1>
 
                         <p>
-                           Each dropdown is a category. You must answer all questions under each category to
-                           get the severity score.{' '}
-                           {/*If a question is left unanswered the assessment will be
-                           saved as a draft. */}
+                           Each dropdown must be answered to progress. For more information about the categories and how to perform an assessment, see the "about" page or click on the information icons on the dropdown-menus. 
                         </p>
                      </div>
                   </div>
                   <div className="row">
-                     <div className="col-12 col-lg-3">
+                     <div id="showNote" className="col-12 col-lg-3">
                         <button className="btn btn-showNote" onClick={() => setShowNote(!showNote)}>
                            {showNote ? 'Hide note' : 'Show note'}
                         </button>

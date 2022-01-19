@@ -18,7 +18,7 @@ const Aboutpage = () => {
 
    function scrollFunction(id: string) {
       const el = document.querySelector(id);
-      el && el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el && el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
    }
 
    useEffect(() => {
@@ -37,16 +37,16 @@ const Aboutpage = () => {
             <a href="#assessor">Step 1: Assessor and date</a>
 
             <a href="#data">Step 2: Data processing context</a>
-            <a href="#simpleData">&nbsp; • Simple data</a>
-            <a href="#behaviouralData">&nbsp; • Behavioural data</a>
-            <a href="#financialData">&nbsp; • Financial data</a>
-            <a href="#sensitiveData">&nbsp; • Sensitive data</a>
+            <a href="#simple_data">&nbsp; • Simple data</a>
+            <a href="#behavioural_data">&nbsp; • Behavioural data</a>
+            <a href="#financial_data">&nbsp; • Financial data</a>
+            <a href="#sensitive_data">&nbsp; • Sensitive data</a>
 
-            <a href="#eoi">Step 3: Ease of identification</a>
+            <a href="#ease_of_identification">Step 3: Ease of identification</a>
 
-            <a href="#ac">Step 4: Aggravating circumstances</a>
+            <a href="#aggravating_circumstances_of_breach">Step 4: Aggravating circumstances</a>
 
-            <a href="#mc">Step 5: Mitigating circumstances</a>
+            <a href="#mitigating_circumstances_of_breach">Step 5: Mitigating circumstances</a>
 
             <a href="#dc">Step 6: Draft or calculate score?</a>
 
@@ -133,7 +133,7 @@ const Aboutpage = () => {
             <li>Biometric data</li>
             <li>Sex life or sexual orientation</li>
 
-            <h1 id="eoi" className="h1Style">
+            <h1 id="ease_of_identification" className="h1Style">
                Step 3
             </h1>
             <h2 id="ease_of_identification">Ease of identification (EI)</h2>
@@ -156,7 +156,7 @@ const Aboutpage = () => {
                to the specific case of the breach.
             </p>
 
-            <h1 id="ac" className="h1Style">
+            <h1 id="aggravating_circumstances_of_breach" className="h1Style">
                Step 4
             </h1>
             <h2 id="aggravating_circumstances_of_breach">Aggravating circumstances of breach (CBa)</h2>
@@ -202,10 +202,10 @@ const Aboutpage = () => {
                />
             </p>
 
-            <h1 id="mc" className="h1Style">
+            <h1 id="mitigating_circumstances_of_breach" className="h1Style">
                Step 5
             </h1>
-            <h2 id="mitigating_circumstances_of_breach">Mitigating circumstances of breach (CBm)</h2>
+            <h2>Mitigating circumstances of breach (CBm)</h2>
             <p>
                The elements assessed under CBm are the specific circumstances of the breach and are custom
                made for NN Non-Life. These are complementary to DPC, EI, and CBa. The points obtained for each
