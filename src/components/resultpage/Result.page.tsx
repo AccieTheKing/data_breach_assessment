@@ -1,24 +1,25 @@
-import React from 'react';
-import { useRecoilValue } from 'recoil';
-import currentAssessmentDetailState, { dataBreachDateState } from '../../recoil/assessment';
-import assessorState from '../../recoil/assessor';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { getAssessmentById } from '../../api';
+import getCurrentAssessment, {
+   assessmentDateState,
+   assessmentImpactNumberState,
+   assessmentIncidentNumberState,
+   assessmentNoteState,
+   ASSESSMENT_IMPACT_TITLE,
+   resultTextState,
+} from '../../providers/assessment';
+import assessorState from '../../providers/assessor';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
-import QuestionsComponentTest from '../question/question.component';
+import InteractiveQuestionary from '../question/interactive.questionaire.component';
 import './styles.css';
 
-enum ASSESSMENT_IMPACT_TITLE {
-   LOW = 'LOW',
-   MEDIUM = 'MEDIUM',
-   HIGH = 'HIGH',
-   CRITICAL = 'CRITICAL',
-}
-
-const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
-   // based on the score decide what value to show
-   const title = Object.values(ASSESSMENT_IMPACT_TITLE)[score - 1];
+const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, score }) => {
    return (
-      <div className="impact_card card">
+      <div className={`impact_card card border_${title}`}>
          <div className="impact_score_container">
             <div className={`impact_score score_${title}`}>{score}</div>
          </div>
@@ -27,10 +28,109 @@ const ImpactScoreVisual: React.FC<{ score: number }> = ({ score }) => {
    );
 };
 
+const ActionList: React.FC<{ SL: string }> = ({ SL }) => {
+   const showActionItem = () => {
+      const conditionNotSupAuthorities =
+         SL === ASSESSMENT_IMPACT_TITLE.HIGH || SL === ASSESSMENT_IMPACT_TITLE.CRITICAL;
+      const conditionComToDataSubjects = SL === ASSESSMENT_IMPACT_TITLE.CRITICAL;
+
+      return {
+         authorities: conditionNotSupAuthorities ? 'list-item' : 'none',
+         dataSubject: conditionComToDataSubjects ? 'list-item' : 'none',
+      };
+   };
+   return (
+      <div className="row">
+         <div className="col-12 col-lg-8 offset-lg-2">
+            <div className="action_list_container">
+               <h2>Action list</h2>
+               <ol className="action_list">
+                  <li>Internal Documentation</li>
+                  <li style={{ display: `${showActionItem().authorities}` }}>
+                     Notify Supervisory Authorities
+                  </li>
+                  <li style={{ display: `${showActionItem().dataSubject}` }}>
+                     Communicate to the data subjects
+                  </li>
+               </ol>
+            </div>
+         </div>
+      </div>
+   );
+};
+
 const Resultpage: React.FC = () => {
-   const currentAssessment = useRecoilValue(currentAssessmentDetailState);
-   const currentAssessmentDatabreachData = useRecoilValue(dataBreachDateState);
-   const assessor = useRecoilValue(assessorState);
+   // Set the values of the selected assessment
+   const params = useParams<{ id: string }>();
+   const setAnswers = useSetRecoilState<ICurrentAssessmentAnswers[]>(assessmentAnswersState);
+   const setAssessmentDate = useSetRecoilState<string>(assessmentDateState);
+   const setAssessmentNote = useSetRecoilState<string>(assessmentNoteState);
+   const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
+   const setImpactNumber = useSetRecoilState<number>(assessmentImpactNumberState);
+   const currentAssessment = useRecoilValue(getCurrentAssessment);
+   const [assessor, setAssessorData] = useRecoilState(assessorState);
+   const setResultText = useSetRecoilState(resultTextState);
+   // based on the score decide what value to show
+   let title = '';
+   let SL = currentAssessment.impactScore;
+
+   switch (true) {
+      case SL <= 0:
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+         title = ASSESSMENT_IMPACT_TITLE.NONE;
+         break;
+      case SL > 0 && SL < 2:
+         title = ASSESSMENT_IMPACT_TITLE.LOW;
+         break;
+      case SL >= 2 && SL < 3:
+         title = ASSESSMENT_IMPACT_TITLE.MEDIUM;
+         break;
+      case SL >= 3 && SL < 4:
+         title = ASSESSMENT_IMPACT_TITLE.HIGH;
+         break;
+      case SL >= 4:
+         title = ASSESSMENT_IMPACT_TITLE.CRITICAL;
+         break;
+   }
+
+   useEffect(() => {
+      setResultText(title);
+
+      const onGetAssessment = async (id: number) => {
+         const result = await getAssessmentById(id);
+
+         if (result?.data) {
+            const assessment = result.data;
+
+            const answers: Array<ICurrentAssessmentAnswers> = assessment.answers!.map((el) => {
+               const transfer_answer =
+                  el.answer_text === 'true' ? true : el.answer_text === 'false' ? false : el.answer_text;
+               return {
+                  id: parseInt(el.question_number),
+                  questionText: el.question_text,
+                  answer: transfer_answer,
+               };
+            });
+
+            setAnswers(answers);
+            setAssessmentDate(assessment.assessmentDate);
+            setIncidentNumber(assessment.incidentNr);
+            setImpactNumber(assessment.resultNumber);
+            setAssessorData({
+               firstName: assessment.assessor.firstName,
+               lastName: assessment.assessor.lastName,
+            });
+            // console.log(assessment);
+            if (assessment.note && assessment.note.length > 0) {
+               setAssessmentNote(assessment.note[0].notesText);
+            }
+         }
+      };
+      if (params && params.id) {
+         onGetAssessment(parseInt(params.id));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    return (
       <>
@@ -43,45 +143,45 @@ const Resultpage: React.FC = () => {
             </div>
             <div className="row">
                <div className="col-12 col-lg-8 offset-lg-2">
-                  <ImpactScoreVisual score={currentAssessment.impactScore} />
+                  <ImpactScoreVisual score={SL} title={title} />
                </div>
             </div>
             <div className="row">
                <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
                      <p>Assessment number: {currentAssessment.incidentNumber}</p>
-                     <p>Assessment date: {currentAssessmentDatabreachData}</p>
+                     <p>
+                        Assessment date:{' '}
+                        {currentAssessment.dataBreachDate &&
+                           new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
+                     </p>
                      <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
+                     <p>Result: {`${currentAssessment.impactScore}`}</p>
                   </div>
                </div>
             </div>
          </header>
          <main className="container">
+            <ActionList SL={title} />
+            {currentAssessment.notes.length > 0 && (
+               <div className="row mb-2">
+                  <div className="col-12">
+                     <div className="note-group">
+                        <label htmlFor="note">Note</label>
+                        <textarea
+                           className="form-control"
+                           id="note"
+                           rows={3}
+                           value={currentAssessment.notes}
+                           readOnly
+                        />
+                     </div>
+                  </div>
+               </div>
+            )}
             <div className="row">
                <div className="col-12">
-                  <QuestionsComponentTest interactive={false} />
-               </div>
-            </div>
-
-            <div className="row">
-               <div className="col-12 col-lg-8 offset-lg-2">
-                  <div className="action_list_container">
-                     <h2>Action list</h2>
-                     <ol className="action_list">
-                        <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
-                           consequatur ullam aspernatur illum quia
-                        </li>
-                        <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
-                           consequatur ullam aspernatur illum quia
-                        </li>
-                        <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
-                           consequatur ullam aspernatur illum quia
-                        </li>
-                     </ol>
-                  </div>
+                  <InteractiveQuestionary interactive={true} />
                </div>
             </div>
          </main>

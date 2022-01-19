@@ -11,22 +11,27 @@
    padding: 25px;
    filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
    margin-bottom: 1em;
+   border: solid 2px;
 }
 
 .card.border_LOW {
-   border-color: #4A9C09;
+   border-color: #4a9c09;
 }
 
 .border_MEDIUM {
-   border-color:#E9D418;
+   border-color: #e9d418;
 }
 
 .border_HIGH {
-   border-color:#FD9800
+   border-color: #fd9800;
 }
 
 .border_CRITICAL {
-   border-color:#FE0000
+   border-color: #fe0000;
+}
+
+.border_INSIGNIFICANT {
+   border-color: #6966663b;
 }
 
 .card-text {
@@ -57,19 +62,66 @@
 }
 
 .score_LOW {
-	background-color: #4A9C09;
+   background-color: #4a9c09;
    height: 2em;
 }
 
 .score_MEDIUM {
-	background-color: #E9D418;
+   background-color: #e9d418;
    height: 2em;
 }
 .score_HIGH {
-	background-color: #FD9800;
+   background-color: #fd9800;
    height: 2em;
 }
 .score_CRITICAL {
-	background-color: #FE0000;
+   background-color: #fe0000;
    height: 2em;
+}
+
+.score_INSIGNIFICANT {
+   background-color: #6966663b;
+   height: 2em;
+}
+
+#dropdownMenuButton1 {
+   background-color: #f1edeb;
+}
+
+.dropdown-toggle {
+   color: black;
+   border-color: #ced4da;
+}
+
+.btn-wrapper {
+   text-align: center;
+}
+
+.btn-filter {
+   background-color: #f1edeb;
+   outline: 1px solid;
+   width: 90%;
+   padding: 3px;
+}
+
+.dropdown-item label {
+   cursor: pointer;
+   display: block;
+}
+
+.input-group {
+   margin-bottom: 2em;
+}
+
+.input-group-text {
+   background-color: #f1edeb;
+}
+
+.btn-search {
+   color: white;
+   background-color: gray;
+}
+
+.form-control {
+   border-radius: 0px 4px 4px 0px;
 }

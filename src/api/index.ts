@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ASSESSMENT_IMPACT_TITLE, IDatabreachAssessment } from '../providers/assessment';
 
-const database_url: string = 'http://localhost:8080'
+const database_url: string = 'https://7c43-62-194-76-72.ngrok.io';
 
 export interface DB_Assessment {
    assessmentId: number;
@@ -13,7 +13,13 @@ export interface DB_Assessment {
    status: string;
    assessor_Id: number;
    note?: Array<{ noteId: number; notesText: string; assessment_Id: number }>;
-   answers?: Array<{ AnswerId: number; answer_text: string; question_number: string; assessment_Id: number }>;
+   answers?: Array<{
+      AnswerId: number;
+      answer_text: string;
+      question_text: string;
+      question_number: string;
+      assessment_Id: number;
+   }>;
    assessor: {
       assessorId?: number;
       firstName: string;

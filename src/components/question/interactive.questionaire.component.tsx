@@ -1,14 +1,18 @@
 import React, { useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { assessmentTypeScoreState } from '../../recoil/assessment';
-import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../recoil/question/answer';
-import { currentQuestionTypeState, typedQuestionState } from '../../recoil/question/atom';
-import { currentQuestionState } from '../../recoil/question/selector';
+import { assessmentTypeScoreState } from '../../providers/assessment';
+import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
+import { currentQuestionTypeState, typedQuestionState } from '../../providers/question/atom';
+import { currentQuestionState } from '../../providers/question/selector';
+import { InfoIcon } from '@primer/octicons-react';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 export interface QuestionTypes {
    type: string;
    questions: Array<IQuestion>;
+   description?: string;
 }
 
 export interface IQuestion {
@@ -27,6 +31,7 @@ export interface IQuestion {
 
 export interface IQuestionAnswer {
    id: number;
+   questionText: string;
    answer: boolean | string;
 }
 
@@ -35,6 +40,7 @@ interface QuestionContainerProp extends QuestonInteraction {
    id: number;
    type: string;
    score: number;
+   description: string | undefined;
    currentQuestionType: string;
    questions: Array<IQuestion>;
    currentQuestion: IQuestion;
@@ -43,18 +49,45 @@ interface QuestionContainerProp extends QuestonInteraction {
 
 interface QuestonInteraction {
    onAnswerQuestion: (value: IQuestionAnswer) => void;
+   interactive: boolean;
 }
 
 interface ISpecialQuestions {
    value: IQuestion;
    allAnswers: IQuestionAnswer[];
    focusDropdown: boolean;
+   interactive: boolean;
    showQuestion: (value: number) => boolean;
    onAction: (value: IQuestionAnswer) => void;
 }
 
+function formatDesciption(type: string, description: string) {
+   const list = description.split('*');
+   const aboutPageLink = type.split(' ').join('_').toLowerCase();
+
+   return (
+      <div className="question_detail_body">
+         {list.length > 1 ? (
+            <ul>
+               {list.map((el, i) => {
+                  if (i === 0 || i === el.length - 1) return '';
+                  return <li key={i}>{el}</li>;
+               })}
+            </ul>
+         ) : (
+            <p>{description}</p>
+         )}
+         <p>
+            For more information regarding the questions go to the{' '}
+            <Link to={`/about#${aboutPageLink}`}>About</Link> page
+         </p>
+      </div>
+   );
+}
+
 const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    value,
+   interactive,
    allAnswers,
    onAction,
    showQuestion,
@@ -71,15 +104,25 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
    const radioButtonTexts = Object.keys(value.weight ?? {});
    const radioButtonValues = Object.values(value.weight ?? {});
 
+   const getQuestionValue = useMemo(() => {
+      return (id: number): { value: string } => {
+         const value = allAnswers.find((e) => e.id === id)?.answer as string;
+         return {
+            value,
+         };
+      };
+   }, [allAnswers]);
+
    return (
       <div
          className={`row disable_question_${showQuestion(questionId)} is_answered_${hasBeenAnswered(
             questionId
-         )}`}
+         )} ${interactive && hasBeenAnswered(questionId) && 'show_question'}`}
       >
          <div className="col-12">
             <div>
-               <div className="question_wrap">
+               <div className="question_wrap wrap">
+                  <span className="question_number_wrap ">{questionId}. </span>
                   <p className="m-0">{questionTitle}</p>
                </div>
                <div className="eoi_container">
@@ -91,12 +134,15 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
                            name="ease_of_indentication"
                            id={`ease_of_indentication${index}`}
                            value={radioButtonValues[index].value}
+                           checked={getQuestionValue(questionId).value === radioButtonTexts[index]}
                            disabled={
-                              hasBeenAnswered(questionId) === false && showQuestion(questionId) === false
+                              interactive ||
+                              (hasBeenAnswered(questionId) === false && showQuestion(questionId) === false)
                            }
                            onChange={(e) =>
                               onAction({
                                  id: questionId,
+                                 questionText: questionTitle,
                                  answer: radioButtonTexts[index],
                               })
                            }
@@ -113,6 +159,7 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
 const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
    value,
    allAnswers,
+   interactive,
    onAction,
    showQuestion,
 }) => {
@@ -124,6 +171,17 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
          return false;
       };
    }, [allAnswers]);
+
+   const getQuestionValue = useMemo(() => {
+      return (id: number): { yes: boolean; no: boolean } => {
+         const value = allAnswers.find((e) => e.id === id)?.answer as boolean;
+         return {
+            yes: value === true,
+            no: value === false,
+         };
+      };
+   }, [allAnswers]);
+
    return (
       <div className="mb-2 bottom_lined">
          {questionsCIA?.map((element, index) => (
@@ -131,7 +189,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                key={index}
                className={`row disable_question_${showQuestion(element.id)} is_answered_${hasBeenAnswered(
                   element.id
-               )}`}
+               )} ${interactive && hasBeenAnswered(element.id) && 'show_question'}`}
             >
                <div className="col-12 col-md-10">
                   <div className="question_wrap">
@@ -143,38 +201,50 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                   </div>
                </div>
                <div className="col-12 col-md-2">
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${element.id}`}
-                     id={`btnradio${element.id}`}
-                     disabled={hasBeenAnswered(element.id) === false && showQuestion(element.id) === false}
-                     onChange={(e) =>
-                        onAction({
-                           id: element.id,
-                           answer: true,
-                        })
-                     }
-                  />
-                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}`}>
-                     Yes
-                  </label>
-                  <input
-                     type="radio"
-                     className="btn-check"
-                     name={`btnradio${element.id}`}
-                     id={`btnradio${element.id}no`}
-                     disabled={hasBeenAnswered(element.id) === false && showQuestion(element.id) === false}
-                     onChange={(e) =>
-                        onAction({
-                           id: element.id,
-                           answer: false,
-                        })
-                     }
-                  />
-                  <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}no`}>
-                     No
-                  </label>
+                  <div className="btn-group">
+                     <input
+                        type="radio"
+                        className="btn-check"
+                        name={`btnradio${element.id}`}
+                        id={`btnradio${element.id}`}
+                        checked={getQuestionValue(element.id).yes}
+                        disabled={
+                           interactive ||
+                           (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
+                        }
+                        onChange={(e) =>
+                           onAction({
+                              id: element.id,
+                              questionText: element.text,
+                              answer: true,
+                           })
+                        }
+                     />
+                     <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}`}>
+                        Yes
+                     </label>
+                     <input
+                        type="radio"
+                        className="btn-check"
+                        name={`btnradio${element.id}`}
+                        id={`btnradio${element.id}no`}
+                        checked={getQuestionValue(element.id).no}
+                        disabled={
+                           interactive ||
+                           (hasBeenAnswered(element.id) === false && showQuestion(element.id) === false)
+                        }
+                        onChange={(e) =>
+                           onAction({
+                              id: element.id,
+                              questionText: element.text,
+                              answer: false,
+                           })
+                        }
+                     />
+                     <label className="btn btn-outline-primary" htmlFor={`btnradio${element.id}no`}>
+                        No
+                     </label>
+                  </div>
                </div>
             </div>
          ))}
@@ -191,7 +261,9 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
    id,
    type,
    questions,
+   description,
    score,
+   interactive,
    currentQuestion,
    currentQuestionType,
    allAnswers,
@@ -209,8 +281,20 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
       };
    }, [allAnswers]);
 
+   const getQuestionValue = useMemo(() => {
+      return (id: number): { yes: boolean; no: boolean } => {
+         const value = allAnswers.find((e) => e.id === id)?.answer as boolean;
+         return {
+            yes: value === true,
+            no: value === false,
+         };
+      };
+   }, [allAnswers]);
+
    return (
-      <div className={`accordion-item focus_dropdown_${type === currentQuestionType}`}>
+      <div
+         className={`accordion-item focus_dropdown_${type === currentQuestionType && interactive === false}`}
+      >
          <h2 className="accordion-header" id={`heading${id}`}>
             <button
                className="accordion-button collapsed"
@@ -220,6 +304,21 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                aria-expanded="false"
                aria-controls={`collapse${id}`}
             >
+               <OverlayTrigger
+                  key={id}
+                  placement={'top'}
+                  trigger={'click'}
+                  overlay={
+                     <Popover id={`popover-positioned-top`}>
+                        <Popover.Header as="h3">{`${type}`}</Popover.Header>
+                        <Popover.Body>{description && formatDesciption(type, description)}</Popover.Body>
+                     </Popover>
+                  }
+               >
+                  <span>
+                     <InfoIcon size={24} />
+                  </span>
+               </OverlayTrigger>
                {id + 1}. {type} | {score}
             </button>
          </h2>
@@ -236,6 +335,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         value={question}
                         allAnswers={allAnswers}
+                        interactive={interactive}
                         focusDropdown={type === currentQuestionType}
                         onAction={onAnswerQuestion}
                         showQuestion={showCurrentQuestion}
@@ -244,6 +344,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                      <AggravatingCircumstances
                         key={id}
                         value={question}
+                        interactive={interactive}
                         allAnswers={allAnswers}
                         focusDropdown={type === currentQuestionType}
                         onAction={onAnswerQuestion}
@@ -254,7 +355,9 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                         key={id}
                         className={`row mb-2 bottom_lined is_answered_${hasBeenAnswered(
                            question.id
-                        )} disable_question_${showCurrentQuestion(question.id)}`}
+                        )} disable_question_${showCurrentQuestion(question.id)} ${
+                           interactive && hasBeenAnswered(question.id) && 'show_question'
+                        }`}
                      >
                         <div className="col-12 col-md-10">
                            <span className="question_number_wrap">{question.id}.</span>
@@ -264,44 +367,53 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                            </div>
                         </div>
                         <div className="col-12 col-md-2">
-                           <input
-                              type="radio"
-                              className="btn-check"
-                              name={`btnradio${question.id}`}
-                              id={`btnradio${question.id}`}
-                              disabled={
-                                 hasBeenAnswered(question.id) === false &&
-                                 showCurrentQuestion(question.id) === false
-                              }
-                              onChange={(e) =>
-                                 onAnswerQuestion({
-                                    id: question.id,
-                                    answer: true,
-                                 })
-                              }
-                           />
-                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}`}>
-                              Yes
-                           </label>
-                           <input
-                              type="radio"
-                              className="btn-check"
-                              name={`btnradio${question.id}`}
-                              id={`btnradio${question.id}no`}
-                              disabled={
-                                 hasBeenAnswered(question.id) === false &&
-                                 showCurrentQuestion(question.id) === false
-                              }
-                              onChange={(e) =>
-                                 onAnswerQuestion({
-                                    id: question.id,
-                                    answer: false,
-                                 })
-                              }
-                           />
-                           <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}no`}>
-                              No
-                           </label>
+                           <div className="btn-group">
+                              <input
+                                 type="radio"
+                                 className="btn-check"
+                                 name={`btnradio${question.id}`}
+                                 id={`btnradio${question.id}`}
+                                 readOnly={interactive}
+                                 disabled={
+                                    interactive ||
+                                    (hasBeenAnswered(question.id) === false &&
+                                       showCurrentQuestion(question.id) === false)
+                                 }
+                                 checked={getQuestionValue(question.id).yes}
+                                 onChange={(e) =>
+                                    onAnswerQuestion({
+                                       id: question.id,
+                                       questionText: question.text,
+                                       answer: true,
+                                    })
+                                 }
+                              />
+                              <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}`}>
+                                 Yes
+                              </label>
+                              <input
+                                 type="radio"
+                                 className="btn-check"
+                                 name={`btnradio${question.id}`}
+                                 id={`btnradio${question.id}no`}
+                                 checked={getQuestionValue(question.id).no}
+                                 disabled={
+                                    interactive ||
+                                    (hasBeenAnswered(question.id) === false &&
+                                       showCurrentQuestion(question.id) === false)
+                                 }
+                                 onChange={(e) =>
+                                    onAnswerQuestion({
+                                       id: question.id,
+                                       questionText: question.text,
+                                       answer: false,
+                                    })
+                                 }
+                              />
+                              <label className="btn btn-outline-primary" htmlFor={`btnradio${question.id}no`}>
+                                 No
+                              </label>
+                           </div>
                         </div>
                      </div>
                   )
@@ -318,9 +430,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
  * functionality to save the answers to the state.
  *
  */
-const QuestionsResultComponent: React.FC<{
-   interactive: boolean;
-}> = ({ interactive }) => {
+const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ interactive }) => {
    const typedQuestions = useRecoilValue<QuestionTypes[]>(typedQuestionState);
    const currentQuestion = useRecoilValue<IQuestion>(currentQuestionState);
    const currentQuestionType = useRecoilValue<string>(currentQuestionTypeState);
@@ -335,7 +445,8 @@ const QuestionsResultComponent: React.FC<{
          // Check if question has been answered before
          if (foundIndex !== -1) {
             let updatedAnswers = assessmentAnswers.map((el) => {
-               if (el.id === value.id) return { id: el.id, answer: value.answer };
+               if (el.id === value.id)
+                  return { id: el.id, questionText: value.questionText, answer: value.answer };
                return el;
             });
             // Remove the questions after the updated question
@@ -352,6 +463,7 @@ const QuestionsResultComponent: React.FC<{
             ...assessmentAnswers,
             {
                id: value.id,
+               questionText: value.questionText,
                answer: value.answer,
             },
          ]);
@@ -360,10 +472,10 @@ const QuestionsResultComponent: React.FC<{
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {/* This is just for demonstration purposes */}
          {/* {assessmentAnswers.map((question, index) => (
             <div key={index}>
                <span>{question.id}</span>
+               <span>{question.questionText}</span>
                <span>{JSON.stringify(question.answer)}</span>
             </div>
          ))} */}
@@ -372,8 +484,10 @@ const QuestionsResultComponent: React.FC<{
                key={id}
                id={id}
                score={assessmentTypeScores[id]}
+               description={el.description}
                type={el.type}
                questions={el.questions}
+               interactive={interactive}
                currentQuestion={currentQuestion}
                currentQuestionType={currentQuestionType}
                onAnswerQuestion={onAddAnswer}
@@ -384,4 +498,4 @@ const QuestionsResultComponent: React.FC<{
    );
 };
 
-export default QuestionsResultComponent;
+export default InteractiveQuestionaryComponent;

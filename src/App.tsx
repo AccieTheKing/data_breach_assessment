@@ -34,6 +34,7 @@ function App() {
                         <Route path="/" element={<Homepage />} />
                         <Route path="/about" element={<Aboutpage />} />
                         <Route path="/history" element={<Historypage />} />
+                        <Route path="/history/:id" element={<Resultpage />} />
                         <Route path="/start" element={<Questionairpage />} />
                         <Route path="/draft" element={<Draftpage />} />
                         <Route path="/result" element={<Resultpage />} />

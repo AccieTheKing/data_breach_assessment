@@ -1,20 +1,35 @@
-import './style.css';
 import Navbar from '../Navbar/Nav';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import assessorState, { IAssessor } from '../../recoil/assessor';
-import currentAssessmentDetailState, {
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import {
+   assessmentIncidentNumberState,
+   assessmentNoteState,
+   assessmentScore,
    dataBreachDateState,
-   IAssessmentDetailState,
-} from '../../recoil/assessment';
+} from '../../providers/assessment';
+import assessorState, { IAssessor } from '../../providers/assessor';
 import { useForm } from 'react-hook-form';
+import './style.css';
+import { useEffect } from 'react';
+import assessmentAnswersState from '../../providers/question/answer';
+import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 
+
+//Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
+   const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
+   const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
+   const onResetAssessmentScore = useResetRecoilState(assessmentScore);
+   const onResetNotes = useResetRecoilState(assessmentNoteState);
+   const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
+   const onResetAssessor = useResetRecoilState(assessorState);
+   const onResetIncidentNumber = useResetRecoilState(assessmentIncidentNumberState);
+   const onResetDatabreachDate = useResetRecoilState(dataBreachDateState);
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
-   const dataBreachDate = useRecoilValue<string>(dataBreachDateState);
-   const [assessmentDetail, setAssessmentDetail] = useRecoilState<IAssessmentDetailState>(
-      currentAssessmentDetailState
+   const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
+   const [incidentNumber, setIncidentNumber] = useRecoilState<string | undefined>(
+      assessmentIncidentNumberState
    );
    const {
       register,
@@ -23,6 +38,30 @@ const Homepage = () => {
       formState: { errors },
    } = useForm();
    const onSubmit = () => console.log();
+
+   const {
+      register,
+      handleSubmit,
+      formState: { errors },
+   } = useForm();
+   const onSubmit = () => console.log();
+
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   const onResetAllStates = () => {
+      onResetQuestionaireState();
+      onResetQuestionID();
+      onResetAssessmentScore();
+      onResetNotes();
+      onResetQuestionType();
+      onResetAssessor();
+      onResetIncidentNumber();
+      onResetDatabreachDate();
+   };
+
+   useEffect(() => {
+      onResetAllStates();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    return (
       <div>
@@ -46,7 +85,9 @@ const Homepage = () => {
                         placeholder="Enter first name"
                         aria-label="First name"
                      />
-                     {errors.firstName?.type === 'required' && 'First name is required'}
+                     {errors.firstName?.type === 'required' && (
+                        <p className="required">First name is required</p>
+                     )}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
@@ -66,27 +107,35 @@ const Homepage = () => {
                         placeholder="Enter last name"
                         aria-label="Last name"
                      />
-                     {errors.lastName?.type === 'required' && 'Last name is required'}
+                     {errors.lastName?.type === 'required' && (
+                        <p className="required">Last name is required</p>
+                     )}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4 mb-2">
                   <b className="bPos">Incident number</b>
                   <div>
                      <input
-                        {...register('incidentNumber', { required: true })}
-                        onChange={(e) =>
-                           setAssessmentDetail({
-                              ...assessmentDetail,
-                              incidentNumber: e.target.value,
-                           })
-                        }
+                        {...register('incidentNumber', {
+                           required: true,
+                           pattern: {
+                              value: /^(?:(LE)_([0-9]{6}))$/i,
+                              message: '⚠ Wrong format used for incident number!',
+                           },
+                        })}
+                        onChange={(e) => setIncidentNumber(e.target.value)}
                         type="text"
-                        value={assessmentDetail.incidentNumber ?? ''}
+                        value={incidentNumber ? incidentNumber : ''}
                         className="form-control"
                         placeholder="Enter incident number"
                         aria-label="Incident number"
                      />
-                     {errors.incidentNumber?.type === 'required' && 'Incident number is required'}
+                     {errors.incidentNumber?.type === 'required' && (
+                        <p className="required">Incident number is required</p>
+                     )}
+                     {errors.incidentNumber?.message && (
+                        <p className="required">{errors.incidentNumber?.message}</p>
+                     )}
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
@@ -100,15 +149,12 @@ const Homepage = () => {
                         className="form-control"
                         type="date"
                         id="formFile"
-                        onChange={(e) =>
-                           setAssessmentDetail({
-                              ...assessmentDetail,
-                              dataBreachDate: e.target.value,
-                           })
-                        }
-                        value={dataBreachDate}
+                        onChange={(e) => setDataBreachDate(e.target.value)}
+                        value={dataBreachDate ?? ''}
                      />
-                     {errors.dataBreachDate?.type === 'required' && 'Data breach date is required'}
+                     {errors.dataBreachDate?.type === 'required' && (
+                        <p className="required">Data breach date is required</p>
+                     )}
                   </div>
                </div>
 
@@ -119,8 +165,8 @@ const Homepage = () => {
                      if (
                         assessor.firstName != null &&
                         assessor.lastName != null &&
-                        assessmentDetail.incidentNumber != null &&
-                        assessmentDetail.dataBreachDate != null
+                        incidentNumber != null &&
+                        dataBreachDate != null
                      )
                         navigate('/start');
                   }}
