@@ -26,13 +26,13 @@ const Aboutpage = () => {
    }, [location]);
 
    return (
-      <div>
-         <Navbar></Navbar>
+      <div id="about">
+         <Navbar ></Navbar>
 
          <br></br>
          <div className="sidebar" id="side" onClick={activeClass}>
          <br></br>
-            <a href="#about">What is this tool about?</a>
+            <a href="#about">About</a>
            
             <a href="#assessor">Step 1: Assessor and date</a>
             
@@ -53,7 +53,7 @@ const Aboutpage = () => {
             <a href="#sl">Step 7: Results: SL and actions</a>
          </div>
 
-         <div className="content">
+         <div id="about" className="content">
          <h1 id="about" className="h1Style">
                What is this tool about?
             </h1>
@@ -63,7 +63,7 @@ const Aboutpage = () => {
             ENISA. Through an assessor's answers to questions regarding the data in a breach, the severity level 
             of the data breach is determined, and the assessor is given suggestions on actions to take according 
             to the GDPR (and AVG). </p>
-            <h1 id="step1" className="h1Style">
+            <h1 id="assessor" className="h1Style">
                Step 1
             </h1>
             <h2 id="assessor">The assessor and the data breach date</h2>
@@ -74,7 +74,7 @@ const Aboutpage = () => {
             how much time is left to notify the supervisory authorities if it needs to be notified.
             </p>
 
-            <h1 id="step2" className="h1Style">
+            <h1 id="data" className="h1Style">
                Step 2
             </h1>
             <h2 id="data">Data processing context (DPC)</h2>
@@ -131,7 +131,7 @@ const Aboutpage = () => {
             <li>Biometric data</li>
             <li>Sex life or sexual orientation</li>
 
-            <h1 id="step3" className="h1Style">
+            <h1 id="eoi" className="h1Style">
                Step 3
             </h1>
             <h2 id="eoi">Ease of identification (EI)</h2>
@@ -148,7 +148,7 @@ const Aboutpage = () => {
             Therefore, certain identifiers may lead to different EI scores according to the specific case of the breach.
          </p>
 
-         <h1 id="step4" className="h1Style">
+         <h1 id="ac" className="h1Style">
                Step 4
             </h1>
             <h2 id="ac">Aggravating circumstances of breach (CBa)</h2>
@@ -181,7 +181,7 @@ const Aboutpage = () => {
             
          </p>
 
-         <h1 id="step5" className="h1Style">
+         <h1 id="mc" className="h1Style">
                Step 5
             </h1>
             <h2 id="mc">Mitigating circumstances of breach (CBm)</h2>
@@ -191,7 +191,7 @@ const Aboutpage = () => {
                <br></br> <br></br>
          </p>
          
-         <h1 id="step6" className="h1Style">
+         <h1 id="dc" className="h1Style">
                Step 6
             </h1>
             <h2 id="dc">End of assessment: Draft or Calculate score?</h2>
@@ -203,7 +203,7 @@ const Aboutpage = () => {
                72 hours after the awareness of the data breach.<br></br> <br></br>
          </p>
 
-         <h1 id="step7" className="h1Style">
+         <h1 id="sl" className="h1Style">
                Step 7
             </h1>
             <h2 id="sl">Results: Severity Level and actions</h2>

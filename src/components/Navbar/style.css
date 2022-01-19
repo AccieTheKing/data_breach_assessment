@@ -11,3 +11,8 @@
     color:#ea650d;
 
 }
+
+.navbar a.active {
+    color: #ea650d;
+    
+  }
