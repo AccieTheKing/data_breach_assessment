@@ -28,6 +28,37 @@ const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, 
    );
 };
 
+const ActionList: React.FC<{ SL: string }> = ({ SL }) => {
+   const showActionItem = () => {
+      const conditionNotSupAuthorities =
+         SL === ASSESSMENT_IMPACT_TITLE.HIGH || SL === ASSESSMENT_IMPACT_TITLE.CRITICAL;
+      const conditionComToDataSubjects = SL === ASSESSMENT_IMPACT_TITLE.CRITICAL;
+
+      return {
+         authorities: conditionNotSupAuthorities ? 'list-item' : 'none',
+         dataSubject: conditionComToDataSubjects ? 'list-item' : 'none',
+      };
+   };
+   return (
+      <div className="row">
+         <div className="col-12 col-lg-8 offset-lg-2">
+            <div className="action_list_container">
+               <h2>Action list</h2>
+               <ol className="action_list">
+                  <li>Internal Documentation</li>
+                  <li style={{ display: `${showActionItem().authorities}` }}>
+                     Notify Supervisory Authorities
+                  </li>
+                  <li style={{ display: `${showActionItem().dataSubject}` }}>
+                     Communicate to the data subjects
+                  </li>
+               </ol>
+            </div>
+         </div>
+      </div>
+   );
+};
+
 const Resultpage: React.FC = () => {
    // Set the values of the selected assessment
    const params = useParams<{ id: string }>();
@@ -74,7 +105,11 @@ const Resultpage: React.FC = () => {
             const answers: Array<ICurrentAssessmentAnswers> = assessment.answers!.map((el) => {
                const transfer_answer =
                   el.answer_text === 'true' ? true : el.answer_text === 'false' ? false : el.answer_text;
-               return { id: parseInt(el.question_number), answer: transfer_answer };
+               return {
+                  id: parseInt(el.question_number),
+                  questionText: el.question_text,
+                  answer: transfer_answer,
+               };
             });
 
             setAnswers(answers);
@@ -94,17 +129,8 @@ const Resultpage: React.FC = () => {
       if (params && params.id) {
          onGetAssessment(parseInt(params.id));
       }
-   }, [
-      params,
-      setAnswers,
-      setAssessmentDate,
-      setAssessmentNote,
-      setAssessorData,
-      setImpactNumber,
-      setIncidentNumber,
-      setResultText,
-      title,
-   ]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    return (
       <>
@@ -136,6 +162,7 @@ const Resultpage: React.FC = () => {
             </div>
          </header>
          <main className="container">
+            <ActionList SL={title} />
             {currentAssessment.notes.length > 0 && (
                <div className="row mb-2">
                   <div className="col-12">
@@ -155,28 +182,6 @@ const Resultpage: React.FC = () => {
             <div className="row">
                <div className="col-12">
                   <InteractiveQuestionary interactive={true} />
-               </div>
-            </div>
-
-            <div className="row">
-               <div className="col-12 col-lg-8 offset-lg-2">
-                  <div className="action_list_container">
-                     <h2>Action list</h2>
-                     <ol className="action_list">
-                        <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
-                           consequatur ullam aspernatur illum quia
-                        </li>
-                        <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
-                           consequatur ullam aspernatur illum quia
-                        </li>
-                        <li>
-                           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae optio ducimus
-                           consequatur ullam aspernatur illum quia
-                        </li>
-                     </ol>
-                  </div>
                </div>
             </div>
          </main>

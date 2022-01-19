@@ -89,6 +89,8 @@ header h2 {
 
 .action_list_container .action_list {
    font-size: 1.5em;
+   width: fit-content;
+   margin: auto auto 1em auto;
 }
 
 /* Main */

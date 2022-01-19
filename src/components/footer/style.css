@@ -58,3 +58,52 @@ footer#app-footer #result-page-footer button:first-child:hover {
       display: none;
    }
 }
+
+.print-container {
+   max-height: 400px;
+   overflow-y: scroll;
+   width: fit-content;
+   margin: auto;
+   border: solid 1px;
+}
+
+/* Global   */
+#print {
+   font-size: 12px;
+   padding: 20px;
+   width: 447px;
+   margin: auto;
+}
+
+#print h2 {
+   text-align: center;
+}
+
+#print table {
+   width: 90%;
+   padding: 10px;
+   margin: auto;
+}
+
+#print table tbody tr:nth-child(even) {
+   background-color: #d6eeee;
+}
+
+#print table thead {
+   background-color: #95e5e5;
+}
+
+/*  */
+#print .assessment-information {
+   margin-bottom: 15px;
+}
+
+#print .assessment-notes {
+   margin-bottom: 15px;
+}
+
+#print .assessment-notes textarea {
+   background-color: #fff;
+   border-radius: 5px;
+   height: fit-content;
+}
