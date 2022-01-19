@@ -59,7 +59,7 @@ export const dataBreachDateState = atom<string | null>({
 
 export const assessmentDateState = atom<string>({
    key: 'assessmentDate',
-   default: new Date().toISOString(),
+   default: new Date().toString(),
 });
 
 export const assessmentNoteState = atom<string>({
