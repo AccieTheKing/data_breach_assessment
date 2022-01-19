@@ -75,7 +75,6 @@ const AppProvider: React.FC = ({ children }) => {
    const onDesicionMaking = (currentQuestionId: number, nextAction: string, nextType: string) => {
       switch (nextAction) {
          case QUESTIONNAIR_STATE.CONTINUE:
-            // console.log(currentQuestionId, nextType, currentQuestionType);
             setCurrentQuestionID(currentQuestionId + 1);
             break;
          case QUESTIONNAIR_STATE.NEXT_TYPE:
@@ -83,8 +82,6 @@ const AppProvider: React.FC = ({ children }) => {
             setCurrentQuestionType(nextType);
             // Grab the first question of the next type
             const nextQuestion = questionTypes.find((el) => el.type === nextType)?.questions[0] as IQuestion;
-
-            // console.log(nextQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextQuestion.id);
             break;
          case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
@@ -97,12 +94,9 @@ const AppProvider: React.FC = ({ children }) => {
             const nextCiaQuestion = (
                ciaQuestions.find((el) => el.cia_type === nextCiaType)?.questions as IQuestion[]
             )[0];
-
-            // console.log(nextCiaQuestion.id, nextType, currentQuestionType);
             setCurrentQuestionID(nextCiaQuestion.id);
             break;
          case QUESTIONNAIR_STATE.CALCULATE:
-            // console.log('End of the questionaire');
             setEnableCalcButton(true);
             onCalcuateAssessment();
             break;
