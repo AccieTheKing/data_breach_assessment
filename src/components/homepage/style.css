@@ -1,12 +1,12 @@
 .bPos{
   display: flex;
   justify-content: left;
+ font-weight: lighter;
 }
 
 .classPosition {
   margin-top: 50px;
-}
-
+} 
 
 .gridPos {
   align-items: center;
@@ -31,17 +31,16 @@
   background-color: #ea650d;
   font-weight: bold;
   padding: 40px 60px;
-  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
+  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(192, 192, 192));
 }
 
 .btn-colour-2 {
   color: black;
   background-color: #f1edeb;
   font-size: 15px;
-  font-weight: bold;
   width: 7.5em;
   height: 6em;
-  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
+  filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(192, 192, 192));
 }
 
 .linkStyle {

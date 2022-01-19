@@ -133,7 +133,7 @@ const Homepage = () => {
                   <b className="bPos">Data breach date</b>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
-                  <div className="mb-5">
+                  <div className="mb-4">
                      <input
                         {...register('dataBreachDate', { required: true })}
                         style={{ width: '100%', display: 'block' }}
@@ -180,7 +180,7 @@ const Homepage = () => {
                <p></p>
                <div className="centerLink">
                   <Link className="linkStyle" to="/about">
-                     What is the tool about?
+                     How to do an assessment
                   </Link>
                </div>
             </form>
