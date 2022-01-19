@@ -40,7 +40,7 @@ function MyVerticallyCenteredModal(props: any) {
          <Modal.Body>
             <div className="print-container">
                <div id="print">
-                  <h2>Data breach assessment result</h2>
+                  <h3>Data breach assessment result</h3>
                   <table className="assessment-information">
                      <tbody>
                         <tr>
@@ -151,13 +151,14 @@ const ResultPageFooterContent = () => {
    const onExport = () => {
       const doc = new jsPDF('p', 'px', 'a4');
       const el = document.getElementById('print');
+      let pdfname = currentAssessment.dataBreachDate.toLocaleDateString('nl') + "_DataBreach.pdf";
       if (el) {
          doc.html(el, {
             autoPaging: 'text',
             margin: [20, 0, 40, 0],
             callback: (pdf) => {
-               pdf.setFont('calibri');
-               pdf.save('hello.pdf');
+               pdf.save(pdfname);
+         
             },
          });
       }
