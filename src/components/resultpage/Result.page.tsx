@@ -30,7 +30,6 @@ const ImpactScoreVisual: React.FC<{ title: string; score: number }> = ({ title, 
 
 const ActionList: React.FC<{ SL: string }> = ({ SL }) => {
    const showActionItem = () => {
-      console.log(SL);
       const conditionNotSupAuthorities =
          SL === ASSESSMENT_IMPACT_TITLE.HIGH || SL === ASSESSMENT_IMPACT_TITLE.CRITICAL;
       const conditionComToDataSubjects = SL === ASSESSMENT_IMPACT_TITLE.CRITICAL;
@@ -46,7 +45,7 @@ const ActionList: React.FC<{ SL: string }> = ({ SL }) => {
             <div className="action_list_container">
                <h2>Action list</h2>
                <ol className="action_list">
-                  <li>Iternal Documentation</li>
+                  <li>Internal Documentation</li>
                   <li style={{ display: `${showActionItem().authorities}` }}>
                      Notify Supervisory Authorities
                   </li>
@@ -106,7 +105,11 @@ const Resultpage: React.FC = () => {
             const answers: Array<ICurrentAssessmentAnswers> = assessment.answers!.map((el) => {
                const transfer_answer =
                   el.answer_text === 'true' ? true : el.answer_text === 'false' ? false : el.answer_text;
-               return { id: parseInt(el.question_number), answer: transfer_answer };
+               return {
+                  id: parseInt(el.question_number),
+                  questionText: el.question_text,
+                  answer: transfer_answer,
+               };
             });
 
             setAnswers(answers);

@@ -31,6 +31,7 @@ export interface IQuestion {
 
 export interface IQuestionAnswer {
    id: number;
+   questionText: string;
    answer: boolean | string;
 }
 
@@ -141,6 +142,7 @@ const EaseOfIndentification: React.FC<ISpecialQuestions> = ({
                            onChange={(e) =>
                               onAction({
                                  id: questionId,
+                                 questionText: questionTitle,
                                  answer: radioButtonTexts[index],
                               })
                            }
@@ -213,6 +215,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                         onChange={(e) =>
                            onAction({
                               id: element.id,
+                              questionText: element.text,
                               answer: true,
                            })
                         }
@@ -233,6 +236,7 @@ const AggravatingCircumstances: React.FC<ISpecialQuestions> = ({
                         onChange={(e) =>
                            onAction({
                               id: element.id,
+                              questionText: element.text,
                               answer: false,
                            })
                         }
@@ -379,6 +383,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                                  onChange={(e) =>
                                     onAnswerQuestion({
                                        id: question.id,
+                                       questionText: question.text,
                                        answer: true,
                                     })
                                  }
@@ -400,6 +405,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
                                  onChange={(e) =>
                                     onAnswerQuestion({
                                        id: question.id,
+                                       questionText: question.text,
                                        answer: false,
                                     })
                                  }
@@ -439,7 +445,8 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
          // Check if question has been answered before
          if (foundIndex !== -1) {
             let updatedAnswers = assessmentAnswers.map((el) => {
-               if (el.id === value.id) return { id: el.id, answer: value.answer };
+               if (el.id === value.id)
+                  return { id: el.id, questionText: value.questionText, answer: value.answer };
                return el;
             });
             // Remove the questions after the updated question
@@ -456,6 +463,7 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
             ...assessmentAnswers,
             {
                id: value.id,
+               questionText: value.questionText,
                answer: value.answer,
             },
          ]);
@@ -464,6 +472,13 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
+         {/* {assessmentAnswers.map((question, index) => (
+            <div key={index}>
+               <span>{question.id}</span>
+               <span>{question.questionText}</span>
+               <span>{JSON.stringify(question.answer)}</span>
+            </div>
+         ))} */}
          {typedQuestions.map((el, id) => (
             <QuestionItemContainer
                key={id}
