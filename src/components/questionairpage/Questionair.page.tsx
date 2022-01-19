@@ -50,7 +50,7 @@ const Questionairpage: React.FC = () => {
                         <p>
                            Each dropdown is a category. You must answer all questions under each category to
                            get the severity score. If a question is left unanswered the assessment will be
-                           saved as a draft
+                           saved as a draft.
                         </p>
                      </div>
                   </div>
@@ -66,7 +66,7 @@ const Questionairpage: React.FC = () => {
                            {new Date(currentAssessment.assessmentDate).toLocaleDateString('nl')}
                         </p>
                         <p className="m-0">
-                           Date of Data breach:{' '}
+                           Date of data breach:{' '}
                            {currentAssessment.dataBreachDate &&
                               new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
                         </p>

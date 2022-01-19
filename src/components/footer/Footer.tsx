@@ -62,7 +62,7 @@ const ResultPageFooterContent = () => {
             <div className="button-container">
                <button className="btn btn-light footer-button">Export</button>
                <button className="btn btn-light footer-button" onClick={onFinishAssessment}>
-                  Finish
+                  {params && params.id ? 'Back to list' : 'Finish'}
                </button>
             </div>
          </div>

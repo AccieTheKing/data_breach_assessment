@@ -41,19 +41,6 @@ const Historypage = () => {
       navigate(`/history/${assessment.assessmentId}`);
    };
 
-   //search: For searching for different assessment attributes (search meachinism could also be implemented as a function)
-   /*    function search () {
-      const emptyArr: any = [];
-      usedData.filter((val) => {
-         if (searchTerm == ""){clearState()
-      }
-      else if (val.assessor.toLocaleLowerCase().includes(searchTerm.toLowerCase()) || val.date.toLocaleLowerCase().includes(searchTerm.toLowerCase())) {
-         emptyArr.push(val);
-         setUsedData(emptyArr)
-      }
-   })} */
-
-   //filterResult: This function filters the previous ratings by their result (low, medium, high, critical).  This is done by looking at which checkbox was clicked in the drop-down menu. On this basis, the appropriate assessments are then output. Used as onClick function in the dropdown menu.
    function filterResult() {
       const map1 = new Map<HTMLInputElement | null, Array<DB_Assessment>>();
       map1.set(nullCheck.current, filtInsignificant());
@@ -283,6 +270,11 @@ const Historypage = () => {
                   if (
                      val.assessor.firstName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
                      val.assessor.lastName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                     searchTerm
+                        .toLowerCase()
+                        .includes(
+                           `${val.assessor.firstName.toLocaleLowerCase()} ${val.assessor.lastName.toLocaleLowerCase()}`
+                        ) ||
                      new Date(val.assessmentDate)
                         .toLocaleDateString('nl')
                         .includes(searchTerm.toLowerCase()) ||
