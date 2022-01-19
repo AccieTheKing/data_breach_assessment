@@ -1,3 +1,6 @@
+import { jsPDF } from 'jspdf';
+import { useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { storeAssessmentInDB } from '../../api';
@@ -9,11 +12,8 @@ import getCurrentAssessment, {
    showAnimationState,
 } from '../../providers/assessment';
 import assessmentAnswersState from '../../providers/question/answer';
-import { jsPDF } from 'jspdf';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 import './style.css';
-import { Button, Modal } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
 
 export enum FOOTER_CONTENT {
    RESULT,
