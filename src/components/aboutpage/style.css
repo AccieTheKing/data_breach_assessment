@@ -8,8 +8,10 @@ h2 {
   color: #ea650d;
 }
 
-#about {
-  font-weight: bold;
+.tblImage {
+  width: 80%;
+  max-width: 500px;
+  min-width: 300px;
 }
 
 .sidebar {
@@ -58,17 +60,21 @@ color: #ea650d;
 font-weight: bold;
 }
 
-div.content {
+.content {
   margin-left: 325px;
   padding: 1px 16px;
   min-height: fit-content;
   margin-right: 100px;
-
+  max-width: 2500px;
 }
+
+.tblActions {
+  max-width: 400px;
+}
+
 @media screen and (min-width: 1920px) {
-  div.content { margin-right: 500px;}
+  .content { margin-right: 500px;}
 }
-
 
 @media screen and (max-width: 700px) {
   .sidebar {
@@ -77,7 +83,7 @@ div.content {
     position: relative;
   }
   .sidebar a {float: left;}
-  div.content {margin-left: 0; margin-right: 0;}
+  .content {margin-left: 0; margin-right: 0;}
 }
 
 

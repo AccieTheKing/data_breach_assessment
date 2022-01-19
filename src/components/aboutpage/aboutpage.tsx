@@ -174,10 +174,11 @@ const Aboutpage = () => {
             The table below shows examples of data breaches and their loss of security and whether they are 
             considered with malicious intent. For the first and last row, the malicious intent must be considered within the 
             context of the breach. 
-            <br></br><br></br>
-            Insert picture
             <br></br> <br></br> 
             Large number: Examines the number of affected individuals in the breach. 
+            <br></br><br></br>
+           <img className="tblImage" src='./tblCIA.png' alt="Table with breach in confidentialty, integrity, availability and example of malicious intent" />
+            
          </p>
 
          <h1 id="step5" className="h1Style">
@@ -213,7 +214,7 @@ const Aboutpage = () => {
                The negative number is to ensure the insignificance of the breach.  
                See table below for further description on how the different levels may affect the individuals. 
                <br></br> <br></br>
-               Insert table 
+               <img className="tblImage" src="./tblConsequences.png" alt="Table that shows how the different severity levels of a breach affect an individuals rights and freedoms"/>
                <br></br> <br></br> 
                Based on the Severity Level, you will be provided with some actions that are in accordance with the GDPR. 
                The three types of action the GDPR requires the controller to do are: 
@@ -223,7 +224,7 @@ const Aboutpage = () => {
                <br></br> 
                The diagram below illustrates which actions is to be taken based on the different Severity Levels. 
                <br></br> <br></br> 
-               insert table
+               <img className="tblActions tblImage" src="./tblActions.png" alt="Table of severity levels and their actions"/>
                <br></br> <br></br> 
                If you want to use the results of this assessment as part of the documentation, tap "Export" to download 
                them as a PDF file.
