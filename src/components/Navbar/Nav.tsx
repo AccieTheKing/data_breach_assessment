@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const Navbar: React.FC = () => {
 	return (
 		<nav className='navbar navbar-expand-lg navbar-light'>
-			<div className='container-fluid'>
+			<div className='container-fluid' >
 				<Link className='navbar-brand' to='/'>
 					LOGO
 				</Link>
@@ -26,10 +26,16 @@ const Navbar: React.FC = () => {
 					id='navbarSupportedContent'
 				>
 					<button className='btn'>
-						<Link to='/'>Home</Link>
+						<Link to='/'>New assessment</Link>
 					</button>
 					<button className='btn'>
-					<Link to='/history'>Assessments</Link>
+					<Link to='/history'>History</Link>
+					</button>
+					<button className='btn'>
+					<Link to='/drafts'>Draft</Link>
+					</button>
+					<button className='btn'>
+					<Link to='/about'>About</Link>
 					</button>
 
 					<button className='btn ms-auto'>
