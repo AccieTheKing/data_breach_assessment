@@ -53,12 +53,8 @@
 }
 
 
-.btn-colour-1:hover {
-    background-color: #925422;
-}
-
 .btn-colour-2:hover {
-    background-color: #8f8780;
+    border-color: #ea650d;
 }
 
 #loading {

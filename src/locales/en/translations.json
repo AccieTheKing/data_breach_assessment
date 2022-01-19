@@ -293,7 +293,7 @@
         },
         {
             "type": "Ease of identification",
-            "description": "*This part of the assessment is to evaluate how easy it is to identify an individual based on the data in the breach. *Neglible is chosen if it is extremely difficult to match the data to a particular person, but under certain conditions it could be possible.",
+            "description": "*Negligible is when it is extremely difficult to match the data to a particular person, but under certain conditions it could be possible. *Maximum is selected when identification is possible directly from the data breached with no special research needed to discover the individual’s identity",
             "questions": [
                 {
                     "id": 20,
@@ -321,7 +321,7 @@
         },
         {
             "type": "Aggravating circumstances of breach",
-            "description": " ",
+            "description": "*Loss of confidentiality: Data is accessed by or disclosed to unauthorized parties *Loss of integrity: The original data has been altered by unauthorized parties or systems. *Loss of availability: Data is inaccessible. Either temporal (data can be recovered within some time), or permanent (data can’t be recovered). *Malicious intent: Was the breach due to an error or mistake, or an intentional action of malicious intent. *Large number: Determine the extent of the breach.  ",
             "questions": [
                 {
                     "cia_type": "confidentiality",
@@ -505,7 +505,7 @@
         },
         {
             "type": "Mitigating circumstances of breach",
-            "description": " ",
+            "description": "*Specific circumstances that may occur at NN Non-Life. *For causes with fraud pass incident on to Anti-Fraud department",
             "questions": [
                 {
                     "id": 32,

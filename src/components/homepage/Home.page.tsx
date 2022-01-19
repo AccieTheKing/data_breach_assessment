@@ -130,7 +130,7 @@ const Homepage = () => {
                   </div>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
-                  <b className="bPos">Data breach date</b>
+                  <b className="bPos">Date of data breach</b>
                </div>
                <div className="row offset-lg-4 col-lg-4 offset-lg-4">
                   <div className="mb-4">
@@ -144,7 +144,7 @@ const Homepage = () => {
                         value={dataBreachDate ?? ''}
                      />
                      {errors.dataBreachDate?.type === 'required' && (
-                        <p className="required">Data breach date is required</p>
+                        <p className="required">Date of data breach is required</p>
                      )}
                   </div>
                </div>
