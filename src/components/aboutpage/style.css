@@ -1,68 +1,85 @@
 .h1Style {
-    font-size: var(--h1fontSize);
-    margin-top: 50px;
-    color: #ea650d;
-  }
+  font-size: var(--h1fontSize);
+  margin-top: 50px;
+  color: #ea650d;
+}
 
-  h2 {
-    color: #ea650d;
-  }
+h2 {
+  color: #ea650d;
+}
+
+.tblImage {
+  width: 80%;
+  max-width: 500px;
+  min-width: 300px;
+}
 
 .sidebar {
-    margin: 0;
-    padding: 0;
-    width: 225px;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-    background-color: #F1EDEB;
-  }
-
-  .sidebar li {
-    padding-left: 20px;
-    
+  margin: 0;
+  padding: 0 0 20px 0;
+  width: 300px;
+  position: fixed;
+  max-height: 90vh;
+  overflow-y: scroll;
+  background-color: #F1EDEB
 }
-  
-  .sidebar a {
-    display: block;
-    color: black;
-    padding: 10px;
-    text-decoration: none;
-  }
-  
 
-  .sidebar a.active {
-    color: #ea650d;
-    
+.sidebar li {
+  padding-left: 20px;
   }
+
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  line-height: 25px;
+}
+
+
+.sidebar a.active {
+  color: #ea650d;
+  
+}
 
 .sidebar a.focus {
-  color: #ea650d;
+color: #ea650d;
 
 }
-  
-  div.content {
-    margin-left: 225px;
-    padding: 1px 16px;
-    height: 1000px;
-    margin-right: 100px;
+
+
+.content {
+  margin-left: 325px;
+  padding: 1px 16px;
+  min-height: fit-content;
+  margin-right: 100px;
+  max-width: 2500px;
+}
+
+.tblActions {
+  max-width: 400px;
+}
+
+@media screen and (min-width: 1920px) {
+  .content { margin-right: 500px;}
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  .content {margin-left: 0; margin-right: 0;}
+}
+
+
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
   }
   
- 
-  @media screen and (max-width: 700px) {
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
-    }
-    .sidebar a {float: left;}
-    div.content {margin-left: 0;}
-  }
-  
-  
-  @media screen and (max-width: 400px) {
-    .sidebar a {
-      text-align: center;
-      float: none;
-    }
-  }
+}
