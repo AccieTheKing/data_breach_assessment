@@ -14,7 +14,6 @@ import { useEffect } from 'react';
 import assessmentAnswersState from '../../providers/question/answer';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 
-
 //Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
@@ -31,14 +30,6 @@ const Homepage = () => {
    const [incidentNumber, setIncidentNumber] = useRecoilState<string | undefined>(
       assessmentIncidentNumberState
    );
-   const {
-      register,
-      handleSubmit,
-      watch,
-      formState: { errors },
-   } = useForm();
-   const onSubmit = () => console.log();
-
    const {
       register,
       handleSubmit,
