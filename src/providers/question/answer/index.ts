@@ -2,6 +2,7 @@ import { atom } from 'recoil';
 
 export interface ICurrentAssessmentAnswers {
    id: number;
+   questionText: string;
    answer: boolean | string;
 }
 

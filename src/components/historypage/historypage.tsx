@@ -285,6 +285,8 @@ const Historypage = () => {
                      return val;
                   }
                })
+               .sort((a, b) => new Date(a.assessmentDate).getTime() - new Date(b.assessmentDate).getTime())
+               .reverse()
                .map((el: DB_Assessment, id: number) => (
                   <div key={id}>
                      <div className={`card assessmentCard card border_${el.resultText}`}>

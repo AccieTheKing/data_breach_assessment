@@ -5,11 +5,15 @@ import getCurrentAssessment, {
    assessmentNoteState,
    assessmentScore,
    enableCalculationButtonState,
+   IDatabreachAssessment,
    showAnimationState,
 } from '../../providers/assessment';
 import assessmentAnswersState from '../../providers/question/answer';
+import { jsPDF } from 'jspdf';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 import './style.css';
+import { Button, Modal } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
 export enum FOOTER_CONTENT {
    RESULT,
@@ -18,6 +22,92 @@ export enum FOOTER_CONTENT {
 
 interface FooterProps {
    forPage: FOOTER_CONTENT;
+}
+
+function MyVerticallyCenteredModal(props: any) {
+   const assessment = props.assessment as IDatabreachAssessment;
+   return (
+      <Modal
+         show={props.show}
+         onHide={props.onHide}
+         size="lg"
+         aria-labelledby="contained-modal-title-vcenter"
+         centered
+      >
+         <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Preview PDF</Modal.Title>
+         </Modal.Header>
+         <Modal.Body>
+            <div className="print-container">
+               <div id="print">
+                  <h2>Data breach assessment result</h2>
+                  <table className="assessment-information">
+                     <tbody>
+                        <tr>
+                           <th>Incident number: </th>
+                           <td>{assessment.incidentNumber}</td>
+                        </tr>
+                        <tr>
+                           <th>Date of data breach: </th>
+                           <td>{assessment.dataBreachDate?.toLocaleDateString('nl')}</td>
+                        </tr>
+                        <tr>
+                           <th>Score: </th>
+                           <td>{assessment.impactScore}</td>
+                        </tr>
+                        <tr>
+                           <th>Severity level: </th>
+                           <td>{assessment.resultText}</td>
+                        </tr>
+                        <tr>
+                           <th>Assessor: </th>
+                           <td>{`${assessment.assessor.firstName} ${assessment.assessor.lastName}`}</td>
+                        </tr>
+                        <tr>
+                           <th>Date of assessment: </th>
+                           <td>{assessment.assessmentDate.toLocaleDateString('nl')}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <table className="assessment-notes">
+                     <tr>
+                        <th>Notes:</th>
+                     </tr>
+                     <tr>
+                        <td>
+                           <div>{assessment.notes}</div>
+                        </td>
+                     </tr>
+                  </table>
+                  <table className="assessment-answers">
+                     <thead>
+                        <tr>
+                           <th>#</th>
+                           <th>Question</th>
+                           <th>Answer</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {assessment.answers.map((el) => (
+                           <tr key={el.id}>
+                              <td>{el.id}</td>
+                              <td>{el.questionText}</td>
+                              <td>{el.answer === true ? 'Yes' : el.answer === false ? 'No' : el.answer}</td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </Modal.Body>
+         <Modal.Footer>
+            <Button variant="secondary" onClick={props.onHide}>
+               Cancel
+            </Button>
+            <Button onClick={props.export}>Export</Button>
+         </Modal.Footer>
+      </Modal>
+   );
 }
 
 // Footer content for the result page
@@ -31,6 +121,7 @@ const ResultPageFooterContent = () => {
    const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
    const setEnableCalcButton = useSetRecoilState<boolean>(enableCalculationButtonState);
    const currentAssessment = useRecoilValue(getCurrentAssessment); // has all the assessment data
+   const [modalShow, setModalShow] = useState(false);
 
    const onResetAllStates = () => {
       onResetQuestionaireState();
@@ -56,17 +147,43 @@ const ResultPageFooterContent = () => {
          }
       }
    };
+
+   const onExport = () => {
+      const doc = new jsPDF('p', 'px', 'a4');
+      const el = document.getElementById('print');
+      if (el) {
+         doc.html(el, {
+            autoPaging: 'text',
+            margin: [20, 0, 40, 0],
+            callback: (pdf) => {
+               pdf.setFont('calibri');
+               pdf.save('hello.pdf');
+            },
+         });
+      }
+   };
+
    return (
-      <div className="row" id="result-page-footer">
-         <div className="col-6 offset-6 col-lg-2 offset-lg-9">
-            <div className="button-container">
-               <button className="btn btn-light footer-button">Export</button>
-               <button className="btn btn-light footer-button" onClick={onFinishAssessment}>
-                  {params && params.id ? 'Back to list' : 'Finish'}
-               </button>
+      <>
+         <MyVerticallyCenteredModal
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            export={() => onExport()}
+            assessment={currentAssessment}
+         />
+         <div className="row" id="result-page-footer">
+            <div className="col-6 offset-6 col-lg-2 offset-lg-9">
+               <div className="button-container">
+                  <button className="btn btn-light footer-button" onClick={() => setModalShow(true)}>
+                     Export
+                  </button>
+                  <button className="btn btn-light footer-button" onClick={onFinishAssessment}>
+                     {params && params.id ? 'Back to history' : 'Finish'}
+                  </button>
+               </div>
             </div>
          </div>
-      </div>
+      </>
    );
 };
 

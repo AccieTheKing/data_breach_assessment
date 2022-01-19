@@ -1,15 +1,31 @@
 import Navbar from '../Navbar/Nav';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { assessmentIncidentNumberState, dataBreachDateState } from '../../providers/assessment';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import {
+   assessmentIncidentNumberState,
+   assessmentNoteState,
+   assessmentScore,
+   dataBreachDateState,
+} from '../../providers/assessment';
 import assessorState, { IAssessor } from '../../providers/assessor';
 import { useForm } from 'react-hook-form';
 import './style.css';
+import { useEffect } from 'react';
+import assessmentAnswersState from '../../providers/question/answer';
+import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 
 
 //Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
+   const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
+   const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
+   const onResetAssessmentScore = useResetRecoilState(assessmentScore);
+   const onResetNotes = useResetRecoilState(assessmentNoteState);
+   const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
+   const onResetAssessor = useResetRecoilState(assessorState);
+   const onResetIncidentNumber = useResetRecoilState(assessmentIncidentNumberState);
+   const onResetDatabreachDate = useResetRecoilState(dataBreachDateState);
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
    const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
    const [incidentNumber, setIncidentNumber] = useRecoilState<string | undefined>(
@@ -22,6 +38,23 @@ const Homepage = () => {
       formState: { errors },
    } = useForm();
    const onSubmit = () => console.log();
+
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   const onResetAllStates = () => {
+      onResetQuestionaireState();
+      onResetQuestionID();
+      onResetAssessmentScore();
+      onResetNotes();
+      onResetQuestionType();
+      onResetAssessor();
+      onResetIncidentNumber();
+      onResetDatabreachDate();
+   };
+
+   useEffect(() => {
+      onResetAllStates();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    return (
       <div>
@@ -79,7 +112,7 @@ const Homepage = () => {
                         {...register('incidentNumber', {
                            required: true,
                            pattern: {
-                              value: /^(?:([A-Z]{2})_([0-9]{6}))$/g,
+                              value: /^(?:(LE)_([0-9]{6}))$/i,
                               message: '⚠ Wrong format used for incident number!',
                            },
                         })}

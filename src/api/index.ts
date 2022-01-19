@@ -13,7 +13,13 @@ export interface DB_Assessment {
    status: string;
    assessor_Id: number;
    note?: Array<{ noteId: number; notesText: string; assessment_Id: number }>;
-   answers?: Array<{ AnswerId: number; answer_text: string; question_number: string; assessment_Id: number }>;
+   answers?: Array<{
+      AnswerId: number;
+      answer_text: string;
+      question_text: string;
+      question_number: string;
+      assessment_Id: number;
+   }>;
    assessor: {
       assessorId?: number;
       firstName: string;
