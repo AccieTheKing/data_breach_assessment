@@ -13,14 +13,18 @@
 .cardDraft {
    background: #f1edeb;
    border-radius: 10px;
+  
    padding: 25px;
    filter: drop-shadow(0.15rem 0.15rem 0.15rem rgb(110, 107, 107));
    margin-bottom: 1em;
+ 
 }
 
-.card-text {
-   font-weight: bold;
+.cardDraft   .card-text {
+   font-weight: lighter;
 }
+
+
 
 .squareDraft {
    display: flex;

@@ -6,6 +6,7 @@ header .row:last-child {
    margin-bottom: 15px;
 }
 
+
 .note-group textarea {
    border: solid 2px var(--nnOrange);
    border-radius: 15px;
@@ -46,4 +47,10 @@ header .row:last-child {
    .btn-showNote {
       margin: 15px;
    }
+   header #showNote {
+      order: 1;
+      display: flex;
+      justify-items: flex-start;
+}
+
 }
