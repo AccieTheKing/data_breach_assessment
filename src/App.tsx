@@ -6,7 +6,7 @@ import Draftpage from './components/draftpage/draftpage';
 import Historypage from './components/historypage/historypage';
 import Aboutpage from './components/aboutpage/aboutpage';
 import Homepage from './components/homepage/Home.page';
-import Questionairpage from './components/questionairpage/Questionair.page';
+import Questionnairpage from './components/questionairpage/Questionair.page';
 import Resultpage from './components/resultpage/Result.page';
 import GridLoader from 'react-spinners/GridLoader';
 import AppWrapper from './providers';
@@ -32,7 +32,7 @@ function App() {
                   ) : (
                      <Routes>
                         <Route path="/" element={<Homepage />} />
-                        <Route path="/start" element={<Questionairpage />} />
+                        <Route path="/start" element={<Questionnairpage />} />
                         <Route path="/history" element={<Historypage />} />
                         <Route path="/history/:id" element={<Resultpage />} />
                         <Route path="/drafts" element={<Draftpage />} />

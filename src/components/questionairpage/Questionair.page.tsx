@@ -28,7 +28,7 @@ const QuestionNoteField = () => {
    );
 };
 
-const Questionairpage: React.FC = () => {
+const Questionnairpage: React.FC = () => {
    const calculationAnimation = useRecoilValue<boolean>(showAnimationState);
    const currentAssessment = useRecoilValue(getCurrentAssessment);
    const [showNote, setShowNote] = useState(false);
@@ -86,4 +86,4 @@ const Questionairpage: React.FC = () => {
    );
 };
 
-export default Questionairpage;
+export default Questionnairpage;

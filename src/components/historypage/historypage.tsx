@@ -73,13 +73,12 @@ const Historypage = () => {
       setUsedData(data.current);
    };
 
-
    //filtInsignificant: Filters all assessments to get the assessments with the result "insignificant". Used in the filterResult function.
    function filtInsignificant() {
       const insignificant = data.current.filter(
          (historyData: DB_Assessment) => historyData.resultText === ASSESSMENT_IMPACT_TITLE.NONE
       );
-      return insignificant
+      return insignificant;
    }
 
    //filtLow: Filters all assessments to get the assessments with the result "low". Used in the filterResult function.
@@ -145,15 +144,15 @@ const Historypage = () => {
                      </svg>
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li>
+                     <li>
                         <div className="dropdown-item">
                            <label htmlFor="checkbox_insignificant">
                               <input
                                  ref={nullCheck}
-                                 name="low"
+                                 name="insignificant"
                                  className="form-check-input"
                                  type="checkbox"
-                                 id="checkbox_low"
+                                 id="checkbox_insignificant"
                                  onChange={filtInsignificant}
                                  value="insignificant"
                               />
@@ -270,11 +269,9 @@ const Historypage = () => {
                   if (
                      val.assessor.firstName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
                      val.assessor.lastName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     searchTerm
-                        .toLowerCase()
-                        .includes(
-                           `${val.assessor.firstName.toLocaleLowerCase()} ${val.assessor.lastName.toLocaleLowerCase()}`
-                        ) ||
+                     `${val.assessor.firstName.toLocaleLowerCase()} ${val.assessor.lastName.toLocaleLowerCase()}`
+                        .toLocaleLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
                      new Date(val.assessmentDate)
                         .toLocaleDateString('nl')
                         .includes(searchTerm.toLowerCase()) ||

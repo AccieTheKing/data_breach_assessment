@@ -1,3 +1,6 @@
+import { jsPDF } from 'jspdf';
+import { useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { storeAssessmentInDB } from '../../api';
@@ -9,11 +12,8 @@ import getCurrentAssessment, {
    showAnimationState,
 } from '../../providers/assessment';
 import assessmentAnswersState from '../../providers/question/answer';
-import { jsPDF } from 'jspdf';
 import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 import './style.css';
-import { Button, Modal } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
 
 export enum FOOTER_CONTENT {
    RESULT,
@@ -172,10 +172,10 @@ const ResultPageFooterContent = () => {
             assessment={currentAssessment}
          />
          <div className="row" id="result-page-footer">
-            <div className="col-6 offset-6 col-lg-2 offset-lg-9">
+            <div className="col-8 offset-4 col-lg-2 offset-lg-9">
                <div className="button-container">
                   <button className="btn btn-light footer-button" onClick={() => setModalShow(true)}>
-                     Export
+                     Preview PDF
                   </button>
                   <button className="btn btn-light footer-button" onClick={onFinishAssessment}>
                      {params && params.id ? 'Back to history' : 'Finish'}
