@@ -3,7 +3,7 @@
     "dataBreachAssessmentQuestions": [
         {
             "type": "Simple data",
-            "description": "*Biographical data (date of birth, gender, age ..) *Contact details (telephone number, social media, e-mail address ..) *Full name *Data on education *Familiy life (children, marriage, partner, siblings, parents .. ) *Professional experience",
+            "description": "*Biographical data (date of birth, gender, age) *Contact details (telephone number, social media, e-mail address) *Full name *Data on education *Familiy life (children, marriage, partner, siblings, parents) *Professional experience",
             "questions": [
                 {
                     "id": 1,
@@ -60,22 +60,8 @@
                             "action": "nextType"
                         }
                     }
-                },
-                {
-                    "id": 5,
-                    "text": "Can the data breach lead to a breach in their personal security or affect their physical/psychological conditions?",
-                    "weight": {
-                        "yes": {
-                            "value": 2,
-                            "action": "nextType"
-                        },
-                        "no": {
-                            "value": 0,
-                            "action": "nextType"
-                        }
-                    }
                 }
-            ]
+                ]
         },
         {
             "type": "Behavioural data",
@@ -97,7 +83,7 @@
                 },
                 {
                     "id": 7,
-                    "text": "Does the data provide any substatial insight to the individuals's behavioural information?",
+                    "text": "Does the data provide any substantial insight to the individuals's behavioural information?",
                     "weight": {
                         "yes": {
                             "value": 1,
@@ -139,7 +125,7 @@
                 },
                 {
                     "id": 10,
-                    "text": "Can a profile be created based on indivual's sensitive data?",
+                    "text": "Can a profile be created based on individual's sensitive data?",
                     "weight": {
                         "yes": {
                             "value": 2,
@@ -235,7 +221,7 @@
                 },
                 {
                     "id": 16,
-                    "text": "Does the data provide any substatial insight to the individuals's behavioural information?",
+                    "text": "Does the data provide any substantial insight to the individuals's behavioural information?",
                     "weight": {
                         "yes": {
                             "value": -3,
@@ -297,7 +283,7 @@
             "questions": [
                 {
                     "id": 20,
-                    "text": "How easy is it to identiy the individual on the basis of the perosnal data involved in the personal data breach?",
+                    "text": "How easy is it to identiy the individual on the basis of the personal data involved in the personal data breach?",
                     "weight": {
                         "negligible": {
                             "value": 0.25,
@@ -343,7 +329,7 @@
                         },
                         {
                             "id": 22,
-                            "text": "Is data disposed to a number of known recipients?",
+                            "text": "Is data exposed to a number of known recipients?",
                             "weight": {
                                 "yes": {
                                     "value": 0.25,
@@ -357,7 +343,7 @@
                         },
                         {
                             "id": 23,
-                            "text": "Is data disposed to an unknown number of recipients? ",
+                            "text": "Is data exposed to an unknown number of recipients? ",
                             "weight": {
                                 "yes": {
                                     "value": 0.5,
@@ -425,7 +411,7 @@
                         {
                             "id": 27,
                             "headerText": "Loss of availability",
-                            "text": "Is the data recoverable without any difficulty or undue delay?",
+                            "text": "Is the data unavailable, but recoverable without any difficulty or undue delay?",
                             "weight": {
                                 "yes": {
                                     "value": 0,
@@ -551,7 +537,7 @@
                 },
                 {
                     "id": 35,
-                    "text": "There are indications that incorrect contact details were provided to commit fraud.",
+                    "text": "Is there indications that incorrect contact details were provided to commit fraud?",
                     "weight": {
                         "yes": {
                             "value": -10,
@@ -565,7 +551,7 @@
                 },
                 {
                     "id": 36,
-                    "text": "Did the breach concern the personal data of 1 data subject, received by 1 recipient?",
+                    "text": "Did the breach concern the personal data of one data subject, received by one recipient?",
                     "weight": {
                         "yes": {
                             "value": -0.5,
