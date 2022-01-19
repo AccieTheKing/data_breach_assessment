@@ -172,7 +172,7 @@ const ResultPageFooterContent = () => {
             assessment={currentAssessment}
          />
          <div className="row" id="result-page-footer">
-            <div className="col-8 offset-4 col-lg-2 offset-lg-9">
+            <div className="col-sm-8 offset-sm-4 col-xl-4 offset-xl-7">
                <div className="button-container">
                   <button className="btn btn-light footer-button" onClick={() => setModalShow(true)}>
                      Preview PDF
