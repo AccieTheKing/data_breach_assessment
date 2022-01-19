@@ -172,10 +172,10 @@ const ResultPageFooterContent = () => {
             assessment={currentAssessment}
          />
          <div className="row" id="result-page-footer">
-            <div className="col-6 offset-6 col-lg-2 offset-lg-9">
+            <div className="col-8 offset-4 col-lg-2 offset-lg-9">
                <div className="button-container">
                   <button className="btn btn-light footer-button" onClick={() => setModalShow(true)}>
-                     Export
+                     Preview PDF
                   </button>
                   <button className="btn btn-light footer-button" onClick={onFinishAssessment}>
                      {params && params.id ? 'Back to history' : 'Finish'}
