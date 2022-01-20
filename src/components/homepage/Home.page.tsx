@@ -116,7 +116,7 @@ const Homepage = () => {
                         })}
                         onChange={(e) => setIncidentNumber(e.target.value)}
                         type="text"
-                        value={incidentNumber ? incidentNumber : ''}
+                        value={incidentNumber}
                         className="form-control"
                         placeholder="Enter incident number"
                         aria-label="Incident number"
@@ -157,7 +157,8 @@ const Homepage = () => {
                         assessor.firstName != null &&
                         assessor.lastName != null &&
                         incidentNumber != null &&
-                        dataBreachDate != null
+                        dataBreachDate != null &&
+                        !errors
                      )
                         navigate('/start');
                   }}
