@@ -330,7 +330,7 @@ const QuestionItemContainer: React.FC<QuestionContainerProp> = ({
          >
             <div className="accordion-body">
                {questions.map((question, id) =>
-                  question.id === 20 ? (
+                  question.id === 19 ? (
                      <EaseOfIndentification
                         key={id}
                         value={question}
