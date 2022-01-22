@@ -61,14 +61,14 @@
                         }
                     }
                 }
-                ]
+            ]
         },
         {
             "type": "Behavioural data",
             "description": "*Location (IP-address, travel history) *Traffic data (browsing activity, cookies, e-mail correspondence, telephone history, chat logs) *Data on personal preferences *Data on habits (search behaviour, app usage and activity, purchase, complaints)",
             "questions": [
                 {
-                    "id": 6,
+                    "id": 5,
                     "text": "Does the data breach involve behavioural data?",
                     "weight": {
                         "yes": {
@@ -82,7 +82,7 @@
                     }
                 },
                 {
-                    "id": 7,
+                    "id": 6,
                     "text": "Does the data provide any substantial insight to the individuals's behavioural information?",
                     "weight": {
                         "yes": {
@@ -96,7 +96,7 @@
                     }
                 },
                 {
-                    "id": 8,
+                    "id": 7,
                     "text": "Is it impossible to collect the data through publicly available sources?",
                     "weight": {
                         "yes": {
@@ -110,7 +110,7 @@
                     }
                 },
                 {
-                    "id": 9,
+                    "id": 8,
                     "text": "Is the volume of 'behavioural data' and/or the characteristics of the controller such that a profile the individual can be created, exposing detailed information about his/her everyday life?",
                     "weight": {
                         "yes": {
@@ -124,7 +124,7 @@
                     }
                 },
                 {
-                    "id": 10,
+                    "id": 9,
                     "text": "Can a profile be created based on individual's sensitive data?",
                     "weight": {
                         "yes": {
@@ -144,7 +144,7 @@
             "description": "*Income *Financial transactions *Bank statements *Investments *Credit card information *Invoices *Social welfare data",
             "questions": [
                 {
-                    "id": 11,
+                    "id": 10,
                     "text": "Does the data breach involve financial data?",
                     "weight": {
                         "yes": {
@@ -158,7 +158,7 @@
                     }
                 },
                 {
-                    "id": 12,
+                    "id": 11,
                     "text": "Does the nature of the data set provide substantial insight to the individuals financial information?",
                     "weight": {
                         "yes": {
@@ -172,7 +172,7 @@
                     }
                 },
                 {
-                    "id": 13,
+                    "id": 12,
                     "text": "Does the specific data set include financial information but without providing any significant insight to the indivicual's financial status/situation?",
                     "weight": {
                         "yes": {
@@ -186,7 +186,7 @@
                     }
                 },
                 {
-                    "id": 14,
+                    "id": 13,
                     "text": "Can the data set, due to its nature and/or volume, enable fraud or lead to the creation of a detailed social/financial profile?",
                     "weight": {
                         "yes": {
@@ -206,7 +206,7 @@
             "description": "*Health data *Political affiliation/opinion *Racial or ethnic origin *Religious or philosophical beliefs *Trade union membership *Genetic data *Biometric data *Sex life or sexual orientation",
             "questions": [
                 {
-                    "id": 15,
+                    "id": 14,
                     "text": "Does the data breach involve sensitive data?",
                     "weight": {
                         "yes": {
@@ -220,7 +220,7 @@
                     }
                 },
                 {
-                    "id": 16,
+                    "id": 15,
                     "text": "Does the data provide any substantial insight to the individuals's behavioural information?",
                     "weight": {
                         "yes": {
@@ -234,7 +234,7 @@
                     }
                 },
                 {
-                    "id": 17,
+                    "id": 16,
                     "text": "Is it impossible to collect the data through publicly available sources?",
                     "weight": {
                         "yes": {
@@ -248,7 +248,7 @@
                     }
                 },
                 {
-                    "id": 18,
+                    "id": 17,
                     "text": "Does the nature of data lead to general assumptions?",
                     "weight": {
                         "yes": {
@@ -262,7 +262,7 @@
                     }
                 },
                 {
-                    "id": 19,
+                    "id": 18,
                     "text": "Does the nature of data lead to assumptions about sensitive information?",
                     "weight": {
                         "yes": {
@@ -282,7 +282,7 @@
             "description": "*Negligible is when it is extremely difficult to match the data to a particular person, but under certain conditions it could be possible. *Maximum is selected when identification is possible directly from the data breached with no special research needed to discover the individual’s identity",
             "questions": [
                 {
-                    "id": 20,
+                    "id": 19,
                     "text": "How easy is it to identiy the individual on the basis of the personal data involved in the personal data breach?",
                     "weight": {
                         "negligible": {
@@ -313,7 +313,7 @@
                     "cia_type": "confidentiality",
                     "questions": [
                         {
-                            "id": 21,
+                            "id": 20,
                             "headerText": "Loss of confidentiality",
                             "text": "Is data exposed to confidentiality risks, but without evidence that illegal processing has occurred?",
                             "weight": {
@@ -328,7 +328,7 @@
                             }
                         },
                         {
-                            "id": 22,
+                            "id": 21,
                             "text": "Is data exposed to a number of known recipients?",
                             "weight": {
                                 "yes": {
@@ -342,7 +342,7 @@
                             }
                         },
                         {
-                            "id": 23,
+                            "id": 22,
                             "text": "Is data exposed to an unknown number of recipients? ",
                             "weight": {
                                 "yes": {
@@ -361,7 +361,7 @@
                     "cia_type": "integrity",
                     "questions": [
                         {
-                            "id": 24,
+                            "id": 23,
                             "headerText": "Loss of integrity",
                             "text": "Has data been altered but without any identified incorrect or illegal use?",
                             "weight": {
@@ -376,7 +376,7 @@
                             }
                         },
                         {
-                            "id": 25,
+                            "id": 24,
                             "text": "Has data been altered and possibly used in an incorrect or illegal way but with possibility to recover?",
                             "weight": {
                                 "yes": {
@@ -390,7 +390,7 @@
                             }
                         },
                         {
-                            "id": 26,
+                            "id": 25,
                             "text": "Has data been altered and possibly used in an incorrect or illegal way without possibility to recover? ",
                             "weight": {
                                 "yes": {
@@ -409,7 +409,7 @@
                     "cia_type": "availability",
                     "questions": [
                         {
-                            "id": 27,
+                            "id": 26,
                             "headerText": "Loss of availability",
                             "text": "Is the data unavailable, but recoverable without any difficulty or undue delay?",
                             "weight": {
@@ -424,7 +424,7 @@
                             }
                         },
                         {
-                            "id": 28,
+                            "id": 27,
                             "text": "Is the data temporary unavailable? ",
                             "weight": {
                                 "yes": {
@@ -438,7 +438,7 @@
                             }
                         },
                         {
-                            "id": 29,
+                            "id": 28,
                             "text": "Is the data fully unavailable?",
                             "weight": {
                                 "yes": {
@@ -457,7 +457,7 @@
                     "cia_type": "Other aggravating circumstances",
                     "questions": [
                         {
-                            "id": 30,
+                            "id": 29,
                             "headerText": "Other aggravating circumstances",
                             "text": "Was the breach due to an intentional action, e.g. in order to cause problem to the data controller?",
                             "weight": {
@@ -472,7 +472,7 @@
                             }
                         },
                         {
-                            "id": 31,
+                            "id": 30,
                             "text": "Did the breach involve a large number of data subjects?",
                             "weight": {
                                 "yes": {
@@ -494,7 +494,7 @@
             "description": "*Specific circumstances that may occur at NN Non-Life. *For causes with fraud pass incident on to Anti-Fraud department",
             "questions": [
                 {
-                    "id": 32,
+                    "id": 31,
                     "text": "Is the data unintelligible?",
                     "weight": {
                         "yes": {
@@ -508,7 +508,7 @@
                     }
                 },
                 {
-                    "id": 33,
+                    "id": 32,
                     "text": "Was the personal data received by the incorrect recipient due to a failure of the data subject to (correctly) update his contact information?",
                     "weight": {
                         "yes": {
@@ -522,7 +522,7 @@
                     }
                 },
                 {
-                    "id": 34,
+                    "id": 33,
                     "text": "Did the data concern a deceased person?",
                     "weight": {
                         "yes": {
@@ -536,7 +536,7 @@
                     }
                 },
                 {
-                    "id": 35,
+                    "id": 34,
                     "text": "Is there indications that incorrect contact details were provided to commit fraud?",
                     "weight": {
                         "yes": {
@@ -550,7 +550,7 @@
                     }
                 },
                 {
-                    "id": 36,
+                    "id": 35,
                     "text": "Did the breach concern the personal data of one data subject, received by one recipient?",
                     "weight": {
                         "yes": {
@@ -564,7 +564,7 @@
                     }
                 },
                 {
-                    "id": 37,
+                    "id": 36,
                     "text": "Did the breach occur due to a one-off, accidental failure to follow protocol for transmitting personal data?",
                     "weight": {
                         "yes": {
@@ -578,7 +578,7 @@
                     }
                 },
                 {
-                    "id": 38,
+                    "id": 37,
                     "text": "Was the personal data received by a professional party under NDA obligations or professional confidentiality? ",
                     "weight": {
                         "yes": {
@@ -592,7 +592,7 @@
                     }
                 },
                 {
-                    "id": 39,
+                    "id": 38,
                     "text": "Was the breach reported by the recipient on his own volition, and has the received set of data been returned to NN or destroyed by the recipient?",
                     "weight": {
                         "yes": {
