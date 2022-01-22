@@ -113,6 +113,7 @@ const Resultpage: React.FC = () => {
                };
             });
 
+            setResultText(assessment.resultText);
             setAnswers(answers);
             setAssessmentDate(assessment.assessmentDate);
             setDatabreachDate(assessment.databreachDate);
