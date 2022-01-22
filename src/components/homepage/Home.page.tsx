@@ -23,7 +23,6 @@ const Homepage = () => {
    const onResetNotes = useResetRecoilState(assessmentNoteState);
    const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
    const onResetAssessor = useResetRecoilState(assessorState);
-   const onResetIncidentNumber = useResetRecoilState(assessmentIncidentNumberState);
    const onResetDatabreachDate = useResetRecoilState(dataBreachDateState);
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
    const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
@@ -35,7 +34,10 @@ const Homepage = () => {
       handleSubmit,
       formState: { errors },
    } = useForm();
-   const onSubmit = () => console.log();
+
+   const onSubmit = (data) => {
+      if (data) navigate('/start');
+   };
 
    // eslint-disable-next-line react-hooks/exhaustive-deps
    const onResetAllStates = () => {
@@ -45,7 +47,7 @@ const Homepage = () => {
       onResetNotes();
       onResetQuestionType();
       onResetAssessor();
-      onResetIncidentNumber();
+      setIncidentNumber(null);
       onResetDatabreachDate();
    };
 
@@ -70,7 +72,7 @@ const Homepage = () => {
                               firstName: e.target.value,
                            })
                         }
-                        value={assessor.firstName ?? ''}
+                        value={assessor.firstName}
                         type="text"
                         className="form-control"
                         placeholder="Enter first name"
@@ -92,7 +94,7 @@ const Homepage = () => {
                               lastName: e.target.value,
                            })
                         }
-                        value={assessor.lastName ?? ''}
+                        value={assessor.lastName}
                         type="text"
                         className="form-control"
                         placeholder="Enter last name"
@@ -141,7 +143,7 @@ const Homepage = () => {
                         type="date"
                         id="formFile"
                         onChange={(e) => setDataBreachDate(e.target.value)}
-                        value={dataBreachDate ?? ''}
+                        value={dataBreachDate}
                      />
                      {errors.dataBreachDate?.type === 'required' && (
                         <p className="required">Date of data breach is required</p>
@@ -149,20 +151,7 @@ const Homepage = () => {
                   </div>
                </div>
 
-               <button
-                  type="submit"
-                  className="btn btn-colour-1 btn-lg btn-block"
-                  onClick={() => {
-                     if (
-                        assessor.firstName != null &&
-                        assessor.lastName != null &&
-                        incidentNumber != null &&
-                        dataBreachDate != null &&
-                        !errors
-                     )
-                        navigate('/start');
-                  }}
-               >
+               <button type="submit" className="btn btn-colour-1 btn-lg btn-block">
                   START <br></br>
                   ASSESSMENT
                </button>
