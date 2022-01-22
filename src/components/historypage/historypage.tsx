@@ -290,14 +290,14 @@ const Historypage = () => {
                         <div className="row">
                            <div className="col-12 col-lg-3">
                               <span className="card-text">
-                                 Ass. number: {el.incidentNr}
+                                 Incident nr: {el.incidentNr}
                                  <br></br>
                                  Assessor: {el.assessor.firstName} {el.assessor.lastName}
                               </span>
                            </div>
                            <div className="col-12 col-lg-3">
                               <span className="card-text">
-                                 Date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
+                                 Assessment date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
                                  <br></br>
                                  Result: {el.resultNumber}
                               </span>

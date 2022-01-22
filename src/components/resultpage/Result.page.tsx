@@ -151,7 +151,7 @@ const Resultpage: React.FC = () => {
             <div className="row">
                <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
-                     <p>Assessment number: {currentAssessment.incidentNumber}</p>
+                     <p>Incident number: {currentAssessment.incidentNumber}</p>
                      <p>
                         Date of data breach:{' '}
                         {currentAssessment.dataBreachDate &&
