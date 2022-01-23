@@ -185,7 +185,6 @@ const AppProvider: React.FC = ({ children }) => {
       const [___, mitigating_c_value] = all_score_objects[6];
       const score = highest_score * ease_oi_value + ag_cir_breach + mitigating_c_value;
 
-      // console.log(highest_score, ease_oi_value, ag_cir_breach, mitigating_c_value);
       setCurrentImpactScore(score);
    };
 
@@ -228,16 +227,7 @@ const AppProvider: React.FC = ({ children }) => {
          }
       };
 
-      const onUpdateAgQuestions = (
-         nextCategory: string,
-         foundQuestionType: string,
-         lastQuestionID: number,
-         weightIndex: string
-      ) => {
-         const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
-         const index = allTypes.indexOf(currentCiaType);
-         const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
-         if (nextCiaType === 'availability') setCurrentQuestionType(foundQuestionType);
+      const onUpdateAgQuestions = (nextCategory: string, lastQuestionID: number, weightIndex: string) => {
          let found_cia_type = '';
          let question = {} as IQuestion;
 
@@ -248,9 +238,16 @@ const AppProvider: React.FC = ({ children }) => {
             }
             return null;
          });
+
          found_cia_type = type_and_questions?.cia_type as string;
 
+         const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
+         const index = allTypes.indexOf(found_cia_type);
+         const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
          const nextAction = question.weight![weightIndex].action;
+
+         console.log(found_cia_type, nextCiaType, nextAction);
+
          switch (nextAction) {
             case QUESTIONNAIR_STATE.CONTINUE:
                setCurrentQuestionID(question.id + 1);
@@ -298,7 +295,7 @@ const AppProvider: React.FC = ({ children }) => {
             const newValue = current_question.weight![key].value;
             onStoreScore(foundQuestionType, newValue);
          } else if (foundQuestionType === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
-            onUpdateAgQuestions(nextCategory, foundQuestionType, lastQuestionID, weightIndex);
+            onUpdateAgQuestions(nextCategory, lastQuestionID, weightIndex);
             onUpdateScores();
          } else {
             const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
