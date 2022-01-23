@@ -227,7 +227,12 @@ const AppProvider: React.FC = ({ children }) => {
          }
       };
 
-      const onUpdateAgQuestions = (nextCategory: string, lastQuestionID: number, weightIndex: string) => {
+      const onUpdateAgQuestions = (
+         nextCategory: string,
+         currentQuestionType: string,
+         lastQuestionID: number,
+         weightIndex: string
+      ) => {
          let found_cia_type = '';
          let question = {} as IQuestion;
 
@@ -243,15 +248,14 @@ const AppProvider: React.FC = ({ children }) => {
 
          const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
          const index = allTypes.indexOf(found_cia_type);
-         const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
+         const nextCiaType = allTypes[index + 1];
          const nextAction = question.weight![weightIndex].action;
-
-         console.log(found_cia_type, nextCiaType, nextAction);
 
          switch (nextAction) {
             case QUESTIONNAIR_STATE.CONTINUE:
                setCurrentQuestionID(question.id + 1);
                setCurrentCiaType(found_cia_type);
+               setCurrentQuestionType(currentQuestionType);
                return;
             case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
                // Grab the first question of the next cia type
@@ -260,6 +264,7 @@ const AppProvider: React.FC = ({ children }) => {
                const nextCiaQuestion = bucket[0];
                setCurrentQuestionID(nextCiaQuestion.id);
                setCurrentCiaType(nextCiaType);
+               setCurrentQuestionType(currentQuestionType);
                return;
             case QUESTIONNAIR_STATE.NEXT_TYPE:
                setCurrentQuestionType(nextCategory);
@@ -295,8 +300,7 @@ const AppProvider: React.FC = ({ children }) => {
             const newValue = current_question.weight![key].value;
             onStoreScore(foundQuestionType, newValue);
          } else if (foundQuestionType === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
-            onUpdateAgQuestions(nextCategory, lastQuestionID, weightIndex);
-            onUpdateScores();
+            onUpdateAgQuestions(nextCategory, foundQuestionType, lastQuestionID, weightIndex);
          } else {
             const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
             const nextAction = question.weight![weightIndex].action;
@@ -305,8 +309,8 @@ const AppProvider: React.FC = ({ children }) => {
             const nextCategory = allCategories[typeIndex + 1];
             setCurrentQuestionType(foundQuestionType);
             onDesicionMaking(question.id, nextAction, nextCategory);
-            onUpdateScores();
          }
+         onUpdateScores();
       };
 
       const onHandleQuestions = () => {
