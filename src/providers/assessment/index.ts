@@ -52,9 +52,9 @@ export const assessmentTypeScoreState = selector<number[]>({
    },
 });
 
-export const dataBreachDateState = atom<string | null>({
+export const dataBreachDateState = atom<string | undefined>({
    key: 'dataBreachDate',
-   default: null,
+   default: undefined,
 });
 
 export const assessmentDateState = atom<string>({

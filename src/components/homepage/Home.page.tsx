@@ -1,34 +1,23 @@
-import Navbar from '../Navbar/Nav';
-import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState } from 'recoil';
-import {
-   assessmentIncidentNumberState,
-   assessmentNoteState,
-   assessmentScore,
-   dataBreachDateState,
-} from '../../providers/assessment';
-import assessorState, { IAssessor } from '../../providers/assessor';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { assessmentIncidentNumberState, dataBreachDateState } from '../../providers/assessment';
+import assessorState, { IAssessor } from '../../providers/assessor';
+import Navbar from '../Navbar/Nav';
 import './style.css';
-import { useEffect } from 'react';
-import assessmentAnswersState from '../../providers/question/answer';
-import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 
 //Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
-   const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
-   const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
-   const onResetAssessmentScore = useResetRecoilState(assessmentScore);
-   const onResetNotes = useResetRecoilState(assessmentNoteState);
-   const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
-   const onResetAssessor = useResetRecoilState(assessorState);
-   const onResetDatabreachDate = useResetRecoilState(dataBreachDateState);
+   const setDataBreachDate = useSetRecoilState<string | null>(dataBreachDateState);
+   const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
    const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
-   const [dataBreachDate, setDataBreachDate] = useRecoilState<string | null>(dataBreachDateState);
-   const [incidentNumber, setIncidentNumber] = useRecoilState<string | undefined>(
-      assessmentIncidentNumberState
-   );
+   const [firstName, setFirstname] = useState(undefined);
+   const [lastName, setLastname] = useState(undefined);
+   const [localIncidentNumber, setLocalIncidentNumber] = useState(undefined);
+   const [localDataBreachDate, setLocalDataBreachDate] = useState(undefined);
+
    const {
       register,
       handleSubmit,
@@ -36,25 +25,14 @@ const Homepage = () => {
    } = useForm();
 
    const onSubmit = (data) => {
-      if (data) navigate('/start');
+      if (data) {
+         setAssessor({ ...assessor, firstName });
+         setAssessor({ ...assessor, lastName });
+         setIncidentNumber(localIncidentNumber);
+         setDataBreachDate(localDataBreachDate);
+         navigate('/start');
+      }
    };
-
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   const onResetAllStates = () => {
-      onResetQuestionaireState();
-      onResetQuestionID();
-      onResetAssessmentScore();
-      onResetNotes();
-      onResetQuestionType();
-      onResetAssessor();
-      setIncidentNumber(null);
-      onResetDatabreachDate();
-   };
-
-   useEffect(() => {
-      onResetAllStates();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
 
    return (
       <div>
@@ -66,13 +44,8 @@ const Homepage = () => {
                   <div>
                      <input
                         {...register('firstName', { required: true })}
-                        onChange={(e) =>
-                           setAssessor({
-                              ...assessor,
-                              firstName: e.target.value,
-                           })
-                        }
-                        value={assessor.firstName}
+                        onChange={(e) => setFirstname(e.target.value)}
+                        value={firstName}
                         type="text"
                         className="form-control"
                         placeholder="Enter first name"
@@ -88,13 +61,8 @@ const Homepage = () => {
                   <div>
                      <input
                         {...register('lastName', { required: true })}
-                        onChange={(e) =>
-                           setAssessor({
-                              ...assessor,
-                              lastName: e.target.value,
-                           })
-                        }
-                        value={assessor.lastName}
+                        onChange={(e) => setLastname(e.target.value)}
+                        value={lastName}
                         type="text"
                         className="form-control"
                         placeholder="Enter last name"
@@ -116,9 +84,9 @@ const Homepage = () => {
                               message: '⚠ Wrong format used for incident number!',
                            },
                         })}
-                        onChange={(e) => setIncidentNumber(e.target.value)}
+                        onChange={(e) => setLocalIncidentNumber(e.target.value)}
                         type="text"
-                        value={incidentNumber}
+                        value={localIncidentNumber}
                         className="form-control"
                         placeholder="Enter incident number"
                         aria-label="Incident number"
@@ -142,8 +110,8 @@ const Homepage = () => {
                         className="form-control"
                         type="date"
                         id="formFile"
-                        onChange={(e) => setDataBreachDate(e.target.value)}
-                        value={dataBreachDate}
+                        onChange={(e) => setLocalDataBreachDate(e.target.value)}
+                        value={localDataBreachDate}
                      />
                      {errors.dataBreachDate?.type === 'required' && (
                         <p className="required">Date of data breach is required</p>

@@ -472,13 +472,6 @@ const InteractiveQuestionaryComponent: React.FC<{ interactive: boolean }> = ({ i
 
    return (
       <div className="accordion" id="breachassessmetcontainer">
-         {/* {assessmentAnswers.map((question, index) => (
-            <div key={index}>
-               <span>{question.id}</span>
-               <span>{question.questionText}</span>
-               <span>{JSON.stringify(question.answer)}</span>
-            </div>
-         ))} */}
          {typedQuestions.map((el, id) => (
             <QuestionItemContainer
                key={id}
