@@ -11,7 +11,7 @@ import getCurrentAssessment, {
    dataBreachDateState,
    resultTextState,
 } from '../../providers/assessment';
-import assessorState from '../../providers/assessor';
+import { assessorFirstnameState, assessorLastnameState } from '../../providers/assessor';
 import assessmentAnswersState, { ICurrentAssessmentAnswers } from '../../providers/question/answer';
 import Footer, { FOOTER_CONTENT } from '../footer/Footer';
 import Navbar from '../Navbar/Nav';
@@ -70,7 +70,8 @@ const Resultpage: React.FC = () => {
    const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
    const setImpactNumber = useSetRecoilState<number>(assessmentImpactNumberState);
    const currentAssessment = useRecoilValue(getCurrentAssessment);
-   const [assessor, setAssessorData] = useRecoilState(assessorState);
+   const [firstName, setFirstname] = useRecoilState(assessorFirstnameState);
+   const [lastName, setLastname] = useRecoilState(assessorLastnameState);
    const setResultText = useSetRecoilState(resultTextState);
    // based on the score decide what value to show
    let title = '';
@@ -113,15 +114,14 @@ const Resultpage: React.FC = () => {
                };
             });
 
+            setResultText(assessment.resultText);
             setAnswers(answers);
             setAssessmentDate(assessment.assessmentDate);
             setDatabreachDate(assessment.databreachDate);
             setIncidentNumber(assessment.incidentNr);
             setImpactNumber(assessment.resultNumber);
-            setAssessorData({
-               firstName: assessment.assessor.firstName,
-               lastName: assessment.assessor.lastName,
-            });
+            setFirstname(assessment.assessor.firstName);
+            setLastname(assessment.assessor.lastName);
 
             if (assessment.note && assessment.note.length > 0) {
                setAssessmentNote(assessment.note[0].notesText);
@@ -151,13 +151,13 @@ const Resultpage: React.FC = () => {
             <div className="row">
                <div className="col-12 col-md-4 offset-md-4">
                   <div className="assessor_info_container">
-                     <p>Assessment number: {currentAssessment.incidentNumber}</p>
+                     <p>Incident number: {currentAssessment.incidentNumber}</p>
                      <p>
                         Date of data breach:{' '}
                         {currentAssessment.dataBreachDate &&
                            new Date(currentAssessment.dataBreachDate).toLocaleDateString('nl')}
                      </p>
-                     <p>Performed by: {`${assessor.firstName} ${assessor.lastName}`}</p>
+                     <p>Performed by: {`${firstName} ${lastName}`}</p>
                      <p>
                         Date of assessment:{' '}
                         {currentAssessment.assessmentDate &&

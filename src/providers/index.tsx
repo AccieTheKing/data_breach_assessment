@@ -185,7 +185,6 @@ const AppProvider: React.FC = ({ children }) => {
       const [___, mitigating_c_value] = all_score_objects[6];
       const score = highest_score * ease_oi_value + ag_cir_breach + mitigating_c_value;
 
-      // console.log(highest_score, ease_oi_value, ag_cir_breach, mitigating_c_value);
       setCurrentImpactScore(score);
    };
 
@@ -230,14 +229,10 @@ const AppProvider: React.FC = ({ children }) => {
 
       const onUpdateAgQuestions = (
          nextCategory: string,
-         foundQuestionType: string,
+         currentQuestionType: string,
          lastQuestionID: number,
          weightIndex: string
       ) => {
-         const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
-         const index = allTypes.indexOf(currentCiaType);
-         const nextCiaType = allTypes[index + 1] ? allTypes[index + 1] : 'availability';
-         if (nextCiaType === 'availability') setCurrentQuestionType(foundQuestionType);
          let found_cia_type = '';
          let question = {} as IQuestion;
 
@@ -248,13 +243,19 @@ const AppProvider: React.FC = ({ children }) => {
             }
             return null;
          });
+
          found_cia_type = type_and_questions?.cia_type as string;
 
+         const allTypes = ciaQuestions.map((el) => el.cia_type) as string[];
+         const index = allTypes.indexOf(found_cia_type);
+         const nextCiaType = allTypes[index + 1];
          const nextAction = question.weight![weightIndex].action;
+
          switch (nextAction) {
             case QUESTIONNAIR_STATE.CONTINUE:
                setCurrentQuestionID(question.id + 1);
                setCurrentCiaType(found_cia_type);
+               setCurrentQuestionType(currentQuestionType);
                return;
             case QUESTIONNAIR_STATE.NEXT_CIA_TYPE:
                // Grab the first question of the next cia type
@@ -263,6 +264,7 @@ const AppProvider: React.FC = ({ children }) => {
                const nextCiaQuestion = bucket[0];
                setCurrentQuestionID(nextCiaQuestion.id);
                setCurrentCiaType(nextCiaType);
+               setCurrentQuestionType(currentQuestionType);
                return;
             case QUESTIONNAIR_STATE.NEXT_TYPE:
                setCurrentQuestionType(nextCategory);
@@ -299,7 +301,6 @@ const AppProvider: React.FC = ({ children }) => {
             onStoreScore(foundQuestionType, newValue);
          } else if (foundQuestionType === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
             onUpdateAgQuestions(nextCategory, foundQuestionType, lastQuestionID, weightIndex);
-            onUpdateScores();
          } else {
             const question = allQuestions.find((el) => el.id === lastQuestionID) as IQuestion;
             const nextAction = question.weight![weightIndex].action;
@@ -308,8 +309,8 @@ const AppProvider: React.FC = ({ children }) => {
             const nextCategory = allCategories[typeIndex + 1];
             setCurrentQuestionType(foundQuestionType);
             onDesicionMaking(question.id, nextAction, nextCategory);
-            onUpdateScores();
          }
+         onUpdateScores();
       };
 
       const onHandleQuestions = () => {

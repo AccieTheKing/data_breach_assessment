@@ -1,16 +1,16 @@
 import { atom } from 'recoil';
 
 export interface IAssessor {
-   firstName: string | null;
-   lastName: string | null;
+   firstName: string | undefined;
+   lastName: string | undefined;
 }
 
-const assessorState = atom<IAssessor>({
-   key: 'assessor',
-   default: {
-      firstName: null,
-      lastName: null,
-   },
+export const assessorFirstnameState = atom<string | undefined>({
+   key: 'assessorFirstname',
+   default: undefined,
 });
 
-export default assessorState;
+export const assessorLastnameState = atom<string | undefined>({
+   key: 'assessorLastname',
+   default: undefined,
+});

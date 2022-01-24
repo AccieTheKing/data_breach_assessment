@@ -261,65 +261,71 @@ const Historypage = () => {
                </div>
             </div>
 
-            {usedData
-               .filter((val) => {
-                  if (searchTerm === '') {
-                     return val;
-                  }
-                  if (
-                     val.assessor.firstName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     val.assessor.lastName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     `${val.assessor.firstName.toLocaleLowerCase()} ${val.assessor.lastName.toLocaleLowerCase()}`
-                        .toLocaleLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                     new Date(val.assessmentDate)
-                        .toLocaleDateString('nl')
-                        .includes(searchTerm.toLowerCase()) ||
-                     val.incidentNr.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     val.resultText.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
-                     val.resultNumber.toString().toLocaleLowerCase().includes(searchTerm.toLowerCase())
-                  ) {
-                     return val;
-                  }
-               })
-               .sort((a, b) => new Date(a.assessmentDate).getTime() - new Date(b.assessmentDate).getTime())
-               .reverse()
-               .map((el: DB_Assessment, id: number) => (
-                  <div key={id}>
-                     <div className={`card assessmentCard card border_${el.resultText}`}>
-                        <div className="row">
-                           <div className="col-12 col-lg-3">
-                              <span className="card-text">
-                                 Ass. number: {el.incidentNr}
-                                 <br></br>
-                                 Assessor: {el.assessor.firstName} {el.assessor.lastName}
-                              </span>
-                           </div>
-                           <div className="col-12 col-lg-3">
-                              <span className="card-text">
-                                 Date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
-                                 <br></br>
-                                 Result: {el.resultNumber}
-                              </span>
-                           </div>
-                           <div className="col-12 col-lg-3 mb-2 mb-sm-0">
-                              <ImpactScoreVisual title={el.resultText} />
-                           </div>
-                           <div className="col-12 col-lg-3">
-                              <span>
-                                 <button
-                                    type="submit"
-                                    className="btn w-100"
-                                    onClick={() => onSelectAssessment(el)}
-                                 >
-                                    Details
-                                 </button>
-                              </span>
+            {usedData && usedData.length > 0 ? (
+               usedData
+                  .filter((val) => {
+                     if (searchTerm === '') {
+                        return val;
+                     }
+                     if (
+                        val.assessor.firstName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                        val.assessor.lastName.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                        `${val.assessor.firstName.toLocaleLowerCase()} ${val.assessor.lastName.toLocaleLowerCase()}`
+                           .toLocaleLowerCase()
+                           .includes(searchTerm.toLowerCase()) ||
+                        new Date(val.assessmentDate)
+                           .toLocaleDateString('nl')
+                           .includes(searchTerm.toLowerCase()) ||
+                        val.incidentNr.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                        val.resultText.toLocaleLowerCase().includes(searchTerm.toLowerCase()) ||
+                        val.resultNumber.toString().toLocaleLowerCase().includes(searchTerm.toLowerCase())
+                     ) {
+                        return val;
+                     }
+                  })
+                  .sort((a, b) => new Date(a.assessmentDate).getTime() - new Date(b.assessmentDate).getTime())
+                  .reverse()
+                  .map((el: DB_Assessment, id: number) => (
+                     <div key={id}>
+                        <div className={`card assessmentCard card border_${el.resultText}`}>
+                           <div className="row">
+                              <div className="col-12 col-lg-3">
+                                 <span className="card-text">
+                                    Incident nr: {el.incidentNr}
+                                    <br></br>
+                                    Assessor: {el.assessor.firstName} {el.assessor.lastName}
+                                 </span>
+                              </div>
+                              <div className="col-12 col-lg-3">
+                                 <span className="card-text">
+                                    Assessment date: {new Date(el.assessmentDate).toLocaleDateString('nl')}
+                                    <br></br>
+                                    Result: {el.resultNumber}
+                                 </span>
+                              </div>
+                              <div className="col-12 col-lg-3 mb-2 mb-sm-0">
+                                 <ImpactScoreVisual title={el.resultText} />
+                              </div>
+                              <div className="col-12 col-lg-3">
+                                 <span>
+                                    <button
+                                       type="submit"
+                                       className="btn w-100"
+                                       onClick={() => onSelectAssessment(el)}
+                                    >
+                                       Details
+                                    </button>
+                                 </span>
+                              </div>
                            </div>
                         </div>
                      </div>
-                  </div>
-               ))}
+                  ))
+            ) : (
+               <div className="empty-history">
+                  <h3>There are no assessments done</h3>
+               </div>
+            )}
          </div>
       </div>
    );
