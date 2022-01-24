@@ -5,12 +5,12 @@ export interface IAssessor {
    lastName: string | undefined;
 }
 
-const assessorState = atom<IAssessor>({
-   key: 'assessor',
-   default: {
-      firstName: undefined,
-      lastName: undefined,
-   },
+export const assessorFirstnameState = atom<string | undefined>({
+   key: 'assessorFirstname',
+   default: undefined,
 });
 
-export default assessorState;
+export const assessorLastnameState = atom<string | undefined>({
+   key: 'assessorLastname',
+   default: undefined,
+});

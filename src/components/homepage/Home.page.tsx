@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { assessmentIncidentNumberState, dataBreachDateState } from '../../providers/assessment';
-import assessorState, { IAssessor } from '../../providers/assessor';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import {
+   assessmentIncidentNumberState,
+   assessmentNoteState,
+   assessmentScore,
+   dataBreachDateState,
+} from '../../providers/assessment';
+import { assessorFirstnameState, assessorLastnameState } from '../../providers/assessor';
+import assessmentAnswersState from '../../providers/question/answer';
+import { currentQuestionIdState, currentQuestionTypeState } from '../../providers/question/atom';
 import Navbar from '../Navbar/Nav';
 import './style.css';
 
 //Homepage: Serves as a starting point and orientation page. Options: Start assessment, view tooltips, view historical assessments.
 const Homepage = () => {
    const navigate = useNavigate();
+   const onResetQuestionaireState = useResetRecoilState(assessmentAnswersState);
+   const onResetQuestionID = useResetRecoilState(currentQuestionIdState);
+   const onResetAssessmentScore = useResetRecoilState(assessmentScore);
+   const onResetNotes = useResetRecoilState(assessmentNoteState);
+   const onResetQuestionType = useResetRecoilState(currentQuestionTypeState);
    const setDataBreachDate = useSetRecoilState<string | null>(dataBreachDateState);
    const setIncidentNumber = useSetRecoilState<string | undefined>(assessmentIncidentNumberState);
-   const [assessor, setAssessor] = useRecoilState<IAssessor>(assessorState);
+   const setAssessorFirstname = useSetRecoilState<string | undefined>(assessorFirstnameState);
+   const setAssessorLastname = useSetRecoilState<string | undefined>(assessorLastnameState);
    const [firstName, setFirstname] = useState(undefined);
    const [lastName, setLastname] = useState(undefined);
    const [localIncidentNumber, setLocalIncidentNumber] = useState(undefined);
@@ -24,10 +37,23 @@ const Homepage = () => {
       formState: { errors },
    } = useForm();
 
+   const onResetAllStates = () => {
+      onResetQuestionaireState();
+      onResetQuestionID();
+      onResetAssessmentScore();
+      onResetNotes();
+      onResetQuestionType();
+   };
+
+   useEffect(() => {
+      onResetAllStates();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
+
    const onSubmit = (data) => {
       if (data) {
-         setAssessor({ ...assessor, firstName });
-         setAssessor({ ...assessor, lastName });
+         setAssessorFirstname(firstName);
+         setAssessorLastname(lastName);
          setIncidentNumber(localIncidentNumber);
          setDataBreachDate(localDataBreachDate);
          navigate('/start');
