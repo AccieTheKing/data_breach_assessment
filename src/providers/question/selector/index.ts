@@ -1,5 +1,6 @@
 import { selector } from 'recoil';
 import { IQuestion } from '../../../components/question/interactive.questionaire.component';
+import { ASSESSMENT_SCORE_TYPE } from '../../assessment';
 import {
    ciaQuestionState,
    currentCiaTypeState,
@@ -35,11 +36,10 @@ export const getCurrentQuestionTypeState = selector<{ [x: string]: number }[]>({
    key: 'getCurrentQuestionType',
    get: ({ get }) => {
       let counter = 0;
-      const easeOfIdentficationQ_ID = 20;
       const typedQuestions = get(typedQuestionState);
       const rangesPerQuestion = typedQuestions
          .map((el) => {
-            if (counter === easeOfIdentficationQ_ID) {
+            if (el.type === ASSESSMENT_SCORE_TYPE.aggreveting_circumstances) {
                el.questions.forEach((elt) => {
                   counter += (elt.questions as IQuestion[]).length;
                });
@@ -50,7 +50,6 @@ export const getCurrentQuestionTypeState = selector<{ [x: string]: number }[]>({
          .map((el) => {
             return { [el.type]: el.max_question };
          });
-
       return rangesPerQuestion;
    },
 });

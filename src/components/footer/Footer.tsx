@@ -69,16 +69,20 @@ function MyVerticallyCenteredModal(props: any) {
                         </tr>
                      </tbody>
                   </table>
-                  <table className="assessment-notes">
-                     <tr>
-                        <th>Notes:</th>
-                     </tr>
-                     <tr>
-                        <td>
-                           <div>{assessment.notes}</div>
-                        </td>
-                     </tr>
-                  </table>
+                  {assessment.notes.trim().length > 0 && (
+                     <table className="assessment-notes">
+                        <tbody>
+                           <tr>
+                              <th>Notes:</th>
+                           </tr>
+                           <tr>
+                              <td>
+                                 <div>{assessment.notes}</div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  )}
                   <table className="assessment-answers">
                      <thead>
                         <tr>
@@ -151,14 +155,13 @@ const ResultPageFooterContent = () => {
    const onExport = () => {
       const doc = new jsPDF('p', 'px', 'a4');
       const el = document.getElementById('print');
-      let pdfname = currentAssessment.dataBreachDate.toLocaleDateString('nl') + "_DataBreach.pdf";
+      let pdfname = currentAssessment.dataBreachDate.toLocaleDateString('nl') + '_DataBreach.pdf';
       if (el) {
          doc.html(el, {
             autoPaging: 'text',
             margin: [20, 0, 40, 0],
             callback: (pdf) => {
                pdf.save(pdfname);
-         
             },
          });
       }

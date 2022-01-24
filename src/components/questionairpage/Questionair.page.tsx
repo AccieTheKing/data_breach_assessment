@@ -48,7 +48,9 @@ const Questionnairpage: React.FC = () => {
                         <h1>Data breach assessment</h1>
 
                         <p>
-                           Each dropdown must be answered to progress. For more information about the categories and how to perform an assessment, see the "about" page or click on the information icons on the dropdown-menus. 
+                           Each dropdown must be answered to progress. For more information about the
+                           categories and how to perform an assessment, see the "about" page or click on the
+                           information icons on the dropdown-menus.
                         </p>
                      </div>
                   </div>
