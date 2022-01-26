@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DBA app",
+  "name": "Data breach assessment app",
   "icons": [
     {
       "src": "favicon.ico",
