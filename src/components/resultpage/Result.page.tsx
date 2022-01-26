@@ -46,9 +46,9 @@ const ActionList: React.FC<{ SL: string }> = ({ SL }) => {
             <div className="action_list_container">
                <h2>Action list</h2>
                <ol className="action_list">
-                  <li>Internal Documentation</li>
+                  <li>Internal documentation</li>
                   <li style={{ display: `${showActionItem().authorities}` }}>
-                     Notify Supervisory Authorities
+                     Notify supervisory authorities
                   </li>
                   <li style={{ display: `${showActionItem().dataSubject}` }}>
                      Communicate to the data subjects
