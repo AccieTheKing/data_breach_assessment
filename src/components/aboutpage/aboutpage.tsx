@@ -94,7 +94,11 @@ const Aboutpage = () => {
                the controllers or the individuals, invalidity/inaccuracy of data, public availability (before
                the breach), nature of data etc.
                <br></br> <br></br>
-               Insert picture
+               <img
+                  className="tblImage"
+                  src="./picDPC.png"
+                  alt="The first four dropdown menus"
+               />
                <br></br> <br></br>
                The highest score will then be used for further calculations.
             </p>
@@ -103,7 +107,7 @@ const Aboutpage = () => {
             <li>Biographical data (date of birth, gender, age)</li>
             <li>Contact details (telephone number, social media, e-mail address) </li>
             <li>Full name</li>
-            <li>Data on education ()</li>
+            <li>Data on education</li>
             <li>Familiy life (children, marriage, partner, siblings, parents)</li>
             <li>Professional experience</li>
             <br></br>
@@ -168,7 +172,7 @@ const Aboutpage = () => {
                <br></br> <br></br>
                <li>
                   Loss of confidentiality occurs when the information is accessed by parties who are not
-                  authorized or do not have a legitimate purpose to access it.{' '}
+                  authorized or do not have a legitimate purpose to access it.
                </li>
                <li>
                   Loss of integrity occurs when the original data has been altered by unauthorized parties or
